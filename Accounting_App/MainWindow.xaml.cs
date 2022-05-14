@@ -9,6 +9,8 @@ using Accounting_App.DTO;
 using Accounting_App.Utilities;
 using Accounting_App.Form;
 using System.Globalization;
+using System.Configuration;
+using System.IO;
 
 namespace Accounting_App
 {
@@ -21,8 +23,19 @@ namespace Accounting_App
 
         public MainWindow()
         {
+            DBExists();
             InitializeComponent();
             RefreshUserInfo();
+        }
+
+        private void DBExists()
+        {
+            string DB_path = ConfigurationManager.AppSettings["DBPath"];
+            if (!File.Exists(DB_path))
+            {
+                MessageBox.Show($"資料庫{Environment.CurrentDirectory}{DB_path.Substring(1)}不存在", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(0);
+            }
         }
 
         //重整使用者資訊

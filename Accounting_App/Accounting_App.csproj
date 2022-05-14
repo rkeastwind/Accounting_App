@@ -267,6 +267,11 @@
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(SolutionDir)Accounting_App\Reports\*.xlsx" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>Copy "$(SolutionDir)Accounting_App\Reports\*.xlsx" "$(TargetDir)"
+If Not Exist "$(TargetDir)Accounting_App.db" (Copy "$(SolutionDir)Accounting_App\Accounting_App.db" "$(TargetDir)")</PreBuildEvent>
   </PropertyGroup>
 </Project>
