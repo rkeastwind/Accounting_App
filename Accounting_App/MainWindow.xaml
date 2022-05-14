@@ -1,0 +1,97 @@
+﻿<Window x:Class="Accounting_App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Accounting_App"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
+    <Grid>
+        <Menu DockPanel.Dock="Top" Height="25" VerticalAlignment="Top">
+            <MenuItem Header="交易">
+                <MenuItem Header="一般交易" Click="MenuItem_Trade_Click" />
+                <MenuItem Header="銀行存提" Click="MenuItem_BankDeal_Click" />
+                <MenuItem Header="結帳" Click="MenuItem_ProDate_Click" />
+            </MenuItem>
+            <MenuItem Header="報表">
+                <MenuItem Header="交易明細表" Click="MenuItem_Report_R001_Click" />
+                <MenuItem Header="庫存明細表" Click="MenuItem_Report_R002_Click" />
+                <MenuItem Header="經常費收支表" Click="MenuItem_Report_T001_Click" />
+                <MenuItem Header="會計師財務報表" Click="MenuItem_Report_T002_Click" />
+            </MenuItem>
+            <MenuItem Header="設定">
+                <MenuItem Header="帳冊基本資料維護" Click="MenuItem_BookBase_Click"/>
+                <MenuItem Header="管理員命令工具" Click="MenuItem_SqlRepairTool_Click"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <TextBlock Name="lbStatusBar1" />
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Name="lbStatusBar2" />
+            </StatusBarItem>
+            <Separator Grid.Column="3" />
+            <StatusBarItem Grid.Column="4">
+                <TextBlock Name="lbStatusBar3" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="100" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Image Grid.Column="0" Grid.Row="0" Source="/images/user.png" Width="70" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" />
+            <Label Grid.Column="1" Grid.Row="0" Content="使用者" Margin="0,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TextBox Grid.Column="1" Grid.Row="0" 
+                     x:Name="Txt_UserName" Margin="5,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="120"
+                     VerticalContentAlignment="Center" TextWrapping="NoWrap" Text="請輸入"/>
+
+            <Image Grid.Column="0" Grid.Row="1" Source="/images/department.png" Width="70"  Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" />
+            <Label Grid.Column="1" Grid.Row="1" Content="使用單位" Margin="0,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TextBox Grid.Column="1" Grid.Row="1" 
+                     x:Name="Txt_Department" Margin="5,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="120"
+                     VerticalContentAlignment="Center" TextWrapping="NoWrap" Text="請輸入"/>
+
+            <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
+                    x:Name="Btn_UpdUseInfo" Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Height="40" 
+                    Click="Btn_UpdUseInfo_Click">
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/images/Btn_Refresh_Color.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
+                    <TextBlock Margin="5,0" VerticalAlignment="Center">更新使用資訊</TextBlock>
+                </StackPanel>
+            </Button>
+            <TextBlock Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" 
+                       Margin="0,70,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="175"
+                       Text="第一次使用請更新使用資訊" TextWrapping="Wrap" TextAlignment="Center" Background="AntiqueWhite" Foreground="Navy" />
+            <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" 
+                       Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto"
+                       Text="Version 1.0.0 Copyright © Rick Lin" TextWrapping="Wrap" TextAlignment="Center" Background="LightCyan" Foreground="Black" />
+        </Grid>
+
+    </Grid>
+</Window>

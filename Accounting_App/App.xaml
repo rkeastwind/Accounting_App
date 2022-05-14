@@ -1,0 +1,15 @@
+﻿<Application x:Class="Accounting_App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Accounting_App"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!--Label顏色-->
+        <Style x:Key="LbKeyColor" TargetType="Label">
+            <Setter Property="Foreground" Value="#FFE6263A"/>
+        </Style>
+        <Style x:Key="LbInsOnlyColor" TargetType="Label">
+            <Setter Property="Foreground" Value="#FF2B45EC"/>
+        </Style>
+    </Application.Resources>
+</Application>
