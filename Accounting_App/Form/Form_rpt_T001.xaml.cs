@@ -103,7 +103,7 @@ namespace Accounting_App.Form
                 sheet.Cells[7, 7] = LastInv;
 
                 //一次Insert行數(會複製9之上的那一行)
-                if (DataCount > 2)
+                if (DataCount >= 2)
                 {
                     insert_row = sheet.Rows[9 + ":" + (9 + DataCount - 2)];
                     insert_row.Insert(Excel.XlInsertShiftDirection.xlShiftDown);

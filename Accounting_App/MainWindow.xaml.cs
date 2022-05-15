@@ -56,69 +56,113 @@ namespace Accounting_App
 
 
 
-        #region 開啟頁面
+        #region 開啟頁面      
+
+        //判斷視窗是否開啟(泛型)，若存在就active
+        public static bool IsWindowOpen<T>(string name = "") where T : Window
+        {
+            bool b = string.IsNullOrEmpty(name)
+               ? Application.Current.Windows.OfType<T>().Any()
+               : Application.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
+
+            if (b == true)
+            {
+                if (string.IsNullOrEmpty(name))
+                    Application.Current.Windows.OfType<T>().FirstOrDefault().Activate();
+                else
+                    Application.Current.Windows.OfType<T>().Where(w => w.Name.Equals(name)).FirstOrDefault().Activate();
+            }
+            return b;
+        }
 
         private void MenuItem_Trade_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_tra_trade w = new Form_tra_trade(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_tra_trade>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_tra_trade w = new Form_tra_trade(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_BankDeal_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_tra_bankdeal w = new Form_tra_bankdeal(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_tra_bankdeal>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_tra_bankdeal w = new Form_tra_bankdeal(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_ProDate_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_pro_date w = new Form_pro_date(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_pro_date>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_pro_date w = new Form_pro_date(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_Report_R001_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_rpt_R001 w = new Form_rpt_R001(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_rpt_R001>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_rpt_R001 w = new Form_rpt_R001(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_Report_R002_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_rpt_R002 w = new Form_rpt_R002(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_rpt_R002>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_rpt_R002 w = new Form_rpt_R002(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_Report_T001_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_rpt_T001 w = new Form_rpt_T001(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_rpt_T001>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_rpt_T001 w = new Form_rpt_T001(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_Report_T002_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_rpt_T002 w = new Form_rpt_T002(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_rpt_T002>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_rpt_T002 w = new Form_rpt_T002(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_BookBase_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_book_base w = new Form_book_base(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_book_base>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_book_base w = new Form_book_base(i.Header.ToString());
+                w.Show();
+            }
         }
 
         private void MenuItem_SqlRepairTool_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem i = (MenuItem)sender;
-            Form_sql_repair_tool w = new Form_sql_repair_tool(i.Header.ToString());
-            w.Show();
+            if (!IsWindowOpen<Form_sql_repair_tool>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_sql_repair_tool w = new Form_sql_repair_tool(i.Header.ToString());
+                w.Show();
+            }
         }
 
 

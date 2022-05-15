@@ -90,7 +90,7 @@
                        Text="第一次使用請更新使用資訊" TextWrapping="Wrap" TextAlignment="Center" Background="AntiqueWhite" Foreground="Navy" />
             <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" 
                        Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto"
-                       Text="Version 1.0.0 Copyright © Rick Lin" TextWrapping="Wrap" TextAlignment="Center" Background="LightCyan" Foreground="Black" />
+                       Text="Version 1.0.1 Copyright © Rick Lin" TextWrapping="Wrap" TextAlignment="Center" Background="LightCyan" Foreground="Black" />
         </Grid>
 
     </Grid>

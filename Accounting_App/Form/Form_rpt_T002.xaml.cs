@@ -173,7 +173,7 @@ order by book", new string[] { });
                         sheet.Cells[8, 6] = LastInv;
 
                         //一次Insert行數(會複製10之上的那一行)
-                        if (DataCount > 2)
+                        if (DataCount >= 2)
                         {
                             insert_row = sheet.Rows[10 + ":" + (10 + DataCount - 2)];
                             insert_row.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
