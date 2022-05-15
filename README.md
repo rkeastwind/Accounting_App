@@ -19,7 +19,7 @@
 <table>
   <tr>
     <td>
-      <strong>Latest Release: v1.0.0</strong>
+      <strong>Latest Release: v1.0.1</strong>
     </td>
     <td>
       <a href="https://github.com/rkeastwind/Accounting_App/releases/latest">[ Download ]</a><br />
