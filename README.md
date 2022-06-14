@@ -5,7 +5,6 @@
 提供持有「銀行存款」與「現金」的使用者作帳，產出報表。
 
 ## Indroduction
-架構：採用WPF與SQLite搭配Dapper實作
 
 結帳流程：輸入一般交易 >> 輸入銀行存提 >> 結帳 >> 列印報表
 
@@ -36,3 +35,21 @@
     </td>
   </tr>
 </table>
+
+## Development
+
+- 使用 Visual Studio Community 2019
+- 前端使用WPF用戶端應用程式
+- 後端使用SQLite搭配Dapper實作
+
+資料庫路徑可於App.config修改
+
+```C#
+  <appSettings>
+    <add key="DBPath" value=".\Accounting_App.db" />
+  </appSettings>
+```
+
+## License
+
+![GitHub User's stars](https://img.shields.io/badge/Copyright%40-Rick%20Lin-blue?style=?style=plastic&logo=GitHub)
