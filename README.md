@@ -27,4 +27,12 @@
         <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/downloads/rkeastwind/Accounting_App/latest/total?color=%2300cc99"></a>
     </td>
   </tr>
+  <tr>
+    <td>
+      <strong>Specifications</strong>
+    </td>
+    <td>
+      <a href="https://github.com/rkeastwind/Accounting_App/raw/master/小型帳務軟體使用說明書.docx">[ 小型帳務軟體使用說明書.docx ]</a><br />     
+    </td>
+  </tr>
 </table>
