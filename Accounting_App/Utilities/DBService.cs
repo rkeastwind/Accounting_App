@@ -144,7 +144,7 @@ namespace Accounting_App.Utilities
                 if (filter != "")
                     statement += filter;
 
-                var result = conn.ExecuteReader(statement);
+                var result = conn.ExecuteReader(statement + " order by book_type, book");
                 table.Load(result);
                 //table = ConvertColumnToDate(table, new string[] { "trade_dt", "logtime" });
                 return table;
@@ -223,7 +223,7 @@ namespace Accounting_App.Utilities
                 if (filter != "")
                     statement += filter;
 
-                var result = conn.ExecuteReader(statement);
+                var result = conn.ExecuteReader(statement + " order by trade_no");
                 table.Load(result);
                 table = ConvertColumnToDate(table, new string[] { "trade_dt", "logtime" });
                 return table;

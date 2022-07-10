@@ -178,7 +178,7 @@ namespace Accounting_App.Form
             else if (FormState == FormStates.Add)
             {
                 Txt_TradeNo.Text = "系統自動編號";
-                Dtp_TradeDt.SelectedDate = DateTime.Today;
+                Dtp_TradeDt.SelectedDate = CommUtility.GetNextProStartDt();
                 Cmb_Action.SelectedIndex = 0;
                 Txt_Amt.Value = 0;
                 Txt_Memo.Text = "";

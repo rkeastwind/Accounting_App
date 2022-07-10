@@ -97,6 +97,23 @@ where acct_book = '{book}' and pro_status = 1
         }
 
         /// <summary>
+        /// 取得下一結帳起始日
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime GetNextProStartDt()
+        {
+            DataRow rw = DBService.QryProDate("where pro_dt = (select MAX(pro_dt) from pro_date where pro_status = 1)").AsEnumerable().FirstOrDefault();
+            if (rw != null)
+            {
+                return rw.Field<DateTime>("pro_dt").AddDays(1);  //最大結帳日+1
+            }
+            else
+            {
+                return DateTime.Today;
+            }
+        }
+
+        /// <summary>
         /// 將DataTable轉換成CSV文件
         /// </summary>
         /// <param name="dt">DataTable</param>
