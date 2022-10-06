@@ -46,7 +46,7 @@ namespace Accounting_App.Utilities
         {
             string trade_no = "";
             string leading_code = dt.ToString("yyyyMMdd");
-            DataRow rw = DBService.QryTraMast($@"where trade_no like '{leading_code}%' order by trade_no desc").AsEnumerable().FirstOrDefault();
+            DataRow rw = DBService.QryTraMast($@"where trade_no like '{leading_code}%'").AsEnumerable().OrderByDescending(x => x["trade_no"]).FirstOrDefault();
             if (rw != null)
             {
                 string max_trade_no = rw["trade_no"].ToString();
