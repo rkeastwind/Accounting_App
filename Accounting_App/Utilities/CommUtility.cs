@@ -61,14 +61,14 @@ namespace Accounting_App.Utilities
         }
 
         /// <summary>
-        /// 判斷當月是否結帳
+        /// 判斷當年月是否結帳
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
         public static bool CheckIsPro(DateTime dt)
         {
-            string Month = dt.ToString("MM");
-            DataTable Qry = DBService.QryProDate($@"where strftime('%m', pro_dt) = '{Month}' and pro_status = 1");
+            string YearMonth = dt.ToString("yyyy-MM");
+            DataTable Qry = DBService.QryProDate($@"where strftime('%Y-%m', pro_dt) = '{YearMonth}' and pro_status = 1");
             if (Qry.Rows.Count > 0)
             {
                 return false;
