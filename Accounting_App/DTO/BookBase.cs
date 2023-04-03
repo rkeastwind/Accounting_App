@@ -15,5 +15,10 @@ namespace Accounting_App.DTO
         public string bank_name { get; set; }
         public string account { get; set; }
         public string title { get; set; }
+
+        public string display_name
+        {
+            get { return book + " " + book_name; }
+        }
     }
 }

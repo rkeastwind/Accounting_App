@@ -30,10 +30,36 @@ namespace Accounting_App.Utilities
                     item = "",
                     item_name = "",
                     memo1 = "",
-                    memo2 = ""
+                    memo2 = "",
+                    order_by = 0
                 });
             }
-            return MF.OrderBy(x => x.item).ToList();
+            return MF.OrderBy(x => x.order_by).ThenBy(x => x.item).ToList();
+        }
+
+        /// <summary>
+        /// 填充空白選項
+        /// </summary>
+        /// <param name="I_BookBase"></param>
+        /// <returns></returns>
+        public static List<BookBase> InsertBlankItem(List<BookBase> I_BookBase)
+        {
+            List<BookBase> MF = new List<BookBase>();
+            MF.AddRange(I_BookBase);
+            BookBase A = MF.Find(x => x.book == "");
+            if (A == null)
+            {
+                MF.Add(new BookBase()
+                {
+                    book = "",
+                    book_name = "",
+                    bank = "",
+                    bank_name = "",
+                    account = "",
+                    title = ""
+                });
+            }
+            return MF.OrderBy(x => x.book).ToList();
         }
 
 
@@ -111,6 +137,54 @@ where acct_book = '{book}' and pro_status = 1
             {
                 return DateTime.Today;
             }
+        }
+
+        /// <summary>
+        /// 找備註預設值(欄位吻合最多的那筆)
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="action_dtl"></param>
+        /// <param name="acct_code"></param>
+        /// <param name="acct_book_in"></param>
+        /// <param name="acct_book_out"></param>
+        /// <returns></returns>
+        public static string GetTraMastMemoDef(string action, string action_dtl, string acct_code, string acct_book_in, string acct_book_out)
+        {
+            string result = "";
+            if (string.IsNullOrWhiteSpace(action) && string.IsNullOrWhiteSpace(action_dtl) && string.IsNullOrWhiteSpace(acct_code) &&
+                string.IsNullOrWhiteSpace(acct_book_in) && string.IsNullOrWhiteSpace(acct_book_out))
+                return result;
+
+            string QryStr = @"
+select
+[CtStr]
+,*
+from tra_mast_memodef
+[WhStr]
+order by cnt desc
+";
+            //吻合計數(找最高的)
+            string CtStr = " 0";
+            CtStr += (string.IsNullOrWhiteSpace(action)) ? "" : $"\r\n + case when action = '{action}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(action_dtl)) ? "" : $"\r\n + case when action_dtl = '{action_dtl}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(acct_code)) ? "" : $"\r\n + case when acct_code = '{acct_code}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(acct_book_in)) ? "" : $"\r\n + case when acct_book_in = '{acct_book_in}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(acct_book_out)) ? "" : $"\r\n + case when acct_book_out = '{acct_book_out}' then 1 else 0 end";
+            CtStr += "\r\n as cnt";
+
+            //來源有值代表要找設定是ALL和一樣的那一列
+            string WhStr = "where 1=1";
+            WhStr += (string.IsNullOrWhiteSpace(action)) ? "" : $"\r\n and (action = '' or action = '{action}')";
+            WhStr += (string.IsNullOrWhiteSpace(action_dtl)) ? "" : $"\r\n and (action_dtl = '' or action_dtl = '{action_dtl}')";
+            WhStr += (string.IsNullOrWhiteSpace(acct_code)) ? "" : $"\r\n and (acct_code = '' or acct_code = '{acct_code}')";
+            WhStr += (string.IsNullOrWhiteSpace(acct_book_in)) ? "" : $"\r\n and (acct_book_in = '' or acct_book_in = '{acct_book_in}')";
+            WhStr += (string.IsNullOrWhiteSpace(acct_book_out)) ? "" : $"\r\n and (acct_book_out = '' or acct_book_out = '{acct_book_out}')";
+
+            QryStr = QryStr.Replace("[CtStr]", CtStr).Replace("[WhStr]", WhStr);
+            DataTable dt = DBService.SQL_QryTable(QryStr, new string[] { });
+            if (dt.Rows.Count == 0) return result;
+
+            return dt.Rows[0]["memodef"].ToString();
         }
 
         /// <summary>

@@ -117,6 +117,9 @@
     <Compile Include="Form\Form_tra_bankdeal.xaml.cs">
       <DependentUpon>Form_tra_bankdeal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Form\Form_tra_mast_memodef.xaml.cs">
+      <DependentUpon>Form_tra_mast_memodef.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Form\Form_tra_trade.xaml.cs">
       <DependentUpon>Form_tra_trade.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Form\Form_tra_bankdeal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Form\Form_tra_mast_memodef.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -42,7 +42,7 @@ namespace Accounting_App.Form
             Title = tl;
             Qry_Action.ItemsSource = CommUtility.InsertBlankItem(Lst_Tra);
             Qry_ActionDtl.ItemsSource = CommUtility.InsertBlankItem(Lst_TraDtl);
-            Cmb_Action.ItemsSource = Lst_Tra;
+            Cmb_Action.ItemsSource = new List<MapFile>(Lst_Tra);
             DG_Main.ItemsSource = DT_Main.DefaultView;
             Refresh(FormStates.Initial);
         }
@@ -187,6 +187,7 @@ namespace Accounting_App.Form
                 Cmb_ActionDtl.SelectedIndex = Cmb_AcctCode.SelectedIndex = 0;
                 Txt_Amt.Value = 0;
                 Txt_Memo.Text = "";
+                UpdateMemoDef();
             }
             Dtp_TradeDt.IsHitTestVisible = Cmb_Action.IsHitTestVisible = Cmb_ActionDtl.IsHitTestVisible = !(FormState == FormStates.Edit);  //新增後不可編輯
         }
@@ -215,13 +216,13 @@ namespace Accounting_App.Form
             string Act = Cmb_Action.SelectedValue.ToString();
             if (Act == "1")
             {
-                Cmb_ActionDtl.ItemsSource = Lst_TraDtlIn;
-                Cmb_AcctCode.ItemsSource = Lst_AcctIn;
+                Cmb_ActionDtl.ItemsSource = new List<MapFile>(Lst_TraDtlIn);
+                Cmb_AcctCode.ItemsSource = new List<MapFile>(Lst_AcctIn);
             }
             else if (Act == "2")
             {
-                Cmb_ActionDtl.ItemsSource = Lst_TraDtlOut;
-                Cmb_AcctCode.ItemsSource = Lst_AcctOut;
+                Cmb_ActionDtl.ItemsSource = new List<MapFile>(Lst_TraDtlOut);
+                Cmb_AcctCode.ItemsSource = new List<MapFile>(Lst_AcctOut);
             }
         }
 
@@ -237,7 +238,7 @@ namespace Accounting_App.Form
                 else if (Dtl == "b")  //入銀存
                     Cmb_BookIn.ItemsSource = Lst_BookBase.Where(x => x.book_type == "2").ToList();
                 else  //其他
-                    Cmb_BookIn.ItemsSource = Lst_BookBase;
+                    Cmb_BookIn.ItemsSource = new List<BookBase>(Lst_BookBase);
                 Cmb_BookOut.ItemsSource = null;  //清空
             }
             else if (Act == "2")  //支出
@@ -247,11 +248,40 @@ namespace Accounting_App.Form
                 else if (Dtl == "2")  //銀行轉帳
                     Cmb_BookOut.ItemsSource = Lst_BookBase.Where(x => x.book_type == "2").ToList();
                 else  //其他
-                    Cmb_BookOut.ItemsSource = Lst_BookBase;
+                    Cmb_BookOut.ItemsSource = new List<BookBase>(Lst_BookBase);
                 Cmb_BookIn.ItemsSource = null;  //清空
             }
+            UpdateMemoDef();
         }
 
+        //會計科目連動
+        private void Cmb_AcctCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateMemoDef();
+        }
+
+        //收入帳冊連動
+        private void Cmb_BookIn_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateMemoDef();
+        }
+
+        //支出帳冊連動
+        private void Cmb_BookOut_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateMemoDef();
+        }
+
+        //取得Memo預設值
+        private void UpdateMemoDef()
+        {
+            if (FormState != FormStates.Add && FormState != FormStates.Edit) return;
+            Txt_Memo.Text = CommUtility.GetTraMastMemoDef(Cmb_Action.SelectedValue == null ? "" : Cmb_Action.SelectedValue.ToString(),
+                Cmb_ActionDtl.SelectedValue == null ? "" : Cmb_ActionDtl.SelectedValue.ToString(),
+                Cmb_AcctCode.SelectedValue == null ? "" : Cmb_AcctCode.SelectedValue.ToString(),
+                Cmb_BookIn.SelectedValue == null ? "" : Cmb_BookIn.SelectedValue.ToString(),
+                Cmb_BookOut.SelectedValue == null ? "" : Cmb_BookOut.SelectedValue.ToString());
+        }
 
         //物件與Grid連動
         private void DG_Main_SelectionChanged(object sender, SelectionChangedEventArgs e)

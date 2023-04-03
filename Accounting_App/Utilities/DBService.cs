@@ -106,9 +106,8 @@ namespace Accounting_App.Utilities
                     parameters = new { Items = where_item };
                 }
 
-                var result = conn.Query<MapFile>(statement, parameters).OrderBy(x => x.item);
+                var result = conn.Query<MapFile>(statement, parameters).OrderBy(x => x.order_by).ThenBy(x => x.item);
                 return result.ToList();
-
             }
         }
 
@@ -292,6 +291,91 @@ namespace Accounting_App.Utilities
                 //注意日期格式
                 var deleteScript = $@"delete from tra_mast where " +
                     $@"trade_no = '{r["trade_no"]}'";
+                conn.Execute(deleteScript);
+            }
+        }
+
+        /// <summary>
+        /// 取得tra_mast_memodef
+        /// </summary>
+        /// <param name="filter">篩選條件</param>
+        /// <returns></returns>
+        public static DataTable QryTraMastMemoDef(string filter = "")
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                DataTable table = new DataTable("MyTable");
+                string statement = $@"select * from tra_mast_memodef ";
+                if (filter != "")
+                    statement += filter;
+
+                var result = conn.ExecuteReader(statement + " order by action, action_dtl, acct_code, acct_book_in, acct_book_out");
+                table.Load(result);
+                table = ConvertColumnToDate(table, new string[] { "logtime" });
+                return table;
+            }
+        }
+
+        /// <summary>
+        /// Insert_mast_memodef
+        /// </summary>
+        /// <param name="r"></param>
+        public static void InsTraMastMemoDef(DataRowView r)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                //注意日期格式
+                var insertScript = $@"insert into tra_mast_memodef values (" +
+                    $@"'{r["action"]}'" + "," +
+                    $@"'{r["action_dtl"]}'" + "," +
+                    $@"'{r["acct_code"]}'" + "," +
+                    $@"'{r["acct_book_in"]}'" + "," +
+                    $@"'{r["acct_book_out"]}'" + "," +
+                    $@"'{r["memodef"]}'" + "," +
+                    $@"'{r["loguser"]}'" + "," +
+                    $@"'{((DateTime)r["logtime"]).ToString("yyyy-MM-dd hh:mm:ss")}'" + ")";
+                conn.Execute(insertScript);
+            }
+        }
+
+        /// <summary>
+        /// Update_tra_mast_memodef
+        /// </summary>
+        /// <param name="r"></param>
+        public static void UpdTraMastMemoDef(DataRowView r)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                //注意日期格式
+                var updateScript = $@"update tra_mast_memodef set " +
+                    $@"memodef = '{r["memodef"]}'" + "," +
+                    $@"loguser = '{r["loguser"]}'" + "," +
+                    $@"logtime = '{((DateTime)r["logtime"]).ToString("yyyy-MM-dd hh:mm:ss")}'" +
+                    " where " +
+                    $@"action = '{r["action"]}'" + " and " +
+                    $@"action_dtl = '{r["action_dtl"]}'" + " and " +
+                    $@"acct_code = '{r["acct_code"]}'" + " and " +
+                    $@"acct_book_in = '{r["acct_book_in"]}'" + " and " +
+                    $@"acct_book_out = '{r["acct_book_out"]}'";
+                conn.Execute(updateScript);
+            }
+        }
+
+        /// <summary>
+        /// Delete_tra_mast_memodef
+        /// </summary>
+        /// <param name="r"></param>
+        public static void DelTraMastMemoDef(DataRowView r)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                //注意日期格式
+                var deleteScript = $@"delete from tra_mast_memodef where " +
+                    $@"action = '{r["action"]}'" + " and " +
+                    $@"action_dtl = '{r["action_dtl"]}'" + " and " +
+                    $@"acct_code = '{r["acct_code"]}'" + " and " +
+                    $@"acct_book_in = '{r["acct_book_in"]}'" + " and " +
+                    $@"acct_book_out = '{r["acct_book_out"]}'";
                 conn.Execute(deleteScript);
             }
         }

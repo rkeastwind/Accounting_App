@@ -45,7 +45,7 @@ namespace Accounting_App.Form
         {
             InitializeComponent();
             Title = tl;
-            Cmb_Action.ItemsSource = Lst_Tra;
+            Cmb_Action.ItemsSource = new List<MapFile>(Lst_Tra);
             DG_Main.ItemsSource = DT_Main.DefaultView;
             Refresh(FormStates.Initial);
         }
@@ -182,6 +182,7 @@ namespace Accounting_App.Form
                 Cmb_Action.SelectedIndex = 0;
                 Txt_Amt.Value = 0;
                 Txt_Memo.Text = "";
+                UpdateMemoDef();
             }
             Dtp_TradeDt.IsHitTestVisible = Cmb_Action.IsHitTestVisible = Cmb_BookIn.IsHitTestVisible = Cmb_BookOut.IsHitTestVisible = !(FormState == FormStates.Edit);  //新增後不可編輯
         }
@@ -202,12 +203,14 @@ namespace Accounting_App.Form
 
             Cmb_BookIn.ItemsSource = (new List<string> { "3", "5" }).Contains(Act) ? Lst_BookBase.Where(x => x.book_type == "2").ToList() : Lst_BookBase.Where(x => x.book_type == "1").ToList();
             Cmb_BookOut.ItemsSource = (new List<string> { "4", "5" }).Contains(Act) ? Lst_BookBase.Where(x => x.book_type == "2").ToList() : Lst_BookBase.Where(x => x.book_type == "1").ToList();
+            UpdateMemoDef();
         }
 
         private void Cmb_BookOut_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //帶出文字
             Txt_BookOutInfo.Text = GetBookInfo(Cmb_BookOut.SelectedItem as BookBase);
+            UpdateMemoDef();
 
             if (FormState != FormStates.Add) return;  //新增才用物件控制
             //取得庫存
@@ -220,12 +223,24 @@ namespace Accounting_App.Form
         {
             //帶出文字
             Txt_BookInInfo.Text = GetBookInfo(Cmb_BookIn.SelectedItem as BookBase);
+            UpdateMemoDef();
 
             if (FormState != FormStates.Add) return;  //新增才用物件控制
             //取得庫存
             C_BookInAmt = GetBookAmt(Cmb_BookIn.SelectedItem as BookBase);
             Txt_Amt_ValueChanged(Txt_Amt, null);
             CheckBookSelect();
+        }
+
+        //取得Memo預設值
+        private void UpdateMemoDef()
+        {
+            if (FormState != FormStates.Add && FormState != FormStates.Edit) return;
+            Txt_Memo.Text = CommUtility.GetTraMastMemoDef(Cmb_Action.SelectedValue == null ? "" : Cmb_Action.SelectedValue.ToString(),
+                "0",
+                "",
+                Cmb_BookIn.SelectedValue == null ? "" : Cmb_BookIn.SelectedValue.ToString(),
+                Cmb_BookOut.SelectedValue == null ? "" : Cmb_BookOut.SelectedValue.ToString());
         }
 
         private void CheckBookSelect()

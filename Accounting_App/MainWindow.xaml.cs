@@ -155,6 +155,16 @@ namespace Accounting_App
             }
         }
 
+        private void MenuItem_TraMastMemoDef_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsWindowOpen<Form_tra_mast_memodef>())
+            {
+                MenuItem i = (MenuItem)sender;
+                Form_tra_mast_memodef w = new Form_tra_mast_memodef(i.Header.ToString());
+                w.Show();
+            }
+        }
+
         private void MenuItem_SqlRepairTool_Click(object sender, RoutedEventArgs e)
         {
             if (!IsWindowOpen<Form_sql_repair_tool>())

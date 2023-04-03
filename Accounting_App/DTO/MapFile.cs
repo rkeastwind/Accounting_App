@@ -14,5 +14,12 @@ namespace Accounting_App.DTO
         public string item_name { get; set; }
         public string memo1 { get; set; }
         public string memo2 { get; set; }
+
+        public Int32 order_by { get; set; }
+
+        public string display_name
+        {
+            get { return item + " " + item_name; }
+        }
     }
 }
