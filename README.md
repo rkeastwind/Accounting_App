@@ -22,7 +22,7 @@
 <table>
   <tr>
     <td>
-      <strong>Latest Release: v1.0.4</strong>
+      <strong>Latest Release: v1.1.0</strong>
     </td>
     <td>
       <a href="https://github.com/rkeastwind/Accounting_App/releases/latest">[ Download ]</a><br />
@@ -42,7 +42,7 @@
 
 ## Development
 
-- 使用 Visual Studio Community 2019
+- 使用 Visual Studio Community 2022
 - 前端使用WPF用戶端應用程式
 - 後端使用SQLite搭配Dapper實作
 
