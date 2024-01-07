@@ -111,6 +111,8 @@ namespace Accounting_App.Utilities
             }
         }
 
+        #region book_base
+
         /// <summary>
         /// 取得BookBase
         /// </summary>
@@ -208,6 +210,10 @@ namespace Accounting_App.Utilities
             }
         }
 
+        #endregion book_base
+
+        #region tra_mast
+
         /// <summary>
         /// 取得tra_mast
         /// </summary>
@@ -295,6 +301,10 @@ namespace Accounting_App.Utilities
             }
         }
 
+        #endregion tra_mast
+
+        #region tra_mast_memodef
+
         /// <summary>
         /// 取得tra_mast_memodef
         /// </summary>
@@ -379,6 +389,10 @@ namespace Accounting_App.Utilities
                 conn.Execute(deleteScript);
             }
         }
+
+        #endregion tra_mast_memodef
+
+        #region 結帳相關(inv_mast、pro_date)
 
         /// <summary>
         /// 取得inv_mast
@@ -485,6 +499,8 @@ where A.book_type != 0 --排除總帳
                 conn.Execute(insertScript);
             }
         }
+
+        #endregion 結帳相關(inv_mast、pro_date)
 
         /// <summary>
         /// 轉換Datatable欄位格式為DateTime(因為SQLite沒有DateTime)
