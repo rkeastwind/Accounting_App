@@ -6,6 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        xmlns:ctnl="clr-namespace:Accounting_App.Controls"
         mc:Ignorable="d"
         Title="Form_tra_bankdeal" Height="865.906" Width="800">
     <Window.Resources>
@@ -163,46 +164,7 @@
 
         <!--CRUD控件-->
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,460,0,0">
-            <StackPanel x:Name="BtnGroup_CED" HorizontalAlignment="Left" Orientation="Horizontal">
-                <Button x:Name="Btn_Add" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25" Click="Btn_Add_Click"
-                        Background="#336633" Foreground="White" BorderThickness="0">
-                    <StackPanel Orientation="Horizontal" >
-                        <Image Source="/images/Btn_Add_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">新增</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="Btn_Edit" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25" Click="Btn_Edit_Click"
-                        Background="#FF7F3F" Foreground="White" BorderThickness="0">
-                    <StackPanel Orientation="Horizontal" >
-                        <Image Source="/images/Btn_Edit_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">修改</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="Btn_Delete" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25" Click="Btn_Delete_Click"
-                        Background="#ED5565" Foreground="White" BorderThickness="0">
-                    <StackPanel Orientation="Horizontal" >
-                        <Image Source="/images/Btn_Delete_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">刪除</TextBlock>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-
-            <StackPanel x:Name="BtnGroup_SoN" HorizontalAlignment="Left" Orientation="Horizontal" Margin="50,0,0,0">
-                <Button x:Name="Btn_Save" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25" Click="Btn_Save_Click"
-                        Background="Gray" Foreground="White" BorderThickness="0">
-                    <StackPanel Orientation="Horizontal" >
-                        <Image Source="/images/Btn_Save_Green.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">確定</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="Btn_Cancel" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25" Click="Btn_Cancel_Click"
-                        Background="DarkGray" Foreground="White" BorderThickness="0">
-                    <StackPanel Orientation="Horizontal" >
-                        <Image Source="/images/Btn_Cancel_Red.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">取消</TextBlock>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+            <ctnl:btn_crud x:Name="BtnGroup_CRUD"></ctnl:btn_crud>
         </StackPanel>
 
         <DataGrid x:Name="DG_Main" Height="295" VerticalAlignment="Top" Margin="10,500,10,0"

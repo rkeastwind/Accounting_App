@@ -108,7 +108,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\btn_crud.xaml.cs">
+      <DependentUpon>btn_crud.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DTO\BookBase.cs" />
+    <Compile Include="Utilities\FormState.cs" />
     <Compile Include="DTO\MapFile.cs" />
     <Compile Include="DTO\ProBal.cs" />
     <Compile Include="Form\Form_pro_date.xaml.cs">
@@ -145,6 +149,10 @@
     <Compile Include="Utilities\CommUtility.cs" />
     <Compile Include="Utilities\DBService.cs" />
     <Compile Include="Utilities\ProUtility.cs" />
+    <Page Include="Controls\btn_crud.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Form\Form_pro_date.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -262,6 +270,7 @@
   <ItemGroup>
     <Resource Include="images\Btn_Setting_White.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
