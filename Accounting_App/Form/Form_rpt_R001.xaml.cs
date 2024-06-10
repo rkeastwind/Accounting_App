@@ -143,7 +143,7 @@ order by book", new string[] { });
                 xlApp.Visible = false;
                 xlApp.ScreenUpdating = false;
 
-                workBook = xlApp.Workbooks.Open(System.Environment.CurrentDirectory + @"\Report_R001.xlsx");
+                workBook = xlApp.Workbooks.Open(System.Environment.CurrentDirectory + @"\Reports\Report_R001.xlsx");
                 sample_sheet = workBook.Worksheets[1];
 
                 string TW_Year_Beg = (QryDtBeg.Year - 1911).ToString() + $"/{QryDtBeg.ToString("%M/%d")}";  //民國年月日

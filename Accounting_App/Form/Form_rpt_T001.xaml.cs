@@ -84,7 +84,7 @@ namespace Accounting_App.Form
                 xlApp.Visible = false;
                 xlApp.ScreenUpdating = false;
 
-                workBook = xlApp.Workbooks.Open(System.Environment.CurrentDirectory + @"\Report_T001.xlsx");
+                workBook = xlApp.Workbooks.Open(System.Environment.CurrentDirectory + @"\Reports\Report_T001.xlsx");
                 sample_sheet = workBook.Worksheets[1];
 
                 string TW_Year = (QryDt.Year - 1911).ToString();  //民國年

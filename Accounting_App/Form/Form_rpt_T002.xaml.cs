@@ -142,7 +142,7 @@ order by book", new string[] { });
                 xlApp.Visible = false;
                 xlApp.ScreenUpdating = false;
 
-                workBook = xlApp.Workbooks.Open(System.Environment.CurrentDirectory + @"\Report_T002.xlsx");
+                workBook = xlApp.Workbooks.Open(System.Environment.CurrentDirectory + @"\Reports\Report_T002.xlsx");
                 sample_sheet = workBook.Worksheets[1];
 
                 DateTime cur_dt = QryDtBeg;

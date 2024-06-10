@@ -230,10 +230,18 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Reports\Report_R001.xlsx" />
-    <None Include="Reports\Report_R002.xlsx" />
-    <None Include="Reports\Report_T001.xlsx" />
-    <None Include="Reports\Report_T002.xlsx" />
+    <None Include="Reports\Report_R001.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Report_R002.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Report_T001.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Report_T002.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -287,7 +295,6 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>Copy "$(SolutionDir)Accounting_App\Reports\*.xlsx" "$(TargetDir)"
-If Not Exist "$(TargetDir)Accounting_App.db" (Copy "$(SolutionDir)Accounting_App\Accounting_App.db" "$(TargetDir)")</PreBuildEvent>
+    <PreBuildEvent>If Not Exist "$(TargetDir)Accounting_App.db" (Copy "$(SolutionDir)Accounting_App\Accounting_App.db" "$(TargetDir)")</PreBuildEvent>
   </PropertyGroup>
 </Project>
