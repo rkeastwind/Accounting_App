@@ -1,31 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Accounting_App.Utilities
 {
-    public enum EnumFormStates { Initial, ShowData, Add, Edit, Delete };
-    public enum EnumFormStatesText { 初始, 顯示, 新增, 修改, 刪除 };
+    public enum FormStateS
+    {
+        [Description("初始")]
+        Initial,
+        [Description("顯示")]
+        ShowData,
+        [Description("新增")]
+        Add,
+        [Description("修改")]
+        Edit,
+        [Description("刪除")]
+        Delete
+    };
 
     public class FormState
     {
-        private EnumFormStates _st;
+        private FormStateS _st;
         public FormState()
         {
-            this._st = EnumFormStates.Initial;
+            _st = FormStateS.Initial;
         }
 
-        public EnumFormStates State
+        public FormStateS State
         {
-            get { return this._st; }
-            set { this._st = value; }
+            get { return _st; }
+            set { _st = value; }
         }
 
         public string StateText
         {
-            get { return Enum.GetName(typeof(EnumFormStatesText), _st); }
+            get { return _st.GetDescriptionText(); }
         }
     }
 }

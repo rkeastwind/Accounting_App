@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Accounting_App.Utilities;
 
-namespace Accounting_App.Controls
+namespace Accounting_App.UserControls
 {
     /// <summary>
     /// btn_crud.xaml 的互動邏輯
@@ -26,10 +26,10 @@ namespace Accounting_App.Controls
             InitializeComponent();
         }
 
-        public void Refresh(EnumFormStates st)
+        public void Refresh(FormStateS st)
         {
             //控制Visibility
-            if (st == EnumFormStates.Initial || st == EnumFormStates.ShowData)
+            if (st == FormStateS.Initial || st == FormStateS.ShowData)
             {
                 BtnGroup_CED.Visibility = System.Windows.Visibility.Visible;
                 BtnGroup_SoN.Visibility = System.Windows.Visibility.Hidden;

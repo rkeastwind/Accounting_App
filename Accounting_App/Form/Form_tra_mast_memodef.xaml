@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
-        xmlns:ctnl="clr-namespace:Accounting_App.Controls"
+        xmlns:ctnl="clr-namespace:Accounting_App.UserControls"
         mc:Ignorable="d"
         Title="Form_tra_mast_memodef" Height="768.906" Width="800">
     <Window.Resources>

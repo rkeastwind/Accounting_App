@@ -51,12 +51,12 @@ namespace Accounting_App.Form
         {
             Cmb_Action.ItemsSource = new List<MapFile>(Lst_Tra);
             DG_Main.ItemsSource = DT_Main.DefaultView;
-            Refresh(EnumFormStates.Initial);
-            BtnGroup_CRUD.Btn_Add.Click += (s, e) => { Btn_AED_Click(EnumFormStates.Add); };
-            BtnGroup_CRUD.Btn_Edit.Click += (s, e) => { Btn_AED_Click(EnumFormStates.Edit); };
-            BtnGroup_CRUD.Btn_Delete.Click += (s, e) => { Btn_AED_Click(EnumFormStates.Delete); };
+            Refresh(FormStateS.Initial);
+            BtnGroup_CRUD.Btn_Add.Click += (s, e) => { Btn_AED_Click(FormStateS.Add); };
+            BtnGroup_CRUD.Btn_Edit.Click += (s, e) => { Btn_AED_Click(FormStateS.Edit); };
+            BtnGroup_CRUD.Btn_Delete.Click += (s, e) => { Btn_AED_Click(FormStateS.Delete); };
             BtnGroup_CRUD.Btn_Save.Click += Btn_Save_Click;
-            BtnGroup_CRUD.Btn_Cancel.Click += (s, e) => { Refresh(EnumFormStates.ShowData); };
+            BtnGroup_CRUD.Btn_Cancel.Click += (s, e) => { Refresh(FormStateS.ShowData); };
         }
 
         private void Btn_Qry_Click(object sender, RoutedEventArgs e)
@@ -73,12 +73,12 @@ namespace Accounting_App.Form
 
             DT_Main = DBService.QryTraMast(filter);
             DG_Main.ItemsSource = DT_Main.DefaultView;
-            Refresh(EnumFormStates.ShowData);
+            Refresh(FormStateS.ShowData);
             lbStatusBar2.Text = $"查詢成功，共{DT_Main.DefaultView.Count.ToString()}筆";
         }
 
         //新增、修改、刪除
-        private void Btn_AED_Click(EnumFormStates st)
+        private void Btn_AED_Click(FormStateS st)
         {
             if (!CheckBeforeEdit(st)) return;
             Refresh(st);
@@ -92,13 +92,13 @@ namespace Accounting_App.Form
             {
                 switch (FormState.State)
                 {
-                    case EnumFormStates.Add:
+                    case FormStateS.Add:
                         Operation_Add();
                         break;
-                    case EnumFormStates.Edit:
+                    case FormStateS.Edit:
                         Operation_Edit();
                         break;
-                    case EnumFormStates.Delete:
+                    case FormStateS.Delete:
                         Operation_Delete();
                         break;
                 }
@@ -110,12 +110,12 @@ namespace Accounting_App.Form
             }
             finally
             {
-                Refresh(EnumFormStates.ShowData);
+                Refresh(FormStateS.ShowData);
             }
         }
 
         //更新畫面與狀態
-        private void Refresh(EnumFormStates IformStates)
+        private void Refresh(FormStateS IformStates)
         {
             FormState.State = IformStates;
             BtnGroup_CRUD.Refresh(IformStates);
@@ -126,28 +126,28 @@ namespace Accounting_App.Form
         private void ObjectControl()
         {
             //大物件控制
-            if (FormState.State == EnumFormStates.Initial || FormState.State == EnumFormStates.ShowData)
+            if (FormState.State == FormStateS.Initial || FormState.State == FormStateS.ShowData)
             {
                 GpBox_Dtl.IsHitTestVisible = false;
                 GpBox_Qry.IsHitTestVisible = DG_Main.IsHitTestVisible = true;
             }
-            else if (FormState.State == EnumFormStates.Add || FormState.State == EnumFormStates.Edit)
+            else if (FormState.State == FormStateS.Add || FormState.State == FormStateS.Edit)
             {
                 GpBox_Dtl.IsHitTestVisible = true;
                 GpBox_Qry.IsHitTestVisible = DG_Main.IsHitTestVisible = false;
             }
-            else if (FormState.State == EnumFormStates.Delete)
+            else if (FormState.State == FormStateS.Delete)
             {
                 GpBox_Dtl.IsHitTestVisible = GpBox_Qry.IsHitTestVisible = DG_Main.IsHitTestVisible = false;
             }
 
             //小物件控制(先還原Amt再對帳冊動作)
-            if (FormState.State == EnumFormStates.Initial || FormState.State == EnumFormStates.ShowData)
+            if (FormState.State == FormStateS.Initial || FormState.State == FormStateS.ShowData)
             {
                 Txt_TradeNo.Text = "";
                 DG_Main_SelectionChanged(DG_Main, null);
             }
-            else if (FormState.State == EnumFormStates.Add)
+            else if (FormState.State == FormStateS.Add)
             {
                 Txt_TradeNo.Text = "系統自動編號";
                 Dtp_TradeDt.SelectedDate = CommUtility.GetNextProStartDt();
@@ -156,12 +156,12 @@ namespace Accounting_App.Form
                 Txt_Memo.Text = "";
                 UpdateMemoDef();
             }
-            Dtp_TradeDt.IsHitTestVisible = Cmb_Action.IsHitTestVisible = Cmb_BookIn.IsHitTestVisible = Cmb_BookOut.IsHitTestVisible = !(FormState.State == EnumFormStates.Edit);  //新增後不可編輯
+            Dtp_TradeDt.IsHitTestVisible = Cmb_Action.IsHitTestVisible = Cmb_BookIn.IsHitTestVisible = Cmb_BookOut.IsHitTestVisible = !(FormState.State == FormStateS.Edit);  //新增後不可編輯
         }
 
         private void Dtp_TradeDt_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (FormState.State != EnumFormStates.Add) return;  //新增才用物件控制
+            if (FormState.State != FormStateS.Add) return;  //新增才用物件控制
             C_BookOutAmt = GetBookAmt(Cmb_BookOut.SelectedItem as BookBase);
             C_BookInAmt = GetBookAmt(Cmb_BookIn.SelectedItem as BookBase);
             Txt_Amt_ValueChanged(Txt_Amt, null);
@@ -184,7 +184,7 @@ namespace Accounting_App.Form
             Txt_BookOutInfo.Text = GetBookInfo(Cmb_BookOut.SelectedItem as BookBase);
             UpdateMemoDef();
 
-            if (FormState.State != EnumFormStates.Add) return;  //新增才用物件控制
+            if (FormState.State != FormStateS.Add) return;  //新增才用物件控制
             //取得庫存
             C_BookOutAmt = GetBookAmt(Cmb_BookOut.SelectedItem as BookBase);
             Txt_Amt_ValueChanged(Txt_Amt, null);
@@ -197,7 +197,7 @@ namespace Accounting_App.Form
             Txt_BookInInfo.Text = GetBookInfo(Cmb_BookIn.SelectedItem as BookBase);
             UpdateMemoDef();
 
-            if (FormState.State != EnumFormStates.Add) return;  //新增才用物件控制
+            if (FormState.State != FormStateS.Add) return;  //新增才用物件控制
             //取得庫存
             C_BookInAmt = GetBookAmt(Cmb_BookIn.SelectedItem as BookBase);
             Txt_Amt_ValueChanged(Txt_Amt, null);
@@ -207,7 +207,7 @@ namespace Accounting_App.Form
         //取得Memo預設值
         private void UpdateMemoDef()
         {
-            if (FormState.State != EnumFormStates.Add && FormState.State != EnumFormStates.Edit) return;
+            if (FormState.State != FormStateS.Add && FormState.State != FormStateS.Edit) return;
             Txt_Memo.Text = CommUtility.GetTraMastMemoDef(Cmb_Action.SelectedValue == null ? "" : Cmb_Action.SelectedValue.ToString(),
                 "0",
                 "",
@@ -301,14 +301,14 @@ namespace Accounting_App.Form
         /// </summary>
         /// <param name="ChangeState">要改變的State</param>
         /// <returns></returns>
-        private bool CheckBeforeEdit(EnumFormStates ChangeState)
+        private bool CheckBeforeEdit(FormStateS ChangeState)
         {
-            if (ChangeState == EnumFormStates.Edit || ChangeState == EnumFormStates.Delete)
+            if (ChangeState == FormStateS.Edit || ChangeState == FormStateS.Delete)
             {
                 if (!CommUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
                 {
                     MessageBox.Show($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
-                        $"不可{Enum.GetName(typeof(EnumFormStatesText), ChangeState)}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        $"不可{ChangeState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
@@ -318,7 +318,7 @@ namespace Accounting_App.Form
         //儲存檢核
         private bool CheckBeforeSave()
         {
-            if (FormState.State == EnumFormStates.Add || FormState.State == EnumFormStates.Edit)
+            if (FormState.State == FormStateS.Add || FormState.State == FormStateS.Edit)
             {
                 if (Dtp_TradeDt.SelectedDate == null)
                 {
@@ -344,7 +344,7 @@ namespace Accounting_App.Form
             if (!CommUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
             {
                 MessageBox.Show($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
-                    $"不可{Enum.GetName(typeof(EnumFormStatesText), FormState)}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    $"不可{FormState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             return true;

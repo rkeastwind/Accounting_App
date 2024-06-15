@@ -51,12 +51,12 @@ namespace Accounting_App.Form
             Qry_Action.SelectedValue = "";  //觸發Select事件
 
             DG_Main.ItemsSource = DT_Main.DefaultView;
-            Refresh(EnumFormStates.Initial);
-            BtnGroup_CRUD.Btn_Add.Click += (s, e) => { Btn_AED_Click(EnumFormStates.Add); };
-            BtnGroup_CRUD.Btn_Edit.Click += (s, e) => { Btn_AED_Click(EnumFormStates.Edit); };
-            BtnGroup_CRUD.Btn_Delete.Click += (s, e) => { Btn_AED_Click(EnumFormStates.Delete); };
+            Refresh(FormStateS.Initial);
+            BtnGroup_CRUD.Btn_Add.Click += (s, e) => { Btn_AED_Click(FormStateS.Add); };
+            BtnGroup_CRUD.Btn_Edit.Click += (s, e) => { Btn_AED_Click(FormStateS.Edit); };
+            BtnGroup_CRUD.Btn_Delete.Click += (s, e) => { Btn_AED_Click(FormStateS.Delete); };
             BtnGroup_CRUD.Btn_Save.Click += Btn_Save_Click;
-            BtnGroup_CRUD.Btn_Cancel.Click += (s, e) => { Refresh(EnumFormStates.ShowData); };
+            BtnGroup_CRUD.Btn_Cancel.Click += (s, e) => { Refresh(FormStateS.ShowData); };
         }
 
         //查詢按鈕
@@ -83,12 +83,12 @@ namespace Accounting_App.Form
 
             DT_Main = DBService.QryTraMastMemoDef(filter);
             DG_Main.ItemsSource = DT_Main.DefaultView;
-            Refresh(EnumFormStates.ShowData);
+            Refresh(FormStateS.ShowData);
             lbStatusBar2.Text = $"查詢成功，共{DT_Main.DefaultView.Count.ToString()}筆";
         }
 
         //新增、修改、刪除
-        private void Btn_AED_Click(EnumFormStates st)
+        private void Btn_AED_Click(FormStateS st)
         {
             if (!CheckBeforeEdit(st)) return;
             Refresh(st);
@@ -102,13 +102,13 @@ namespace Accounting_App.Form
             {
                 switch (FormState.State)
                 {
-                    case EnumFormStates.Add:
+                    case FormStateS.Add:
                         Operation_Add();
                         break;
-                    case EnumFormStates.Edit:
+                    case FormStateS.Edit:
                         Operation_Edit();
                         break;
-                    case EnumFormStates.Delete:
+                    case FormStateS.Delete:
                         Operation_Delete();
                         break;
                 }
@@ -120,12 +120,12 @@ namespace Accounting_App.Form
             }
             finally
             {
-                Refresh(EnumFormStates.ShowData);
+                Refresh(FormStateS.ShowData);
             }
         }
 
         //更新畫面與狀態
-        private void Refresh(EnumFormStates IformStates)
+        private void Refresh(FormStateS IformStates)
         {
             FormState.State = IformStates;
             BtnGroup_CRUD.Refresh(IformStates);
@@ -136,40 +136,40 @@ namespace Accounting_App.Form
         private void ObjectControl()
         {
             //大物件控制
-            if (FormState.State == EnumFormStates.Initial || FormState.State == EnumFormStates.ShowData)
+            if (FormState.State == FormStateS.Initial || FormState.State == FormStateS.ShowData)
             {
                 GpBox_Dtl.IsHitTestVisible = false;
                 GpBox_Qry.IsHitTestVisible = DG_Main.IsHitTestVisible = true;
             }
-            else if (FormState.State == EnumFormStates.Add || FormState.State == EnumFormStates.Edit)
+            else if (FormState.State == FormStateS.Add || FormState.State == FormStateS.Edit)
             {
                 GpBox_Dtl.IsHitTestVisible = true;
                 GpBox_Qry.IsHitTestVisible = DG_Main.IsHitTestVisible = false;
             }
-            else if (FormState.State == EnumFormStates.Delete)
+            else if (FormState.State == FormStateS.Delete)
             {
                 GpBox_Dtl.IsHitTestVisible = GpBox_Qry.IsHitTestVisible = DG_Main.IsHitTestVisible = false;
             }
 
             //小物件控制
-            if (FormState.State != EnumFormStates.Edit && FormState.State != EnumFormStates.Delete)
+            if (FormState.State != FormStateS.Edit && FormState.State != FormStateS.Delete)
             {
                 Cmb_Action.ItemsSource = new List<MapFile>(Lst_Tra);
                 Cmb_Action.SelectedValue = "";  //觸發Select事件
             }
 
-            if (FormState.State == EnumFormStates.Initial || FormState.State == EnumFormStates.ShowData)
+            if (FormState.State == FormStateS.Initial || FormState.State == FormStateS.ShowData)
             {
                 DG_Main_SelectionChanged(DG_Main, null);
             }
-            else if (FormState.State == EnumFormStates.Add)
+            else if (FormState.State == FormStateS.Add)
             {
                 Cmb_Action.SelectedIndex = Cmb_ActionDtl.SelectedIndex = Cmb_AcctCode.SelectedIndex = 0;
                 Cmb_BookIn.SelectedIndex = Cmb_BookOut.SelectedIndex = 0;
                 Txt_MemoDef.Text = "";
             }
             Cmb_Action.IsHitTestVisible = Cmb_ActionDtl.IsHitTestVisible = Cmb_AcctCode.IsHitTestVisible
-                = Cmb_BookIn.IsHitTestVisible = Cmb_BookOut.IsHitTestVisible = !(FormState.State == EnumFormStates.Edit);  //新增後不可編輯
+                = Cmb_BookIn.IsHitTestVisible = Cmb_BookOut.IsHitTestVisible = !(FormState.State == FormStateS.Edit);  //新增後不可編輯
         }
 
         //查詢收支欄位連動
@@ -326,9 +326,9 @@ namespace Accounting_App.Form
         /// </summary>
         /// <param name="ChangeState">要改變的State</param>
         /// <returns></returns>
-        private bool CheckBeforeEdit(EnumFormStates ChangeState)
+        private bool CheckBeforeEdit(FormStateS ChangeState)
         {
-            if (ChangeState == EnumFormStates.Edit || ChangeState == EnumFormStates.Delete)
+            if (ChangeState == FormStateS.Edit || ChangeState == FormStateS.Delete)
             {
                 //if (!CommUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
                 //{
@@ -343,7 +343,7 @@ namespace Accounting_App.Form
         //儲存檢核
         private bool CheckBefoeSave()
         {
-            if (FormState.State == EnumFormStates.Add)
+            if (FormState.State == FormStateS.Add)
             {
                 string filter = "where 1=1 ";
                 string q_action = (Cmb_Action.SelectedValue == null) ? "" : Cmb_Action.SelectedValue.ToString();
