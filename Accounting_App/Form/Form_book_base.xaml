@@ -6,11 +6,11 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        xmlns:vcvt="clr-namespace:Accounting_App.ValueConverters"
         xmlns:ctnl="clr-namespace:Accounting_App.UserControls"
         mc:Ignorable="d"
         Title="Form_book_base" Height="590.333" Width="800">
     <Window.Resources>
-        <local:BookBaseGrideConverter x:Key="BookBaseGrideConverter"/>
     </Window.Resources>
     <Grid>
         <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
@@ -109,10 +109,10 @@
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="dgc_book" Header="帳冊代號" Binding="{Binding book}"/>
                 <DataGridTextColumn x:Name="dgc_book_name" Header="帳冊名稱" Binding="{Binding book_name}"/>
-                <DataGridTemplateColumn x:Name="dgc_book_type" Header="帳冊類型">
+                <DataGridTemplateColumn x:Name="dgc_book_type" Header="帳冊類型" SortMemberPath="book_type" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource BookBaseGrideConverter}, ConverterParameter=book_type}"/>
+                            <TextBlock Text="{Binding book_type, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=book_type}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

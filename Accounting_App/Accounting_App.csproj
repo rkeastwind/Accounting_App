@@ -108,6 +108,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DTO\BaseDTO\TableBaseDTO.cs" />
+    <Compile Include="DTO\InvMast.cs" />
+    <Compile Include="DTO\ProDate.cs" />
+    <Compile Include="DTO\TraMast.cs" />
+    <Compile Include="DTO\TraMastMemoDef.cs" />
     <Compile Include="UserControls\btn_crud.xaml.cs">
       <DependentUpon>btn_crud.xaml</DependentUpon>
     </Compile>
@@ -115,7 +120,6 @@
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\FormState.cs" />
     <Compile Include="DTO\MapFile.cs" />
-    <Compile Include="DTO\ProBal.cs" />
     <Compile Include="Form\Form_pro_date.xaml.cs">
       <DependentUpon>Form_pro_date.xaml</DependentUpon>
     </Compile>
@@ -150,6 +154,9 @@
     <Compile Include="Utilities\CommUtility.cs" />
     <Compile Include="Utilities\DBService.cs" />
     <Compile Include="Utilities\ProUtility.cs" />
+    <Compile Include="ValueConverters\ValueConverterBase.cs" />
+    <Compile Include="ValueConverters\Vcvt_BookBase.cs" />
+    <Compile Include="ValueConverters\Vcvt_MapFile.cs" />
     <Page Include="UserControls\btn_crud.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -6,11 +6,11 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        xmlns:vcvt="clr-namespace:Accounting_App.ValueConverters"
         xmlns:ctnl="clr-namespace:Accounting_App.UserControls"
         mc:Ignorable="d"
         Title="Form_tra_bankdeal" Height="865.906" Width="800">
     <Window.Resources>
-        <local:TraBankDealGrideConverter x:Key="TraBankDealGrideConverter"/>
     </Window.Resources>
     <Grid>
         <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
@@ -174,24 +174,24 @@
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="dgc_trade_no" Header="交易單號" Binding="{Binding trade_no}"/>
                 <DataGridTextColumn x:Name="dgc_trade_dt" Header="交易日期" Binding="{Binding trade_dt, StringFormat={}{0:yyyy/M/d}}"/>
-                <DataGridTemplateColumn x:Name="dgc_action" Header="交易方式">
+                <DataGridTemplateColumn x:Name="dgc_action" Header="交易方式" SortMemberPath="action" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraBankDealGrideConverter}, ConverterParameter=action}"/>
+                            <TextBlock Text="{Binding action, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=1}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_book_out" Header="轉出帳冊">
+                <DataGridTemplateColumn x:Name="dgc_acct_book_out" Header="轉出帳冊" SortMemberPath="acct_book_out" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraBankDealGrideConverter}, ConverterParameter=acct_book_out}"/>
+                            <TextBlock Text="{Binding acct_book_out, Converter={vcvt:Vcvt_BookBase}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_book_in" Header="轉入帳冊">
+                <DataGridTemplateColumn x:Name="dgc_acct_book_in" Header="轉入帳冊" SortMemberPath="acct_book_in" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraBankDealGrideConverter}, ConverterParameter=acct_book_in}"/>
+                            <TextBlock Text="{Binding acct_book_in, Converter={vcvt:Vcvt_BookBase}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

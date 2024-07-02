@@ -28,8 +28,6 @@ namespace Accounting_App.Form
         List<MapFile> Lst_Tra = DBService.GetMapFile("1", new object[] { "3", "4", "5", "6" });  //3.銀行存入、4.銀行提領、5.銀行調撥、6.現金調撥
         List<BookBase> Lst_BookBase = DBService.GetBookBase(false);
 
-        DataTable DT_Main = DBService.QryTraMast("where 1=0");  //初始化
-
         //金額Base，運算用
         decimal C_BookOutAmt = 0;
         decimal C_BookInAmt = 0;
@@ -50,7 +48,7 @@ namespace Accounting_App.Form
         private void FormInitial()
         {
             Cmb_Action.ItemsSource = new List<MapFile>(Lst_Tra);
-            DG_Main.ItemsSource = DT_Main.DefaultView;
+            DG_Main.ItemsSource = DBService.QryTraMast("where 1=0");  //初始化;
             Refresh(FormStateS.Initial);
             BtnGroup_CRUD.Btn_Add.Click += (s, e) => { Btn_AED_Click(FormStateS.Add); };
             BtnGroup_CRUD.Btn_Edit.Click += (s, e) => { Btn_AED_Click(FormStateS.Edit); };
@@ -71,10 +69,10 @@ namespace Accounting_App.Form
             //交易方式
             filter += "\r\n  and " + $@"action in ('3','4','5','6')";
 
-            DT_Main = DBService.QryTraMast(filter);
-            DG_Main.ItemsSource = DT_Main.DefaultView;
+            var DT_Main = DBService.QryTraMast(filter);
+            DG_Main.ItemsSource = DT_Main;
             Refresh(FormStateS.ShowData);
-            lbStatusBar2.Text = $"查詢成功，共{DT_Main.DefaultView.Count.ToString()}筆";
+            lbStatusBar2.Text = $"查詢成功，共{DT_Main.Count}筆";
         }
 
         //新增、修改、刪除
@@ -171,7 +169,7 @@ namespace Accounting_App.Form
         //交易方式欄位連動
         private void Cmb_Action_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string Act = Cmb_Action.SelectedValue.ToString();
+            string Act = Convert.ToString(Cmb_Action.SelectedValue);
 
             Cmb_BookIn.ItemsSource = (new List<string> { "3", "5" }).Contains(Act) ? Lst_BookBase.Where(x => x.book_type == "2").ToList() : Lst_BookBase.Where(x => x.book_type == "1").ToList();
             Cmb_BookOut.ItemsSource = (new List<string> { "4", "5" }).Contains(Act) ? Lst_BookBase.Where(x => x.book_type == "2").ToList() : Lst_BookBase.Where(x => x.book_type == "1").ToList();
@@ -208,17 +206,17 @@ namespace Accounting_App.Form
         private void UpdateMemoDef()
         {
             if (FormState.State != FormStateS.Add && FormState.State != FormStateS.Edit) return;
-            Txt_Memo.Text = CommUtility.GetTraMastMemoDef(Cmb_Action.SelectedValue == null ? "" : Cmb_Action.SelectedValue.ToString(),
+            Txt_Memo.Text = CommUtility.GetTraMastMemoDef(Convert.ToString(Cmb_Action.SelectedValue),
                 "0",
                 "",
-                Cmb_BookIn.SelectedValue == null ? "" : Cmb_BookIn.SelectedValue.ToString(),
-                Cmb_BookOut.SelectedValue == null ? "" : Cmb_BookOut.SelectedValue.ToString());
+                Convert.ToString(Cmb_BookIn.SelectedValue),
+                Convert.ToString(Cmb_BookOut.SelectedValue));
         }
 
         private void CheckBookSelect()
         {
             if (Cmb_BookOut.SelectedValue != null && Cmb_BookIn.SelectedValue != null)
-                Txt_Book_Msg.Text = (Cmb_BookOut.SelectedValue.ToString() == Cmb_BookIn.SelectedValue.ToString()) ? "轉出帳冊與轉入帳冊不可相同" : "";
+                Txt_Book_Msg.Text = (Convert.ToString(Cmb_BookOut.SelectedValue) == Convert.ToString(Cmb_BookIn.SelectedValue)) ? "轉出帳冊與轉入帳冊不可相同" : "";
             Txt_Amt_Msg.Text = (Txt_BookInAmt.Value < 0 || Txt_BookOutAmt.Value < 0) ? "出入帳冊庫存不可小於0" : "";
         }
 
@@ -239,19 +237,19 @@ namespace Accounting_App.Form
         {
             //查詢年月
             DateTime QryDt = Dtp_TradeDt.SelectedDate == null ? DateTime.Now : (DateTime)Dtp_TradeDt.SelectedDate;
-            string q_dt = QryDt.ToString("yyyy-MM-dd");
+            string q_dt = QryDt.GetFullDate();
 
             //庫存_上個月底
             string filter_bal = "\r\n" + $@"where date(trade_dt) = date('{q_dt}','start of month','-1 day') and acct_book = '{Book.book}'";
-            DataTable T_LastInv = DBService.QryInvMast(filter_bal);
-            decimal LastInv = T_LastInv.Rows.Count == 0 ? 0 : (decimal)T_LastInv.AsEnumerable().FirstOrDefault()["amt"];
+            var T_LastInv = DBService.QryInvMast(filter_bal);
+            decimal LastInv = T_LastInv.Count == 0 ? 0 : T_LastInv.FirstOrDefault().amt;
 
             //交易_月初到今日
             string filter_tra = "\r\n" + $@"where date(trade_dt) between date('{q_dt}','start of month') and '{q_dt}'";
-            DataTable T_Tra_P = DBService.QryTraMast(filter_tra + $@" and acct_book_in = '{Book.book}'");  //加項
-            DataTable T_Tra_M = DBService.QryTraMast(filter_tra + $@" and acct_book_out = '{Book.book}'");  //減項
-            decimal Tra_P = T_Tra_P.Rows.Count == 0 ? 0 : (decimal)T_Tra_P.Compute("SUM(amt)", "");
-            decimal Tra_M = T_Tra_M.Rows.Count == 0 ? 0 : (decimal)T_Tra_M.Compute("SUM(amt)", "");
+            List<TraMast> T_Tra_P = DBService.QryTraMast(filter_tra + $@" and acct_book_in = '{Book.book}'");  //加項
+            List<TraMast> T_Tra_M = DBService.QryTraMast(filter_tra + $@" and acct_book_out = '{Book.book}'");  //減項
+            decimal Tra_P = T_Tra_P.Sum(x => x.amt);
+            decimal Tra_M = T_Tra_M.Sum(x => x.amt);
 
             decimal result = LastInv + Tra_P - Tra_M;
             return result;
@@ -274,14 +272,14 @@ namespace Accounting_App.Form
             {
                 foreach (var r in DG_Main.SelectedItems)
                 {
-                    DataRowView drv = r as DataRowView;
-                    Txt_TradeNo.Text = drv["trade_no"].ToString();
-                    Dtp_TradeDt.SelectedDate = (DateTime)drv["trade_dt"];
-                    Cmb_Action.SelectedValue = drv["action"];
-                    Cmb_BookOut.SelectedValue = drv["acct_book_out"];
-                    Cmb_BookIn.SelectedValue = drv["acct_book_in"];
-                    Txt_Amt.Value = (decimal)drv["amt"];
-                    Txt_Memo.Text = drv["memo"].ToString();
+                    TraMast drv = r as TraMast;
+                    Txt_TradeNo.Text = drv.trade_no;
+                    Dtp_TradeDt.SelectedDate = drv.trade_dt;
+                    Cmb_Action.SelectedValue = drv.action;
+                    Cmb_BookOut.SelectedValue = drv.acct_book_out;
+                    Cmb_BookIn.SelectedValue = drv.acct_book_in;
+                    Txt_Amt.Value = drv.amt;
+                    Txt_Memo.Text = drv.memo;
 
                     //新增跟修改的Base不同，分開寫才不會亂掉
                     //新增：Base為當日累計 => 用物件的SelectChange控制
@@ -330,7 +328,7 @@ namespace Accounting_App.Form
                     MessageBox.Show("金額不可為0", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
-                if (Cmb_BookOut.SelectedValue.ToString() == Cmb_BookIn.SelectedValue.ToString())
+                if (Convert.ToString(Cmb_BookOut.SelectedValue) == Convert.ToString(Cmb_BookIn.SelectedValue))
                 {
                     MessageBox.Show("轉出帳冊與轉入帳冊不可相同", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
@@ -354,87 +352,51 @@ namespace Accounting_App.Form
         private void Operation_Add()
         {
             string trade_no = CommUtility.GetNextTradeNo_TraMast((DateTime)Dtp_TradeDt.SelectedDate);
-            DataView drv = DG_Main.ItemsSource as DataView;
-            DataRowView rowView = drv.AddNew();
-            rowView["trade_no"] = trade_no;
-            rowView["trade_dt"] = (DateTime)Dtp_TradeDt.SelectedDate;
-            rowView["action"] = Cmb_Action.SelectedValue;
-            rowView["action_dtl"] = 0;
-            rowView["acct_code"] = "";
-            rowView["acct_book_in"] = Cmb_BookIn.SelectedValue == null ? "" : Cmb_BookIn.SelectedValue;
-            rowView["acct_book_out"] = Cmb_BookOut.SelectedValue == null ? "" : Cmb_BookOut.SelectedValue;
-            rowView["amt"] = Txt_Amt.Value;
-            rowView["memo"] = Txt_Memo.Text.Trim();
-            rowView["loguser"] = AppVar.UserName;
-            rowView["logtime"] = DateTime.Now;
+            TraMast rowView = new TraMast()
+            {
+                trade_no = trade_no,
+                trade_dt = (DateTime)Dtp_TradeDt.SelectedDate,
+                action = Convert.ToString(Cmb_Action.SelectedValue),
+                action_dtl = "0",
+                acct_code = "",
+                acct_book_in = Convert.ToString(Cmb_BookIn.SelectedValue),
+                acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue),
+                amt = Txt_Amt.Value.Value,
+                memo = Txt_Memo.Text.Trim(),
+                loguser = AppVar.UserName,
+                logtime = DateTime.Now
+            };
 
-            DBService.InsTraMast(rowView);
-            rowView.EndEdit();
+            rowView.InsertDB();
+            (DG_Main.ItemsSource as List<TraMast>).Add(rowView);
+            CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
         }
 
         //編輯作業
         private void Operation_Edit()
         {
-            DataView drv = DG_Main.ItemsSource as DataView;
-            int r = DG_Main.SelectedIndex;
-            DataRowView rowView = drv[r];
-            rowView["trade_dt"] = (DateTime)Dtp_TradeDt.SelectedDate;
-            rowView["action"] = Cmb_Action.SelectedValue;
-            rowView["action_dtl"] = 0;
-            rowView["acct_code"] = "";
-            rowView["acct_book_in"] = Cmb_BookIn.SelectedValue == null ? "" : Cmb_BookIn.SelectedValue;
-            rowView["acct_book_out"] = Cmb_BookOut.SelectedValue == null ? "" : Cmb_BookOut.SelectedValue;
-            rowView["amt"] = Txt_Amt.Value;
-            rowView["memo"] = Txt_Memo.Text.Trim();
-            rowView["loguser"] = AppVar.UserName;
-            rowView["logtime"] = DateTime.Now;
+            var rowView = DG_Main.SelectedItem as TraMast;
+            rowView.trade_dt = (DateTime)Dtp_TradeDt.SelectedDate;
+            rowView.action = Convert.ToString(Cmb_Action.SelectedValue);
+            rowView.action_dtl = "0";
+            rowView.acct_code = "";
+            rowView.acct_book_in = Convert.ToString(Cmb_BookIn.SelectedValue);
+            rowView.acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue);
+            rowView.amt = Txt_Amt.Value.Value;
+            rowView.memo = Txt_Memo.Text.Trim();
+            rowView.loguser = AppVar.UserName;
+            rowView.logtime = DateTime.Now;
 
-            DBService.UpdTraMast(rowView);
-            rowView.EndEdit();
-            drv.Sort = drv.Sort == "" ? "[trade_no]" : "";  //透過改變Sort強迫觸發IValueConverter，但Sort只有空白時可以給值，所以並不會被賦予空白
+            rowView.UpdateDB();
+            CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
         }
 
         private void Operation_Delete()
         {
-            DataView drv = DG_Main.ItemsSource as DataView;
-            int r = DG_Main.SelectedIndex;
-            DataRowView rowView = drv[r];
-            DBService.DelTraMast(rowView);
-            rowView.Delete();
-            rowView.EndEdit();
-        }
-    }
-
-    /// <summary>
-    /// Gride文字轉換器(顯示用，只實作Convert)
-    /// </summary>
-    public class TraBankDealGrideConverter : IValueConverter
-    {
-        List<MapFile> Lst_Tra = DBService.GetMapFile("1", new object[] { "3", "4", "5", "6" });  //3.銀行存入、4.銀行提領、5.銀行調撥、6.現金調撥
-        List<BookBase> Lst_BookBase = DBService.GetBookBase(false);
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DataRowView r = value as DataRowView;
-            string col = parameter as string;
-            string result = "";
-
-            if (col == "action")
-            {
-                result = Lst_Tra.Where(x => x.item == r.Row[col].ToString()).Select(s => s.item_name).FirstOrDefault();
-            }
-            else if (col == "acct_book_in" || col == "acct_book_out")
-            {
-                result = Lst_BookBase.Where(x => x.book == r.Row[col].ToString()).Select(s => s.book_name).FirstOrDefault();
-            }
-            return result;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DataRowView r = value as DataRowView;
-            string col = parameter as string;
-            return r.Row[col].ToString();
+            var rowView = DG_Main.SelectedItem as TraMast;
+            rowView.DeleteDB();
+            (DG_Main.ItemsSource as List<TraMast>).Remove(rowView);
+            CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
         }
     }
 }

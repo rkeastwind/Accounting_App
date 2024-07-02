@@ -150,8 +150,8 @@ order by book", new string[] { });
                 {
                     foreach (var b in Books)  //帳冊
                     {
-                        string cur_beg_dt = new DateTime(cur_dt.Year, cur_dt.Month, 1).ToString("yyyy-MM-dd");  //月初
-                        string cur_end_dt = new DateTime(cur_dt.Year, cur_dt.Month, DateTime.DaysInMonth(cur_dt.Year, cur_dt.Month)).ToString("yyyy-MM-dd");  //月底日                        
+                        string cur_beg_dt = new DateTime(cur_dt.Year, cur_dt.Month, 1).GetFullDate();  //月初
+                        string cur_end_dt = new DateTime(cur_dt.Year, cur_dt.Month, DateTime.DaysInMonth(cur_dt.Year, cur_dt.Month)).GetFullDate();  //月底日                        
 
                         DataRow[] cur_trans = Trans.Select($@"(trade_dt >= '{cur_beg_dt}' and trade_dt <= '{cur_end_dt}') and (acct_book_in = '{b.book}' or acct_book_out = '{b.book}')");  //當月帳冊交易
                         int DataCount = cur_trans.Count();  //行數
@@ -245,8 +245,8 @@ order by book", new string[] { });
 
         private DataTable GetTrans(DateTime QryDtBeg, DateTime QryDtEnd)
         {
-            string q_beg_dt = QryDtBeg.ToString("yyyy-MM-dd");
-            string q_end_dt = QryDtEnd.ToString("yyyy-MM-dd");
+            string q_beg_dt = QryDtBeg.GetFullDate();
+            string q_end_dt = QryDtEnd.GetFullDate();
 
             DataTable dtb = DBService.SQL_QryTable($@"
 select
@@ -265,10 +265,10 @@ order by trade_dt, action, action_dtl
         private decimal GetLastDateEndInv(DateTime QryDt, string book)
         {
             decimal amt = 0;
-            string q_end_dt = new DateTime(QryDt.Year, QryDt.Month, 1).AddDays(-1).ToString("yyyy-MM-dd");  //上個月底
-            DataTable dtb = DBService.QryInvMast($@"where date(trade_dt) = '{q_end_dt}' and acct_book = '{book}'");
-            if (dtb.Rows.Count != 0)
-                amt = Convert.ToDecimal(dtb.AsEnumerable().FirstOrDefault()["amt"]);
+            string q_end_dt = new DateTime(QryDt.Year, QryDt.Month, 1).AddDays(-1).GetFullDate();  //上個月底
+            var dtb = DBService.QryInvMast($@"where date(trade_dt) = '{q_end_dt}' and acct_book = '{book}'");
+            if (dtb.Count != 0)
+                amt = dtb.FirstOrDefault().amt;
 
             return amt;
         }

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Accounting_App.DTO;
+using Accounting_App.DTO.BaseDTO;
+using System.Reflection;
 using Dapper;
 
 namespace Accounting_App.Utilities
@@ -73,7 +75,7 @@ namespace Accounting_App.Utilities
         /// </summary>
         /// <param name="usif">UserInfo物件</param>
         /// <returns></returns>
-        public static Boolean UpdUserInfo(UserInfo usif)
+        public static bool UpdUserInfo(UserInfo usif)
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
@@ -111,8 +113,6 @@ namespace Accounting_App.Utilities
             }
         }
 
-        #region book_base
-
         /// <summary>
         /// 取得BookBase
         /// </summary>
@@ -120,15 +120,9 @@ namespace Accounting_App.Utilities
         /// <returns></returns>
         public static List<BookBase> GetBookBase(bool InCludeTotal = false)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                string statement = $@"select * from book_base ";
-                if (InCludeTotal == false)
-                    statement += "where book_type != 0";
-
-                var result = conn.Query<BookBase>(statement).OrderBy(x => x.book_type).ThenBy(y => y.book);
-                return result.ToList();
-            }
+            string statement = (InCludeTotal == false) ? "where book_type != 0" : "";
+            var result = QryBookBase(statement);
+            return result;
         }
 
         /// <summary>
@@ -136,90 +130,25 @@ namespace Accounting_App.Utilities
         /// </summary>
         /// <param name="filter">篩選條件</param>
         /// <returns></returns>
-        public static DataTable QryBookBase(string filter = "")
+        public static List<BookBase> QryBookBase(string filter = "")
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
-                DataTable table = new DataTable("MyTable");
                 string statement = $@"select * from book_base ";
                 if (filter != "")
                     statement += filter;
 
-                var result = conn.ExecuteReader(statement + " order by book_type, book");
-                table.Load(result);
-                //table = ConvertColumnToDate(table, new string[] { "trade_dt", "logtime" });
-                return table;
+                var result = conn.Query<BookBase>(statement).OrderBy(x => x.book_type).ThenBy(y => y.book);
+                return result.ToList();
             }
         }
-
-        /// <summary>
-        /// Insert_book_base
-        /// </summary>
-        /// <param name="r"></param>
-        public static void InsBookBase(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var insertScript = $@"insert into book_base values (" +
-                    $@"'{r["book"]}'" + "," +
-                    $@"'{r["book_name"]}'" + "," +
-                    $@"'{r["book_type"]}'" + "," +
-                    $@"'{r["bank"]}'" + "," +
-                    $@"'{r["bank_name"]}'" + "," +
-                    $@"'{r["account"]}'" + "," +
-                    $@"'{r["title"]}'" + ")";
-                conn.Execute(insertScript);
-            }
-        }
-
-        /// <summary>
-        /// Update_book_base
-        /// </summary>
-        /// <param name="r"></param>
-        public static void UpdBookBase(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var updateScript = $@"update book_base set " +
-                    $@"book_name = '{r["book_name"]}'" + "," +
-                    $@"book_type = '{r["book_type"]}'" + "," +
-                    $@"bank = '{r["bank"]}'" + "," +
-                    $@"bank_name = '{r["bank_name"]}'" + "," +
-                    $@"account = '{r["account"]}'" + "," +
-                    $@"title = '{r["title"]}'" +
-                    " where " +
-                    $@"book = '{r["book"]}'";
-                conn.Execute(updateScript);
-            }
-        }
-
-        /// <summary>
-        /// Delete_book_base
-        /// </summary>
-        /// <param name="r"></param>
-        public static void DelBookBase(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var deleteScript = $@"delete from book_base where " +
-                    $@"book = '{r["book"]}'";
-                conn.Execute(deleteScript);
-            }
-        }
-
-        #endregion book_base
-
-        #region tra_mast
 
         /// <summary>
         /// 取得tra_mast
         /// </summary>
         /// <param name="filter">篩選條件</param>
         /// <returns></returns>
-        public static DataTable QryTraMast(string filter = "")
+        public static List<TraMast> QryTraMast(string filter = "")
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
@@ -228,89 +157,17 @@ namespace Accounting_App.Utilities
                 if (filter != "")
                     statement += filter;
 
-                var result = conn.ExecuteReader(statement + " order by trade_no");
-                table.Load(result);
-                table = ConvertColumnToDate(table, new string[] { "trade_dt", "logtime" });
-                return table;
+                var result = conn.Query<TraMast>(statement).OrderBy(x => x.trade_no);
+                return result.ToList();
             }
         }
-
-        /// <summary>
-        /// Insert_tra_mast
-        /// </summary>
-        /// <param name="r"></param>
-        public static void InsTraMast(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var insertScript = $@"insert into tra_mast values (" +
-                    $@"'{r["trade_no"]}'" + "," +
-                    $@"'{((DateTime)r["trade_dt"]).ToString("yyyy-MM-dd")}'" + "," +
-                    $@"'{r["action"]}'" + "," +
-                    $@"'{r["action_dtl"]}'" + "," +
-                    $@"'{r["acct_code"]}'" + "," +
-                    $@"'{r["acct_book_in"]}'" + "," +
-                    $@"'{r["acct_book_out"]}'" + "," +
-                    $@"'{r["amt"]}'" + "," +
-                    $@"'{r["memo"]}'" + "," +
-                    $@"'{r["loguser"]}'" + "," +
-                    $@"'{((DateTime)r["logtime"]).ToString("yyyy-MM-dd hh:mm:ss")}'" + ")";
-                conn.Execute(insertScript);
-            }
-        }
-
-        /// <summary>
-        /// Update_tra_mast
-        /// </summary>
-        /// <param name="r"></param>
-        public static void UpdTraMast(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var updateScript = $@"update tra_mast set " +
-                    $@"trade_dt = '{((DateTime)r["trade_dt"]).ToString("yyyy-MM-dd")}'" + "," +
-                    $@"action = '{r["action"]}'" + "," +
-                    $@"action_dtl = '{r["action_dtl"]}'" + "," +
-                    $@"acct_code = '{r["acct_code"]}'" + "," +
-                    $@"acct_book_in = '{r["acct_book_in"]}'" + "," +
-                    $@"acct_book_out = '{r["acct_book_out"]}'" + "," +
-                    $@"amt = '{r["amt"]}'" + "," +
-                    $@"memo = '{r["memo"]}'" + "," +
-                    $@"loguser = '{r["loguser"]}'" + "," +
-                    $@"logtime = '{((DateTime)r["logtime"]).ToString("yyyy-MM-dd hh:mm:ss")}'" +
-                    " where " +
-                    $@"trade_no = '{r["trade_no"]}'";
-                conn.Execute(updateScript);
-            }
-        }
-
-        /// <summary>
-        /// Delete_tra_mast
-        /// </summary>
-        /// <param name="r"></param>
-        public static void DelTraMast(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var deleteScript = $@"delete from tra_mast where " +
-                    $@"trade_no = '{r["trade_no"]}'";
-                conn.Execute(deleteScript);
-            }
-        }
-
-        #endregion tra_mast
-
-        #region tra_mast_memodef
 
         /// <summary>
         /// 取得tra_mast_memodef
         /// </summary>
         /// <param name="filter">篩選條件</param>
         /// <returns></returns>
-        public static DataTable QryTraMastMemoDef(string filter = "")
+        public static List<TraMastMemoDef> QryTraMastMemoDef(string filter = "")
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
@@ -319,87 +176,18 @@ namespace Accounting_App.Utilities
                 if (filter != "")
                     statement += filter;
 
-                var result = conn.ExecuteReader(statement + " order by action, action_dtl, acct_code, acct_book_in, acct_book_out");
-                table.Load(result);
-                table = ConvertColumnToDate(table, new string[] { "logtime" });
-                return table;
+                var result = conn.Query<TraMastMemoDef>(statement)
+                    .OrderBy(x => x.action).ThenBy(x => x.action_dtl).ThenBy(x => x.acct_code).ThenBy(x => x.acct_book_in).ThenBy(x => x.acct_book_out);
+                return result.ToList();
             }
         }
-
-        /// <summary>
-        /// Insert_mast_memodef
-        /// </summary>
-        /// <param name="r"></param>
-        public static void InsTraMastMemoDef(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var insertScript = $@"insert into tra_mast_memodef values (" +
-                    $@"'{r["action"]}'" + "," +
-                    $@"'{r["action_dtl"]}'" + "," +
-                    $@"'{r["acct_code"]}'" + "," +
-                    $@"'{r["acct_book_in"]}'" + "," +
-                    $@"'{r["acct_book_out"]}'" + "," +
-                    $@"'{r["memodef"]}'" + "," +
-                    $@"'{r["loguser"]}'" + "," +
-                    $@"'{((DateTime)r["logtime"]).ToString("yyyy-MM-dd hh:mm:ss")}'" + ")";
-                conn.Execute(insertScript);
-            }
-        }
-
-        /// <summary>
-        /// Update_tra_mast_memodef
-        /// </summary>
-        /// <param name="r"></param>
-        public static void UpdTraMastMemoDef(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var updateScript = $@"update tra_mast_memodef set " +
-                    $@"memodef = '{r["memodef"]}'" + "," +
-                    $@"loguser = '{r["loguser"]}'" + "," +
-                    $@"logtime = '{((DateTime)r["logtime"]).ToString("yyyy-MM-dd hh:mm:ss")}'" +
-                    " where " +
-                    $@"action = '{r["action"]}'" + " and " +
-                    $@"action_dtl = '{r["action_dtl"]}'" + " and " +
-                    $@"acct_code = '{r["acct_code"]}'" + " and " +
-                    $@"acct_book_in = '{r["acct_book_in"]}'" + " and " +
-                    $@"acct_book_out = '{r["acct_book_out"]}'";
-                conn.Execute(updateScript);
-            }
-        }
-
-        /// <summary>
-        /// Delete_tra_mast_memodef
-        /// </summary>
-        /// <param name="r"></param>
-        public static void DelTraMastMemoDef(DataRowView r)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var deleteScript = $@"delete from tra_mast_memodef where " +
-                    $@"action = '{r["action"]}'" + " and " +
-                    $@"action_dtl = '{r["action_dtl"]}'" + " and " +
-                    $@"acct_code = '{r["acct_code"]}'" + " and " +
-                    $@"acct_book_in = '{r["acct_book_in"]}'" + " and " +
-                    $@"acct_book_out = '{r["acct_book_out"]}'";
-                conn.Execute(deleteScript);
-            }
-        }
-
-        #endregion tra_mast_memodef
-
-        #region 結帳相關(inv_mast、pro_date)
 
         /// <summary>
         /// 取得inv_mast
         /// </summary>
         /// <param name="filter">篩選條件</param>
         /// <returns></returns>
-        public static DataTable QryInvMast(string filter = "")
+        public static List<InvMast> QryInvMast(string filter = "")
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
@@ -408,25 +196,8 @@ namespace Accounting_App.Utilities
                 if (filter != "")
                     statement += filter;
 
-                var result = conn.ExecuteReader(statement);
-                table.Load(result);
-                table = ConvertColumnToDate(table, new string[] { "trade_dt", "logtime" });
-                return table;
-            }
-        }
-
-        /// <summary>
-        /// Delete_inv_mast
-        /// </summary>
-        /// <param name="trade_dt"></param>
-        public static void DelInvMast(DateTime trade_dt)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                //注意日期格式
-                var deleteScript = $@"delete from inv_mast where " +
-                    $@"trade_dt = '{trade_dt.ToString("yyyy-MM-dd")}'";
-                conn.Execute(deleteScript);
+                var result = conn.Query<InvMast>(statement);
+                return result.ToList();
             }
         }
 
@@ -435,7 +206,7 @@ namespace Accounting_App.Utilities
         /// </summary>
         /// <param name="filter">篩選條件</param>
         /// <returns></returns>
-        public static DataTable QryProDate(string filter = "")
+        public static List<ProDate> QryProDate(string filter = "")
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
@@ -444,63 +215,156 @@ namespace Accounting_App.Utilities
                 if (filter != "")
                     statement += filter;
 
-                var result = conn.ExecuteReader(statement);
-                table.Load(result);
-                table = ConvertColumnToDate(table, new string[] { "pro_dt", "logtime" });
-                return table;
+                var result = conn.Query<ProDate>(statement);
+                return result.ToList();
             }
         }
 
         /// <summary>
-        /// 取得結帳庫存基底ProBal
+        /// 取得結帳庫存基底InvMast
         /// </summary>
         /// <param name="idt"></param>
         /// <returns></returns>
-        public static List<ProBal> GetProBal(DateTime idt)
+        public static List<InvMast> GetProBaseBal(DateTime idt)
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
                 DateTime dt = idt.AddDays(-idt.Day);  //上個月底
                 string sql = $@"
 SELECT
-	A.book, A.book_name,
-	'{dt.ToString("yyyy-MM-dd")}' AS trade_dt, ifnull(B.amt,0) AS amt
+    A.book AS acct_book,
+    '{dt.GetFullDate()}' AS trade_dt,
+    ifnull(B.amt,0) AS amt
 FROM book_base A
-left join (select * from inv_mast where date(trade_dt) = '{dt.ToString("yyyy-MM-dd")}') B ON A.book = B.acct_book
+left join (select * from inv_mast where date(trade_dt) = '{dt.GetFullDate()}') B ON A.book = B.acct_book
 where A.book_type != 0 --排除總帳
 ";
-
-                var result = conn.Query<ProBal>(sql).OrderBy(x => x.book);
+                var result = conn.Query<InvMast>(sql).OrderBy(x => x.acct_book);
                 return result.ToList();
             }
         }
 
-        /// <summary>
-        /// Insert_inv_mast
-        /// </summary>
-        /// <param name="p"></param>
-        public static void InsInvMast(List<ProBal> p)
+        public static int InsertDB<T>(this T r) where T : TableBaseDTO
         {
-            if (p.Count() == 0) return;
+            int affected = 0;
+            if (r.GetType() != typeof(T))
+                throw new Exception("寫入資料庫與傳入格式不符");
+
+            var SqlScript = @"insert into [$Table] ([$Cols]) values ([$Values])";
+            //處理值
+            List<string> pkey = new List<string>();
+            List<string> cols = new List<string>();
+            var parameters = new DynamicParameters();
+            foreach (var pi in r.GetType().GetProperties())
+            {
+                object vl = pi.GetValue(r, null);
+                SetColByAttr(pi, vl, ref pkey, ref cols, ref parameters);
+            }
+            SqlScript = SqlScript.Replace("[$Table]", r.Table);
+            SqlScript = SqlScript.Replace("[$Cols]", string.Join(", ", cols.ToArray()));
+            SqlScript = SqlScript.Replace("[$Values]", string.Join(", ", cols.Select(x => "@" + x).ToArray()));
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
-                string insertScript = $@"insert into inv_mast values ";
-                foreach (var a in p)
-                {
-                    //注意日期格式
-                    insertScript += "\r\n" + "(" +
-                        $@"'{a.book}'" + "," +
-                        $@"'{a.trade_dt.ToString("yyyy-MM-dd")}'" + "," +
-                        $@"'{a.amt}'" + "," +
-                        $@"'{AppVar.UserName}'" + "," +
-                        $@"'{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}'" + "),";
-                }
-                insertScript = insertScript.TrimEnd(',');
-                conn.Execute(insertScript);
+                affected = conn.Execute(SqlScript, parameters);
             }
+            return affected;
         }
 
-        #endregion 結帳相關(inv_mast、pro_date)
+        public static int UpdateDB<T>(this T r) where T : TableBaseDTO
+        {
+            int affected = 0;
+            if (r.GetType() != typeof(T))
+                throw new Exception("寫入資料庫與傳入格式不符");
+
+            var SqlScript = @"update [$Table] set [$ColVal] where [$Key]";
+            //處理值
+            List<string> pkey = new List<string>();
+            List<string> cols = new List<string>();
+            var parameters = new DynamicParameters();
+            foreach (var pi in r.GetType().GetProperties())
+            {
+                object vl = pi.GetValue(r, null);
+                SetColByAttr(pi, vl, ref pkey, ref cols, ref parameters);
+            }
+            SqlScript = SqlScript.Replace("[$Table]", r.Table);
+            SqlScript = SqlScript.Replace("[$ColVal]", string.Join(", ", cols.Where(x => !pkey.Contains(x)).Select(x => $@"{x} = @{x}").ToArray()));
+            SqlScript = SqlScript.Replace("[$Key]", string.Join(" and ", pkey.Select(x => $@"{x} = @{x}").ToArray()));
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                affected = conn.Execute(SqlScript, parameters);
+            }
+            return affected;
+        }
+
+        public static int DeleteDB<T>(this T r) where T : TableBaseDTO
+        {
+            int affected = 0;
+            if (r.GetType() != typeof(T))
+                throw new Exception("寫入資料庫與傳入格式不符");
+
+            var SqlScript = @"delete from [$Table] where [$Key]";
+            //處理值
+            List<string> pkey = new List<string>();
+            List<string> cols = new List<string>();
+            var parameters = new DynamicParameters();
+            foreach (var pi in r.GetType().GetProperties())
+            {
+                object vl = pi.GetValue(r, null);
+                SetColByAttr(pi, vl, ref pkey, ref cols, ref parameters);
+            }
+            SqlScript = SqlScript.Replace("[$Table]", r.Table);
+            SqlScript = SqlScript.Replace("[$Key]", string.Join(" and ", pkey.Select(x => $@"{x} = @{x}").ToArray()));
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                affected = conn.Execute(SqlScript, parameters);
+            }
+            return affected;
+        }
+
+
+        private static void SetColByAttr(PropertyInfo pi, object vl, ref List<string> pkey, ref List<string> cols, ref DynamicParameters para)
+        {
+            //處理Attribute
+            bool IsTableCol = false;
+            var coltp = TableColTypeS.None;
+            foreach (object attr in pi.GetCustomAttributes(true))
+            {
+                if ((attr as PrimaryKeyAttribute) != null)
+                    pkey.Add(pi.Name);
+                if ((attr as TableColumnAttribute) != null)
+                {
+                    cols.Add(pi.Name);
+                    IsTableCol = true;
+                }
+                if ((attr as ColTypeAttribute) != null)
+                    coltp = (attr as ColTypeAttribute).ColType;
+            }
+            if (!IsTableCol) return;   //不為TableCol
+
+            //處理欄位值
+            List<Type> DtTp = new List<Type>() {
+                typeof(DateTime), typeof(DateTime?)
+            };
+            List<Type> NmTp = new List<Type>() {
+                typeof(decimal), typeof(double), typeof(float), typeof(int),
+                typeof(decimal?), typeof(double?), typeof(float?), typeof(int?)
+            };
+            //預設DB不可Null，日期轉TEXT(SQLLite沒有日期格式)
+            if (DtTp.Contains(pi.PropertyType))  //日期
+            {
+                DateTime dt = (vl == null) ? new DateTime(1900, 01, 01) : Convert.ToDateTime(vl);
+                if (coltp == TableColTypeS.Date)
+                    vl = dt.GetFullDate();
+                else
+                    vl = dt.GetFullDateTime();
+            }
+            else if (NmTp.Contains(pi.PropertyType))  //數字
+                vl = (vl == null) ? 0 : vl;
+            else  //其他
+                vl = (vl == null) ? "" : vl;
+
+            para.Add(pi.Name, vl);
+        }
 
         /// <summary>
         /// 轉換Datatable欄位格式為DateTime(因為SQLite沒有DateTime)

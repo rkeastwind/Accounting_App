@@ -72,10 +72,10 @@ namespace Accounting_App.Utilities
         {
             string trade_no = "";
             string leading_code = dt.ToString("yyyyMMdd");
-            DataRow rw = DBService.QryTraMast($@"where trade_no like '{leading_code}%'").AsEnumerable().OrderByDescending(x => x["trade_no"]).FirstOrDefault();
+            TraMast rw = DBService.QryTraMast($@"where trade_no like '{leading_code}%'").AsEnumerable().OrderByDescending(x => x.trade_no).FirstOrDefault();
             if (rw != null)
             {
-                string max_trade_no = rw["trade_no"].ToString();
+                string max_trade_no = rw.trade_no;
                 int new_no = int.Parse(max_trade_no.Replace(leading_code, "")) + 1;
                 trade_no = leading_code + new_no.ToString().PadLeft(5, '0');
             }
@@ -94,8 +94,8 @@ namespace Accounting_App.Utilities
         public static bool CheckIsPro(DateTime dt)
         {
             string YearMonth = dt.ToString("yyyy-MM");
-            DataTable Qry = DBService.QryProDate($@"where strftime('%Y-%m', pro_dt) = '{YearMonth}' and pro_status = 1");
-            if (Qry.Rows.Count > 0)
+            var Qry = DBService.QryProDate($@"where strftime('%Y-%m', pro_dt) = '{YearMonth}' and pro_status = 1");
+            if (Qry.Count > 0)
             {
                 return false;
             }
@@ -128,10 +128,10 @@ where acct_book = '{book}' and pro_status = 1
         /// <returns></returns>
         public static DateTime GetNextProStartDt()
         {
-            DataRow rw = DBService.QryProDate("where pro_dt = (select MAX(pro_dt) from pro_date where pro_status = 1)").AsEnumerable().FirstOrDefault();
+            var rw = DBService.QryProDate("where pro_dt = (select MAX(pro_dt) from pro_date where pro_status = 1)").FirstOrDefault();
             if (rw != null)
             {
-                return rw.Field<DateTime>("pro_dt").AddDays(1);  //最大結帳日+1
+                return rw.pro_dt.AddDays(1);  //最大結帳日+1
             }
             else
             {

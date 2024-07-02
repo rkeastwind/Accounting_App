@@ -13,36 +13,34 @@ namespace Accounting_App.Utilities
     {
         public static bool ExecutePro(DateTime dt, int direction)
         {
-            string qdt = dt.ToString("yyyy-MM-dd");
+            string qdt = dt.GetFullDate();
             DateTime _qdt = dt.AddMonths(1);
-            string next_dt = new DateTime(_qdt.Year, _qdt.Month, DateTime.DaysInMonth(_qdt.Year, _qdt.Month)).ToString("yyyy-MM-dd");  //下個月底日
+            string next_dt = new DateTime(_qdt.Year, _qdt.Month, DateTime.DaysInMonth(_qdt.Year, _qdt.Month)).GetFullDate();  //下個月底日
 
             if (direction == 1)  //正向
             {
                 //前置作業，刪除庫存
                 DBService.SQL_Command($"delete from inv_mast where date(trade_dt) >= '{qdt}'");
 
-                List<ProBal> Bal = DBService.GetProBal(dt);  //上個月底庫存(完整清單，沒有庫存的放0)
-                DataTable Tra = DBService.QryTraMast($"where date(trade_dt) between date('{qdt}','start of month') and '{qdt}'");  //月初到月底交易
+                List<InvMast> Bal = DBService.GetProBaseBal(dt);  //上個月底庫存(完整清單，沒有庫存的放0)
+                List<TraMast> Tra = DBService.QryTraMast($"where date(trade_dt) between date('{qdt}','start of month') and '{qdt}'");  //月初到月底交易
 
                 DateTime c_mbeg = dt.AddDays(-dt.Day + 1);  //月初
 
                 while (c_mbeg <= dt)
                 {
-                    string qc_mbeg = c_mbeg.ToString("yyyy-MM-dd");
+                    string qc_mbeg = c_mbeg.GetFullDate();
 
                     foreach (var b in Bal)
                     {
-                        object _amt_P = Tra.Compute("SUM(amt)", $"acct_book_in = '{b.book}' and trade_dt = '{qc_mbeg}'");
-                        object _amt_M = Tra.Compute("SUM(amt)", $"acct_book_out = '{b.book}' and trade_dt = '{qc_mbeg}'");
-                        decimal amt_P = _amt_P is decimal ? (decimal)_amt_P : 0;
-                        decimal amt_M = _amt_M is decimal ? (decimal)_amt_M : 0;
+                        decimal amt_P = Tra.Where(x => x.acct_book_in == b.acct_book && x.trade_dt == c_mbeg).Sum(x => x.amt);
+                        decimal amt_M = Tra.Where(x => x.acct_book_out == b.acct_book && x.trade_dt == c_mbeg).Sum(x => x.amt);
                         b.amt = b.amt + amt_P - amt_M;
                         b.trade_dt = c_mbeg;
 
                         if (b.amt < 0)
                         {
-                            MessageBox.Show($"[{b.book}_{b.book_name}]於{qc_mbeg}結帳時發生庫存小於0 (${b.amt})，請檢查交易", "結帳失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            MessageBox.Show($"[{b.acct_book}_{b.acct_book_name}]於{qc_mbeg}結帳時發生庫存小於0 (${b.amt})，請檢查交易", "結帳失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return false;
                         }
                     }
@@ -50,22 +48,35 @@ namespace Accounting_App.Utilities
                 }
 
                 //新增總帳
-                Bal.Add(new ProBal()
+                Bal.Add(new InvMast()
                 {
-                    book = "Total",
-                    book_name = "總帳",
+                    acct_book = "Total",
                     trade_dt = dt,
                     amt = Bal.Sum(x => x.amt)
                 });
                 //刪除0庫存
                 Bal.RemoveAll(x => x.amt == 0);
                 //寫入庫存
-                DBService.InsInvMast(Bal);
+                foreach (var b in Bal)
+                {
+                    b.loguser = AppVar.UserName;
+                    b.logtime = DateTime.Now;
+                    b.InsertDB();
+                }
 
                 //更新狀態，並新增下次的結帳期初，先刪除後新增就不用判斷是否有資料，
                 DBService.SQL_Command($"delete from pro_date where date(pro_dt) between '{qdt}' and '{next_dt}'");
-                DBService.SQL_Command($"insert into pro_date values('{qdt}',1,'{AppVar.UserName}','{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}')");
-                DBService.SQL_Command($"insert into pro_date values('{next_dt}',0,'{AppVar.UserName}','{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}')");
+                ProDate pd = new ProDate()
+                {
+                    pro_dt = Convert.ToDateTime(qdt),
+                    pro_status = 1,
+                    loguser = AppVar.UserName,
+                    logtime = DateTime.Now
+                };
+                pd.InsertDB();
+                pd.pro_dt = Convert.ToDateTime(next_dt);
+                pd.pro_status = 0;
+                pd.InsertDB();
             }
             else  //反向
             {

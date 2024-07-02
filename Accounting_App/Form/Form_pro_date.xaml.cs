@@ -22,8 +22,6 @@ namespace Accounting_App.Form
         enum FormStatesText { 結帳, 反結帳 }
         FormStates FormState = FormStates.Run;
 
-        DataTable DT_Main = DBService.QryProDate("where 1=0");  //初始化
-
         public Form_pro_date()
         {
             InitializeComponent();
@@ -57,13 +55,13 @@ namespace Accounting_App.Form
             string filter = FormState == FormStates.Run ?
                 "where pro_dt = (select MIN(pro_dt) from pro_date where pro_status = 0)" :
                 "where pro_dt = (select MAX(pro_dt) from pro_date where pro_status = 1)";
-            DT_Main = DBService.QryProDate(filter);
-            DG_Main.ItemsSource = DT_Main.DefaultView;
+            var DT_Main = DBService.QryProDate(filter);
+            DG_Main.ItemsSource = DT_Main;
         }
 
         private void Btn_Execute_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dt = (DateTime)DT_Main.AsEnumerable().FirstOrDefault()["pro_dt"];
+            DateTime dt = (DG_Main.ItemsSource as List<ProDate>).FirstOrDefault().pro_dt;
 
             try
             {
@@ -73,7 +71,7 @@ namespace Accounting_App.Form
                     if (ProUtility.ExecutePro(dt, 1))
                     {
                         FormStateChange(FormStates.Run);
-                        MessageBox.Show($"{dt.ToString("yyyy-MM-dd")}結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show($"{dt.GetFullDate()}結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else
@@ -81,7 +79,7 @@ namespace Accounting_App.Form
                     if (ProUtility.ExecutePro(dt, 0))
                     {
                         FormStateChange(FormStates.Cancel);
-                        MessageBox.Show($"{dt.ToString("yyyy-MM-dd")}反結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show($"{dt.GetFullDate()}反結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
@@ -93,35 +91,6 @@ namespace Accounting_App.Form
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
             }
-        }
-    }
-
-    /// <summary>
-    /// Gride文字轉換器(顯示用，只實作Convert)
-    /// </summary>
-    public class ProDateGrideConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DataRowView r = value as DataRowView;
-            string col = parameter as string;
-            string result = "";
-
-            if (col == "pro_status")
-            {
-                if (r.Row[col].ToString() == "0")
-                    result = "未結帳";
-                else if (r.Row[col].ToString() == "1")
-                    result = "已結帳";
-            }
-            return result;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DataRowView r = value as DataRowView;
-            string col = parameter as string;
-            return r.Row[col].ToString();
         }
     }
 }

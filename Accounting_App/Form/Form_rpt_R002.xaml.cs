@@ -214,8 +214,8 @@ order by book", new string[] { });  //庫存表開放查詢總帳冊
 
         private DataTable GetInvMast(DateTime QryDtBeg, DateTime QryDtEnd, List<BookBase> Books)
         {
-            string q_beg_dt = QryDtBeg.ToString("yyyy-MM-dd");
-            string q_end_dt = QryDtEnd.ToString("yyyy-MM-dd");
+            string q_beg_dt = QryDtBeg.GetFullDate();
+            string q_end_dt = QryDtEnd.GetFullDate();
             string q_books = "";
             foreach (var b in Books)
             {

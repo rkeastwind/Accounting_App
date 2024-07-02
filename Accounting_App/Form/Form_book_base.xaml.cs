@@ -8,6 +8,7 @@ using System.Windows.Data;
 using Accounting_App.DTO;
 using Accounting_App.Utilities;
 using System.Globalization;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace Accounting_App.Form
 {
@@ -20,9 +21,6 @@ namespace Accounting_App.Form
 
         List<MapFile> Lst_BookType = DBService.GetMapFile("book_type");
         List<MapFile> Lst_BookType_NT = DBService.GetMapFile("book_type").Where(x => x.item != "0").ToList();
-
-        DataTable DT_Main = DBService.QryBookBase();  //初始化
-
 
         public Form_book_base()
         {
@@ -39,7 +37,7 @@ namespace Accounting_App.Form
 
         private void FormInitial()
         {
-            DG_Main.ItemsSource = DT_Main.DefaultView;
+            DG_Main.ItemsSource = DBService.QryBookBase();
             Refresh(FormStateS.Initial);
             BtnGroup_CRUD.Btn_Add.Click += (s, e) => { Btn_AED_Click(FormStateS.Add); };
             BtnGroup_CRUD.Btn_Edit.Click += (s, e) => { Btn_AED_Click(FormStateS.Edit); };
@@ -137,14 +135,14 @@ namespace Accounting_App.Form
             {
                 foreach (var r in DG_Main.SelectedItems)
                 {
-                    DataRowView drv = r as DataRowView;
-                    Txt_Book.Text = drv["book"].ToString();
-                    Txt_Book_Name.Text = drv["book_name"].ToString();
-                    Cmb_BookType.SelectedValue = drv["book_type"];
-                    Txt_Bank.Text = drv["bank"].ToString();
-                    Txt_Bank_Name.Text = drv["bank_name"].ToString();
-                    Txt_Account.Text = drv["account"].ToString();
-                    Txt_Title.Text = drv["title"].ToString();
+                    BookBase drv = r as BookBase;
+                    Txt_Book.Text = drv.book;
+                    Txt_Book_Name.Text = drv.book_name;
+                    Cmb_BookType.SelectedValue = drv.book_type;
+                    Txt_Bank.Text = drv.bank;
+                    Txt_Bank_Name.Text = drv.bank_name;
+                    Txt_Account.Text = drv.account;
+                    Txt_Title.Text = drv.title;
                 }
             }
 
@@ -179,8 +177,8 @@ namespace Accounting_App.Form
         {
             if (FormState.State == FormStateS.Add)
             {
-                DataTable IsBookExists = DBService.QryBookBase($@"where book = '{Txt_Book.Text}'");
-                if (IsBookExists.Rows.Count > 0)
+                var IsBookExists = DBService.QryBookBase($@"where book = '{Txt_Book.Text}'");
+                if (IsBookExists.Count > 0)
                 {
                     MessageBox.Show("帳冊代號已存在", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
@@ -200,75 +198,44 @@ namespace Accounting_App.Form
         //新增作業
         private void Operation_Add()
         {
-            DataView drv = DG_Main.ItemsSource as DataView;
-            DataRowView rowView = drv.AddNew();
-            rowView["book"] = Txt_Book.Text.Trim();
-            rowView["book_name"] = Txt_Book_Name.Text.Trim();
-            rowView["book_type"] = Cmb_BookType.SelectedValue;
-            rowView["bank"] = Txt_Bank.Value.ToString().Trim();
-            rowView["bank_name"] = Txt_Bank_Name.Text.Trim();
-            rowView["account"] = Txt_Account.Value.ToString().Trim();
-            rowView["title"] = Txt_Title.Text.Trim();
+            BookBase rowView = new BookBase()
+            {
+                book = Txt_Book.Text.Trim(),
+                book_name = Txt_Book_Name.Text.Trim(),
+                book_type = Convert.ToString(Cmb_BookType.SelectedValue),
+                bank = Txt_Bank.Value.ToString().Trim(),
+                bank_name = Txt_Bank_Name.Text.Trim(),
+                account = Txt_Account.Value.ToString().Trim(),
+                title = Txt_Title.Text.Trim()
+            };
 
-            DBService.InsBookBase(rowView);
-            rowView.EndEdit();
+            rowView.InsertDB();
+            (DG_Main.ItemsSource as List<BookBase>).Add(rowView);
+            CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
         }
 
         //編輯作業
         private void Operation_Edit()
         {
-            DataView drv = DG_Main.ItemsSource as DataView;
-            int r = DG_Main.SelectedIndex;
-            DataRowView rowView = drv[r];
-            rowView["book"] = Txt_Book.Text.Trim();
-            rowView["book_name"] = Txt_Book_Name.Text.Trim();
-            rowView["book_type"] = Cmb_BookType.SelectedValue;
-            rowView["bank"] = Txt_Bank.Value.ToString().Trim();
-            rowView["bank_name"] = Txt_Bank_Name.Text.Trim();
-            rowView["account"] = Txt_Account.Value.ToString().Trim();
-            rowView["title"] = Txt_Title.Text.Trim();
+            var rowView = DG_Main.SelectedItem as BookBase;
+            rowView.book = Txt_Book.Text.Trim();
+            rowView.book_name = Txt_Book_Name.Text.Trim();
+            rowView.book_type = Convert.ToString(Cmb_BookType.SelectedValue);
+            rowView.bank = Txt_Bank.Value.ToString().Trim();
+            rowView.bank_name = Txt_Bank_Name.Text.Trim();
+            rowView.account = Txt_Account.Value.ToString().Trim();
+            rowView.title = Txt_Title.Text.Trim();
 
-            DBService.UpdBookBase(rowView);
-            rowView.EndEdit();
-            drv.Sort = drv.Sort == "" ? "[book]" : "";  //透過改變Sort強迫觸發IValueConverter，但Sort只有空白時可以給值，所以並不會被賦予空白
+            rowView.UpdateDB();
+            CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
         }
 
         private void Operation_Delete()
         {
-            DataView drv = DG_Main.ItemsSource as DataView;
-            int r = DG_Main.SelectedIndex;
-            DataRowView rowView = drv[r];
-            DBService.DelBookBase(rowView);
-            rowView.Delete();
-            rowView.EndEdit();
-        }
-    }
-
-    /// <summary>
-    /// Gride文字轉換器(顯示用，只實作Convert)
-    /// </summary>
-    public class BookBaseGrideConverter : IValueConverter
-    {
-        List<MapFile> Lst_BookType = DBService.GetMapFile("book_type");
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DataRowView r = value as DataRowView;
-            string col = parameter as string;
-            string result = "";
-
-            if (col == "book_type")
-            {
-                result = Lst_BookType.Where(x => x.item == r.Row[col].ToString()).Select(s => s.item_name).FirstOrDefault();
-            }
-            return result;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DataRowView r = value as DataRowView;
-            string col = parameter as string;
-            return r.Row[col].ToString();
+            var rowView = DG_Main.SelectedItem as BookBase;
+            rowView.DeleteDB();
+            (DG_Main.ItemsSource as List<BookBase>).Remove(rowView);
+            CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
         }
     }
 }

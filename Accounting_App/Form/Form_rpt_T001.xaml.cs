@@ -8,6 +8,7 @@ using Accounting_App.Utilities;
 using Excel = Microsoft.Office.Interop.Excel;
 using DataTable = System.Data.DataTable;
 using System.Windows.Input;
+using System.Windows.Documents;
 
 namespace Accounting_App.Form
 {
@@ -206,9 +207,9 @@ order by trade_dt, action, action_dtl
         {
             decimal amt = 0;
             string q_end_dt = (QryDt.Year - 1).ToString() + "-12-31";  //去年底
-            DataTable dtb = DBService.QryInvMast($@"where date(trade_dt) = '{q_end_dt}' and acct_book = 'Total'");
-            if (dtb.Rows.Count != 0)
-                amt = Convert.ToDecimal(dtb.AsEnumerable().FirstOrDefault()["amt"]);
+            var dtb = DBService.QryInvMast($@"where date(trade_dt) = '{q_end_dt}' and acct_book = 'Total'");
+            if (dtb.Count != 0)
+                amt = dtb.FirstOrDefault().amt;
 
             return amt;
         }

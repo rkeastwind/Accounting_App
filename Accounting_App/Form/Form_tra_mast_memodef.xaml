@@ -6,11 +6,11 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        xmlns:vcvt="clr-namespace:Accounting_App.ValueConverters"
         xmlns:ctnl="clr-namespace:Accounting_App.UserControls"
         mc:Ignorable="d"
         Title="Form_tra_mast_memodef" Height="768.906" Width="800">
     <Window.Resources>
-        <local:TraMastMemoDefGrideConverter x:Key="TraMastMemoDefGrideConverter"/>
     </Window.Resources>
     <Grid>
         <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
@@ -163,38 +163,38 @@
                   SelectionChanged="DG_Main_SelectionChanged"
                   AutoGenerateColumns="False" ItemsSource="{Binding}">
             <DataGrid.Columns>
-                <DataGridTemplateColumn x:Name="dgc_action" Header="收支">
+                <DataGridTemplateColumn x:Name="dgc_action" Header="收支" SortMemberPath="action" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraMastMemoDefGrideConverter}, ConverterParameter=action}"/>
+                            <TextBlock Text="{Binding action, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=1}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_action_dtl" Header="交易方式">
+                <DataGridTemplateColumn x:Name="dgc_action_dtl" Header="交易方式" SortMemberPath="action_dtl" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraMastMemoDefGrideConverter}, ConverterParameter=action_dtl}"/>
+                            <TextBlock Text="{Binding action_dtl, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=2}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_code" Header="會計科目">
+                <DataGridTemplateColumn x:Name="dgc_acct_code" Header="會計科目" SortMemberPath="acct_code" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraMastMemoDefGrideConverter}, ConverterParameter=acct_code}"/>
+                            <TextBlock Text="{Binding acct_code, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=AC}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_book_in" Header="收入帳冊">
+                <DataGridTemplateColumn x:Name="dgc_acct_book_in" Header="收入帳冊" SortMemberPath="acct_book_in" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraMastMemoDefGrideConverter}, ConverterParameter=acct_book_in}"/>
+                            <TextBlock Text="{Binding acct_book_in, Converter={vcvt:Vcvt_BookBase}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_book_out" Header="支出帳冊">
+                <DataGridTemplateColumn x:Name="dgc_acct_book_out" Header="支出帳冊" SortMemberPath="acct_book_out" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource TraMastMemoDefGrideConverter}, ConverterParameter=acct_book_out}"/>
+                            <TextBlock Text="{Binding acct_book_out, Converter={vcvt:Vcvt_BookBase}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
