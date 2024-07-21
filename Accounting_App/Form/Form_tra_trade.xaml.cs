@@ -32,25 +32,19 @@ namespace Accounting_App.Form
             FormInitial();
         }
 
-        public Form_tra_trade(string tl)
-        {
-            InitializeComponent();
-            FormInitial();
-            Title = tl;
-        }
-
         private void FormInitial()
         {
             Qry_Action.ItemsSource = CommUtility.InsertBlankItem(Lst_Tra);
             Qry_ActionDtl.ItemsSource = CommUtility.InsertBlankItem(Lst_TraDtl);
             Cmb_Action.ItemsSource = new List<MapFile>(Lst_Tra);
             DG_Main.ItemsSource = DBService.QryTraMast("where 1=0");  //初始化
-            Refresh(FormStateS.Initial);
+            BtnGroup_CRUD.permission = DBService.GetBasRolePermission(AppVar.User.role_id, AppVar.OpenMenuId);
             BtnGroup_CRUD.Btn_Add.Click += (s, e) => { Btn_AED_Click(FormStateS.Add); };
             BtnGroup_CRUD.Btn_Edit.Click += (s, e) => { Btn_AED_Click(FormStateS.Edit); };
             BtnGroup_CRUD.Btn_Delete.Click += (s, e) => { Btn_AED_Click(FormStateS.Delete); };
             BtnGroup_CRUD.Btn_Save.Click += Btn_Save_Click;
             BtnGroup_CRUD.Btn_Cancel.Click += (s, e) => { Refresh(FormStateS.ShowData); };
+            Refresh(FormStateS.Initial);
         }
 
         //查詢按鈕
@@ -335,7 +329,7 @@ namespace Accounting_App.Form
                 acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue),
                 amt = Txt_Amt.Value.Value,
                 memo = Txt_Memo.Text.Trim(),
-                loguser = AppVar.UserName,
+                loguser = AppVar.User.user_id,
                 logtime = DateTime.Now,
             };
 
@@ -356,7 +350,7 @@ namespace Accounting_App.Form
             rowView.acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue);
             rowView.amt = Txt_Amt.Value.Value;
             rowView.memo = Txt_Memo.Text.Trim();
-            rowView.loguser = AppVar.UserName;
+            rowView.loguser = AppVar.User.user_id;
             rowView.logtime = DateTime.Now;
 
             rowView.UpdateDB();

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Accounting_App.Utilities;
+using Accounting_App.DTO;
 
 namespace Accounting_App.UserControls
 {
@@ -21,6 +22,8 @@ namespace Accounting_App.UserControls
     /// </summary>
     public partial class btn_crud : UserControl
     {
+        public BasRolePermission permission { get; set; }
+
         public btn_crud()
         {
             InitializeComponent();
@@ -33,6 +36,7 @@ namespace Accounting_App.UserControls
             {
                 BtnGroup_CED.Visibility = System.Windows.Visibility.Visible;
                 BtnGroup_SoN.Visibility = System.Windows.Visibility.Hidden;
+                SetByPermission();
             }
             else
             {
@@ -43,7 +47,25 @@ namespace Accounting_App.UserControls
 
         public bool CanEditDelete
         {
-            set { Btn_Edit.IsEnabled = Btn_Delete.IsEnabled = value; }
+            set
+            {
+                Btn_Edit.IsEnabled = Btn_Delete.IsEnabled = value;
+                SetByPermission();
+            }
+        }
+
+        /// <summary>
+        /// 權限控制
+        /// </summary>
+        private void SetByPermission()
+        {
+            //因為預設可用，若設定為false就強制禁用
+            if (permission != null)
+            {
+                if (permission.cmd_Add == false) Btn_Add.IsEnabled = false;
+                if (permission.cmd_Edit == false) Btn_Edit.IsEnabled = false;
+                if (permission.cmd_Delete == false) Btn_Delete.IsEnabled = false;
+            }
         }
     }
 }

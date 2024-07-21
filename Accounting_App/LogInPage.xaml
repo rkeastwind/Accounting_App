@@ -1,0 +1,42 @@
+﻿<Window x:Class="Accounting_App.LogInPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Accounting_App"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="LogInPage" Height="500" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Image Grid.Row="0" x:Name="Logo" Source="/images/ChurchLogo.png" Width="100" Margin="0,20,0,0" RenderOptions.BitmapScalingMode="Fant">
+            <Image.Effect>
+                <DropShadowEffect BlurRadius="5" Opacity="0.3" Direction="315"/>
+            </Image.Effect>
+        </Image>
+        <StackPanel Grid.Row="1">
+            <TextBlock FontFamily="Microsoft JhengHei" FontSize="26" FontWeight="Heavy" HorizontalAlignment="Center" Text="基督教會景美禮拜堂" />
+            <TextBlock FontFamily="Microsoft JhengHei" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Center"  Text="會計帳務系統" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" >
+            <Label x:Name="lb_Message" Margin="0,10,0,0" HorizontalAlignment="Left" Foreground="Red"/>
+            <Label Content="帳號" Margin="0,10,0,0" HorizontalAlignment="Left" />
+            <TextBox x:Name="Txt_UserName" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
+                     VerticalContentAlignment="Center" TextWrapping="NoWrap" />
+            <Label Content="密碼" Margin="0,10,0,0" HorizontalAlignment="Left" />
+            <PasswordBox x:Name="Txt_Password" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
+                     VerticalContentAlignment="Center" />
+            <CheckBox x:Name="chk_RememberMe" HorizontalAlignment="Left" Margin="5,10,0,0" Content="記住帳號" />
+            <Button x:Name="Btn_LogIn" Margin="5,15,0,0" Width="120" Height="40" Content="登入" Click="Btn_LogIn_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

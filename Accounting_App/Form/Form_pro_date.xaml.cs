@@ -27,12 +27,6 @@ namespace Accounting_App.Form
             InitializeComponent();
         }
 
-        public Form_pro_date(string tl)
-        {
-            InitializeComponent();
-            Title = tl;
-        }
-
         private void Rb_run_Checked(object sender, RoutedEventArgs e)
         {
             FormStateChange(FormStates.Run);

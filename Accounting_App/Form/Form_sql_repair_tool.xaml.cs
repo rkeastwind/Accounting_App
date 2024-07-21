@@ -24,12 +24,13 @@ namespace Accounting_App.Form
         public Form_sql_repair_tool()
         {
             InitializeComponent();
+            FormInitial();
         }
 
-        public Form_sql_repair_tool(string tl)
+        private void FormInitial()
         {
-            InitializeComponent();
-            Title = tl;
+            DataTable d = DBService.SQL_QryTable("SELECT name AS 【TableList】 FROM sqlite_master WHERE type='table' ORDER BY name", new string[] { });
+            Txt_TableList.Text = CommUtility.SaveCSV(d);
         }
 
         private void Btn_Execute_Click(object sender, RoutedEventArgs e)
@@ -44,7 +45,6 @@ namespace Accounting_App.Form
                     Inline st = new Run($"查詢成功，共 {d.Rows.Count} 筆資料" + "\r\n") { Foreground = new SolidColorBrush(Colors.RoyalBlue) };
                     Paragraph p = (Paragraph)Ritx_Stas.Document.Blocks.FirstOrDefault();
                     p.Inlines.InsertBefore(p.Inlines.FirstInline, st);
-
                 }
                 else
                 {

@@ -51,42 +51,154 @@ namespace Accounting_App.Utilities
         }
 
         /// <summary>
-        /// 取得使用者資訊
+        /// 轉換Datatable欄位格式為DateTime(因為SQLite沒有DateTime)
         /// </summary>
-        /// <returns>UserInfo物件</returns>
-        public static UserInfo GetUserInfo()
+        /// <param name="I_Dt">輸入table</param>
+        /// <param name="I_Co">欄位名稱</param>
+        /// <returns></returns>
+        public static DataTable ConvertColumnToDate(DataTable I_Dt, string[] I_Co)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            DataTable dtCloned = I_Dt.Clone();
+            foreach (var c in I_Co)
             {
-                UserInfo ui = new UserInfo();
-                string strSql = "select opt_no, item from map_file where opt_no in ('User','Dept')";
-                var result = conn.Query(strSql);  //動態型別
-                foreach (var r in result)
-                {
-                    if (r.opt_no == "User") { ui.UserName = r.item; }
-                    if (r.opt_no == "Dept") { ui.Department = r.item; }
-                }
-                return ui;
+                dtCloned.Columns[c].DataType = typeof(DateTime);
             }
+            foreach (DataRow row in I_Dt.Rows)
+            {
+                dtCloned.ImportRow(row);
+            }
+            return dtCloned;
         }
 
         /// <summary>
-        /// 更新使用者資訊
+        /// 取得使用者，呼叫端如有密碼要記得檢核不可為空
         /// </summary>
-        /// <param name="usif">UserInfo物件</param>
+        /// <param name="userid"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
-        public static bool UpdUserInfo(UserInfo usif)
+        public static BasUser GetBasUser(string userid, string password = null)
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
-                string strSql = "update map_file set item = @Ucol, item_name = @Ucol where opt_no = @Wcol";
-                object cols = new[]
+                object parameters = null;
+                string statement = $@"select * from bas_user where 1=1 ";
+                if (!string.IsNullOrEmpty(userid))
+                    statement += "and user_id = @UserId ";
+                if (!string.IsNullOrEmpty(password))
+                    statement += "and password = @Password ";
+                parameters = new { UserId = userid, Password = password };
+
+                var result = conn.Query<BasUser>(statement, parameters);
+                return result.ToList().FirstOrDefault();
+            }
+        }
+
+        public static List<BasUser> QryBasUser(string filter = "")
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                string statement = $@"select * from bas_user ";
+                if (filter != "")
+                    statement += filter;
+
+                var result = conn.Query<BasUser>(statement).OrderBy(x => x.user_id);
+                return result.ToList();
+            }
+        }
+
+        public static List<BasMenu> GetBasMenu(string roleid)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                object parameters = null;
+                string statement = $@"
+SELECT a.*
+FROM bas_menu a
+INNER JOIN bas_role_permission b ON a.menu_id = b.menu_id
+WHERE b.role_id = @RoleId
+ORDER BY parent_id
+";
+                parameters = new { RoleId = roleid };
+
+                var result = conn.Query<BasMenu>(statement, parameters);
+                return result.ToList();
+            }
+        }
+
+        public static BasRolePermission GetBasRolePermission(string roleid, string menuid)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                object parameters = null;
+                string statement = $@"select * from bas_role_permission where 1=1 ";
+                if (!string.IsNullOrEmpty(roleid) && !string.IsNullOrEmpty(menuid))
                 {
-                    new{ @Ucol = usif.UserName, @Wcol = "User"},
-                    new{ @Ucol = usif.Department, @Wcol = "Dept"}
-                };
-                conn.Execute(strSql, cols);
-                return true;
+                    statement += "and role_id = @Roleid and menu_id = @Menuid";
+                    parameters = new { RoleId = roleid, Menuid = menuid };
+                }
+
+                var result = conn.Query<BasRolePermission>(statement, parameters);
+                return result.ToList().FirstOrDefault();
+            }
+        }
+
+        public static BasDept GetBasDept(string deptid)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                object parameters = null;
+                string statement = $@"select * from bas_dept where 1=1 ";
+                if (!string.IsNullOrEmpty(deptid))
+                {
+                    statement += "and dept_id = @DeptId ";
+                    parameters = new { DeptId = deptid };
+                }
+
+                var result = conn.Query<BasDept>(statement, parameters);
+                return result.ToList().FirstOrDefault();
+            }
+        }
+
+        public static List<BasDept> QryBasDept(string filter = "")
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                string statement = $@"select * from bas_dept ";
+                if (filter != "")
+                    statement += filter;
+
+                var result = conn.Query<BasDept>(statement).OrderBy(x => x.dept_id);
+                return result.ToList();
+            }
+        }
+
+        public static BasRole GetBasRole(string roleid)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                object parameters = null;
+                string statement = $@"select * from bas_role where 1=1 ";
+                if (!string.IsNullOrEmpty(roleid))
+                {
+                    statement += "and role_id = @RoleId ";
+                    parameters = new { RoleId = roleid };
+                }
+
+                var result = conn.Query<BasRole>(statement, parameters);
+                return result.ToList().FirstOrDefault();
+            }
+        }
+
+        public static List<BasRole> QryBasRole(string filter = "")
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                string statement = $@"select * from bas_role ";
+                if (filter != "")
+                    statement += filter;
+
+                var result = conn.Query<BasRole>(statement).OrderBy(x => x.role_id);
+                return result.ToList();
             }
         }
 
@@ -364,26 +476,6 @@ where A.book_type != 0 --排除總帳
                 vl = (vl == null) ? "" : vl;
 
             para.Add(pi.Name, vl);
-        }
-
-        /// <summary>
-        /// 轉換Datatable欄位格式為DateTime(因為SQLite沒有DateTime)
-        /// </summary>
-        /// <param name="I_Dt">輸入table</param>
-        /// <param name="I_Co">欄位名稱</param>
-        /// <returns></returns>
-        public static DataTable ConvertColumnToDate(DataTable I_Dt, string[] I_Co)
-        {
-            DataTable dtCloned = I_Dt.Clone();
-            foreach (var c in I_Co)
-            {
-                dtCloned.Columns[c].DataType = typeof(DateTime);
-            }
-            foreach (DataRow row in I_Dt.Rows)
-            {
-                dtCloned.ImportRow(row);
-            }
-            return dtCloned;
         }
     }
 }

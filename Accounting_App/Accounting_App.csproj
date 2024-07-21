@@ -108,11 +108,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DTO\BasDept.cs" />
     <Compile Include="DTO\BaseDTO\TableBaseDTO.cs" />
+    <Compile Include="DTO\BasMenu.cs" />
+    <Compile Include="DTO\BasRole.cs" />
+    <Compile Include="DTO\BasRolePermission.cs" />
+    <Compile Include="DTO\BasUser.cs" />
     <Compile Include="DTO\InvMast.cs" />
     <Compile Include="DTO\ProDate.cs" />
     <Compile Include="DTO\TraMast.cs" />
     <Compile Include="DTO\TraMastMemoDef.cs" />
+    <Compile Include="Form\Form_bas_user.xaml.cs">
+      <DependentUpon>Form_bas_user.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form_chg_pwd.xaml.cs">
+      <DependentUpon>Form_chg_pwd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogInPage.xaml.cs">
+      <DependentUpon>LogInPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\btn_crud.xaml.cs">
       <DependentUpon>btn_crud.xaml</DependentUpon>
     </Compile>
@@ -155,8 +169,22 @@
     <Compile Include="Utilities\DBService.cs" />
     <Compile Include="Utilities\ProUtility.cs" />
     <Compile Include="ValueConverters\ValueConverterBase.cs" />
+    <Compile Include="ValueConverters\Vcvt_BasDept.cs" />
+    <Compile Include="ValueConverters\Vcvt_BasRole.cs" />
     <Compile Include="ValueConverters\Vcvt_BookBase.cs" />
     <Compile Include="ValueConverters\Vcvt_MapFile.cs" />
+    <Page Include="Form\Form_bas_user.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Form\Form_chg_pwd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogInPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\btn_crud.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -209,7 +237,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTO\UserInfo.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -286,7 +313,10 @@
   <ItemGroup>
     <Resource Include="images\Btn_Setting_White.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="images\ChurchLogo.png" />
+    <Resource Include="images\MainWindow_background.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

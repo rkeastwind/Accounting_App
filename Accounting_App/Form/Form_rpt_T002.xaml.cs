@@ -23,12 +23,6 @@ namespace Accounting_App.Form
         public Form_rpt_T002()
         {
             InitializeComponent();
-        }
-
-        public Form_rpt_T002(string tl)
-        {
-            InitializeComponent();
-            Title = tl;
             BindBookBase();
         }
 
@@ -168,7 +162,7 @@ order by book", new string[] { });
                         sheet = workBook.Sheets[workBook.Sheets.Count];
                         sheet.Cells[2, 1] = $"{TW_Year}年度 {cur_dt.Month}月";
                         sheet.Cells[3, 1] = $"{b.book_name}變動表";
-                        sheet.Cells[4, 3] = AppVar.Department;
+                        sheet.Cells[4, 3] = AppVar.User.dept_name;
                         sheet.Cells[5, 3] = b.book_type == "2" ? $@"{b.bank_name}/{b.account}" : "";
                         sheet.Cells[8, 6] = LastInv;
 

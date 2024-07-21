@@ -11,6 +11,7 @@ using Accounting_App.Form;
 using System.Globalization;
 using System.Configuration;
 using System.IO;
+using System.Reflection;
 
 namespace Accounting_App
 {
@@ -19,13 +20,12 @@ namespace Accounting_App
     /// </summary>
     public partial class MainWindow : Window
     {
-        UserInfo userInfo = new UserInfo();
-
         public MainWindow()
         {
             DBExists();
             InitializeComponent();
-            RefreshUserInfo();
+            SetFormInfo();
+            BindMenu();
         }
 
         private void DBExists()
@@ -38,145 +38,124 @@ namespace Accounting_App
             }
         }
 
-        //重整使用者資訊
-        private void RefreshUserInfo()
+        private void SetFormInfo()
         {
-            AppVar.RefreshUser();
-            Txt_UserName.Text = AppVar.UserName;
-            Txt_Department.Text = AppVar.Department;
+            tb_version.Text = ConfigurationManager.AppSettings["Version"];
+            string UserInfo = $@"使用者：{AppVar.User.user_id}  {AppVar.User.name}
+單位：{AppVar.User.dept_name}
+角色權限：{AppVar.User.role_name}";
+            tb_UserInfo.Text = UserInfo;
         }
 
-        //更新使用者資訊
-        private void Btn_UpdUseInfo_Click(object sender, RoutedEventArgs e)
+        private void BindMenu()
         {
-            DBService.UpdUserInfo(new UserInfo { UserName = Txt_UserName.Text, Department = Txt_Department.Text });
-            RefreshUserInfo();
-            MessageBox.Show("更新使用者資訊成功", "", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+            try
+            {
+                var LsMenu = DBService.GetBasMenu(AppVar.User.role_id);
+                var lsMenu = GetMenuList(LsMenu, "0");
+                //從Root開始遞迴
+                foreach (var m in lsMenu)
+                {
+                    var rtmu = SetMenuItems(m.child);
+                    SetAMenuItem(ref rtmu, m);
+                    MainMenu.Items.Add(rtmu);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
+        /// <summary>
+        /// 取得Menu清單樹
+        /// </summary>
+        public List<BasMenu> GetMenuList(List<BasMenu> lsmu, string ptkey)
+        {
+            List<BasMenu> result = new List<BasMenu>();
+            foreach (var m in lsmu)
+            {
+                if (m.parent_id == ptkey)
+                {
+                    BasMenu tmu = new BasMenu();
+                    tmu = m;
+                    List<BasMenu> child = GetMenuList(lsmu, m.menu_id);
+                    if (child != null && child.Count > 0)
+                        tmu.child = child;
+                    result.Add(tmu);
+                }
+            }
+            return result;
+        }
 
+        /// <summary>
+        /// 建立Item清單，從第二層開始
+        /// </summary>
+        public MenuItem SetMenuItems(List<BasMenu> lsmu)
+        {
+            MenuItem result = new MenuItem();
+            foreach (var m in lsmu)
+            {
+                MenuItem mi = new MenuItem();
+                if (m.child != null && m.child.Count > 0)  //有子層要遞迴
+                    mi = SetMenuItems(m.child);
 
-        #region 開啟頁面      
+                SetAMenuItem(ref mi, m);
+                result.Items.Add(mi);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 設定一個Item項目
+        /// </summary>
+        public void SetAMenuItem(ref MenuItem mi, BasMenu mu)
+        {
+            mi.Header = mu.menu_title;
+            mi.Tag = mu;
+
+            int icon_number = 0;
+            if (int.TryParse(mu.icon_path, out icon_number))
+            {
+                //PackIcon x = new PackIcon();
+                //x.Kind = (PackIconKind)icon_number;
+                //mi.Icon = x;
+            }
+            if (mu.menu_type == "1")
+                mi.Click += MenuItem_Click;  //賦予事件
+        }
+
+        public void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = (MenuItem)sender;
+            BasMenu mu = (BasMenu)mi.Tag;
+            if (!IsWindowOpen<Window>(mu.menu_id))
+            {
+                AppVar.OpenMenuId = mu.menu_id;  //因為不想多一個建構式，用全域參數實作
+                Window frm = (Window)System.Reflection.Assembly.Load("Accounting_App").CreateInstance(mu.page_url, false, BindingFlags.Instance | BindingFlags.Public, null, null, null, null);
+                if (frm == null)
+                    throw new Exception("查無畫面路徑" + mu.page_url);
+                frm.Title = mu.menu_title;
+                frm.Tag = mu.menu_id;
+                frm.Show();
+            }
+        }
 
         //判斷視窗是否開啟(泛型)，若存在就active
-        public static bool IsWindowOpen<T>(string name = "") where T : Window
+        public static bool IsWindowOpen<T>(string MenuId = "") where T : Window
         {
-            bool b = string.IsNullOrEmpty(name)
+            bool b = string.IsNullOrEmpty(MenuId)
                ? Application.Current.Windows.OfType<T>().Any()
-               : Application.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
-
+               : Application.Current.Windows.OfType<T>().Any(w => Convert.ToString(w.Tag).Equals(MenuId));
             if (b == true)
             {
-                if (string.IsNullOrEmpty(name))
+                if (string.IsNullOrEmpty(MenuId))
                     Application.Current.Windows.OfType<T>().FirstOrDefault().Activate();
                 else
-                    Application.Current.Windows.OfType<T>().Where(w => w.Name.Equals(name)).FirstOrDefault().Activate();
+                    Application.Current.Windows.OfType<T>().Where(w => Convert.ToString(w.Tag).Equals(MenuId)).FirstOrDefault().Activate();
             }
             return b;
         }
-
-        private void MenuItem_Trade_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_tra_trade>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_tra_trade w = new Form_tra_trade(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_BankDeal_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_tra_bankdeal>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_tra_bankdeal w = new Form_tra_bankdeal(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_ProDate_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_pro_date>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_pro_date w = new Form_pro_date(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_Report_R001_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_rpt_R001>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_rpt_R001 w = new Form_rpt_R001(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_Report_R002_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_rpt_R002>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_rpt_R002 w = new Form_rpt_R002(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_Report_T001_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_rpt_T001>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_rpt_T001 w = new Form_rpt_T001(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_Report_T002_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_rpt_T002>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_rpt_T002 w = new Form_rpt_T002(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_BookBase_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_book_base>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_book_base w = new Form_book_base(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_TraMastMemoDef_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_tra_mast_memodef>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_tra_mast_memodef w = new Form_tra_mast_memodef(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-        private void MenuItem_SqlRepairTool_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsWindowOpen<Form_sql_repair_tool>())
-            {
-                MenuItem i = (MenuItem)sender;
-                Form_sql_repair_tool w = new Form_sql_repair_tool(i.Header.ToString());
-                w.Show();
-            }
-        }
-
-
-        #endregion
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

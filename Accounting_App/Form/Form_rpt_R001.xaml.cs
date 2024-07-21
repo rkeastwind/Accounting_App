@@ -23,12 +23,6 @@ namespace Accounting_App.Form
         public Form_rpt_R001()
         {
             InitializeComponent();
-        }
-
-        public Form_rpt_R001(string tl)
-        {
-            InitializeComponent();
-            Title = tl;
             BindBookBase();
         }
 
@@ -154,10 +148,10 @@ order by book", new string[] { });
 
                 //複製sheet
                 sample_sheet.Copy(Type.Missing, workBook.Sheets[workBook.Sheets.Count]); // copy                
-                workBook.Sheets[workBook.Sheets.Count].Name = $@"{AppVar.Department}交易明細表";  // rename
+                workBook.Sheets[workBook.Sheets.Count].Name = $@"{AppVar.User.dept_name}交易明細表";  // rename
 
                 sheet = workBook.Sheets[workBook.Sheets.Count];
-                sheet.Cells[2, 1] = AppVar.Department;
+                sheet.Cells[2, 1] = AppVar.User.dept_name;
                 sheet.Cells[3, 1] = $@"{TW_Year_Beg}~{TW_Year_End} 交易明細表";
 
                 foreach (var r in Trans.AsEnumerable())

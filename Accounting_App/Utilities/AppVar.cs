@@ -13,14 +13,12 @@ namespace Accounting_App.Utilities
         /// 最小日期1900-01-01
         /// </summary>
         public static DateTime DtMinValue = new DateTime(1900, 01, 01);
-        public static string UserName;
-        public static string Department;
+        public static BasUser User;
+        public static string OpenMenuId;  //本次開啟的MenuId
 
-        public static void RefreshUser()
+        public static void SetUserInfo(string user_id)
         {
-            UserInfo userInfo = DBService.GetUserInfo();
-            UserName = userInfo.UserName;
-            Department = userInfo.Department;
+            User = DBService.GetBasUser(user_id);
         }
     }
 }

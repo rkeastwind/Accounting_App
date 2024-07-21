@@ -59,7 +59,7 @@ namespace Accounting_App.Utilities
                 //寫入庫存
                 foreach (var b in Bal)
                 {
-                    b.loguser = AppVar.UserName;
+                    b.loguser = AppVar.User.user_id;
                     b.logtime = DateTime.Now;
                     b.InsertDB();
                 }
@@ -70,7 +70,7 @@ namespace Accounting_App.Utilities
                 {
                     pro_dt = Convert.ToDateTime(qdt),
                     pro_status = 1,
-                    loguser = AppVar.UserName,
+                    loguser = AppVar.User.user_id,
                     logtime = DateTime.Now
                 };
                 pd.InsertDB();

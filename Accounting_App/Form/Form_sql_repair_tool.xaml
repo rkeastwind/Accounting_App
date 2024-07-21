@@ -8,7 +8,8 @@
         Title="Form_sql_repair_tool" Height="600" Width="1000">
     <Grid>
         <TextBox x:Name="Txt_Input" AcceptsReturn="True" TextWrapping="Wrap" Margin="10,10,0,0" VerticalScrollBarVisibility="Auto" Height="250" VerticalAlignment="Top" HorizontalAlignment="Left" Width="546"/>
-        <TextBox x:Name="Txt_Output" AcceptsReturn="True" TextWrapping="Wrap"  Margin="10,265,10,10" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+        <TextBox x:Name="Txt_Output" AcceptsReturn="True" TextWrapping="Wrap"  Margin="10,265,215,10" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+        <TextBox x:Name="Txt_TableList" AcceptsReturn="True" TextWrapping="Wrap"  Margin="0,265,10,10" VerticalScrollBarVisibility="Auto" IsReadOnly="True" HorizontalAlignment="Right" Width="200"/>
         <Button x:Name="Btn_Execute" VerticalAlignment="Top" Margin="561,10,0,0" Height="40" Click="Btn_Execute_Click"
                         Background="#336633" Foreground="White" BorderThickness="0" HorizontalAlignment="Left" Width="120">
             <StackPanel Orientation="Horizontal" >
@@ -23,7 +24,7 @@
                 <TextBlock x:Name="Txt_Btn_Save" Margin="15,0" VerticalAlignment="Center" FontSize="14">儲存</TextBlock>
             </StackPanel>
         </Button>
-        <RichTextBox x:Name="Ritx_Stas" Height="205" Margin="561,55,0,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" IsReadOnly="True" HorizontalAlignment="Left" Width="421">
+        <RichTextBox x:Name="Ritx_Stas" Height="205" Margin="561,55,10,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
             <FlowDocument>
                 <Paragraph>
                     <!--先給一行空白，程式比較好做-->

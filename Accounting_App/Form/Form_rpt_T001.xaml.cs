@@ -22,12 +22,6 @@ namespace Accounting_App.Form
             InitializeComponent();
         }
 
-        public Form_rpt_T001(string tl)
-        {
-            InitializeComponent();
-            Title = tl;
-        }
-
         private bool CheckSelectDate()
         {
             if (Qry_Year.Value == null)
@@ -95,10 +89,10 @@ namespace Accounting_App.Form
 
                 //複製sheet
                 sample_sheet.Copy(Type.Missing, workBook.Sheets[workBook.Sheets.Count]); // copy                
-                workBook.Sheets[workBook.Sheets.Count].Name = $@"{AppVar.Department}{TW_Year}年度經常費收支表";  // rename
+                workBook.Sheets[workBook.Sheets.Count].Name = $@"{AppVar.User.dept_name}{TW_Year}年度經常費收支表";  // rename
 
                 sheet = workBook.Sheets[workBook.Sheets.Count];
-                sheet.Cells[2, 1] = AppVar.Department;
+                sheet.Cells[2, 1] = AppVar.User.dept_name;
                 sheet.Cells[3, 1] = $@"{TW_Year}年度經常費收支表";
                 sheet.Cells[5, 1] = TW_Year;
                 sheet.Cells[7, 7] = LastInv;
