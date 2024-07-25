@@ -4,29 +4,49 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Form_chg_pwd" Height="500" Width="400">
+    <Window.Resources>
+        <Style x:Key="FieldDockPanel" TargetType="DockPanel">
+            <Setter Property="Margin" Value="0,10,0,10"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,50,0,0">
-            <Label x:Name="lb_Message" Margin="0,10,0,0" HorizontalAlignment="Left" Foreground="Red"/>
-            <Label Content="原密碼" Margin="0,10,0,0" HorizontalAlignment="Left" />
-            <PasswordBox x:Name="Txt_OrgPwd" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
-                     VerticalContentAlignment="Center" />
-            <Label Content="新密碼" Margin="0,10,0,0" HorizontalAlignment="Left" />
-            <PasswordBox x:Name="Txt_NewPwd" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
-                     VerticalContentAlignment="Center" />
-            <Label Content="再次輸入新密碼" Margin="0,10,0,0" HorizontalAlignment="Left" />
-            <PasswordBox x:Name="Txt_NewPwd2" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
-                     VerticalContentAlignment="Center" />
-            <Button x:Name="Btn_Save" Margin="5,20,0,0" Width="120" Height="40" Content="確定" Click="Btn_Save_Click" />
+            <Label x:Name="lb_Message" Margin="0,10,0,10" HorizontalAlignment="Center" Foreground="Red"/>
+            <DockPanel Style="{StaticResource FieldDockPanel}">
+                <StackPanel>
+                    <Label Content="原密碼" HorizontalAlignment="Left"/>
+                    <PasswordBox x:Name="Txt_OrgPwd" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
+					             VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="請輸入" materialDesign:TextFieldAssist.HasClearButton="True"/>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Style="{StaticResource FieldDockPanel}">
+                <StackPanel>
+                    <Label Content="新密碼" HorizontalAlignment="Left"/>
+                    <PasswordBox x:Name="Txt_NewPwd" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
+					             VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="請輸入" materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:TextFieldAssist.UnderlineBrush="Green"/>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Style="{StaticResource FieldDockPanel}">
+                <StackPanel>
+                    <Label Content="再次輸入新密碼" HorizontalAlignment="Left"/>
+                    <PasswordBox x:Name="Txt_NewPwd2" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
+					             VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="請輸入" materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:TextFieldAssist.UnderlineBrush="Green"/>
+                </StackPanel>
+            </DockPanel>
+            <Button x:Name="Btn_Save" Margin="5,20,0,0" Width="120" Height="40" Content="確 定" Click="Btn_Save_Click"/>
         </StackPanel>
     </Grid>
 </Window>

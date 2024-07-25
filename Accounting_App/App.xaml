@@ -2,14 +2,41 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Accounting_App"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="LogInPage.xaml">
     <Application.Resources>
-        <!--Label顏色-->
-        <Style x:Key="LbKeyColor" TargetType="Label">
-            <Setter Property="Foreground" Value="#FFE6263A"/>
-        </Style>
-        <Style x:Key="LbInsOnlyColor" TargetType="Label">
-            <Setter Property="Foreground" Value="#FF2B45EC"/>
-        </Style>
+        <ResourceDictionary>
+            <!--Label顏色-->
+            <Style x:Key="LbKeyColor" TargetType="Label">
+                <Setter Property="Foreground" Value="#FFE6263A"/>
+            </Style>
+            <Style x:Key="LbInsOnlyColor" TargetType="Label">
+                <Setter Property="Foreground" Value="#FF2B45EC"/>
+            </Style>
+            <!--Grid預設-->
+            <Style BasedOn="{StaticResource MaterialDesignDataGridCell}" TargetType="DataGridCell">
+                <Style.Triggers>
+                    <!--去除框體，改底色-->
+                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#ffc04c" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="DataGridRow">
+                <Style.Triggers>
+                    <!--改底色-->
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#ffc04c" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="#FF1B5A6F" SecondaryColor="#FF6F1B5A" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

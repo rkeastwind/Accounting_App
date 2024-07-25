@@ -6,118 +6,120 @@
         xmlns:local="clr-namespace:Accounting_App.Form"
         xmlns:vcvt="clr-namespace:Accounting_App.ValueConverters"
         xmlns:ctnl="clr-namespace:Accounting_App.UserControls"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Form_bas_user" Height="600" Width="800">
+        Title="Form_bas_user" Height="800" Width="800">
     <Grid>
-        <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Name="lbStatusBar1" />
+                <TextBlock Name="lbStatusBar1"/>
             </StatusBarItem>
-            <Separator Grid.Column="1" />
+            <Separator Grid.Column="1"/>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="lbStatusBar2" />
+                <TextBlock Name="lbStatusBar2"/>
             </StatusBarItem>
-            <Separator Grid.Column="3" />
+            <Separator Grid.Column="3"/>
             <StatusBarItem Grid.Column="4">
-                <TextBlock Name="lbStatusBar3" />
+                <TextBlock Name="lbStatusBar3"/>
             </StatusBarItem>
         </StatusBar>
 
-        <GroupBox x:Name="GpBox_Dtl" Header="詳細資料" Height="200" Margin="10,10,10,0" VerticalAlignment="Top">
-            <Grid HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="auto" Width="auto">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
+        <StackPanel Margin="10,10,10,40">
+            <GroupBox x:Name="GpBox_Dtl" Header="詳細資料" Height="auto" VerticalAlignment="Top" Style="{StaticResource MaterialDesignCardGroupBox}" materialDesign:ElevationAssist.Elevation="Dp4">
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Height="auto" Width="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
 
-                <!--第一行-->
-                <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="帳號" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbKeyColor}"/>
-                    <TextBox x:Name="Txt_UserId" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="150"
-                             VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="姓名" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-                    <TextBox x:Name="Txt_Name" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="150"
-                             VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="密碼" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-                    <PasswordBox x:Name="Txt_PassWord" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="150"
-                             VerticalContentAlignment="Center" />
-                </StackPanel>
+                    <!--第一行-->
+                    <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="帳號" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0" Style="{StaticResource LbKeyColor}"/>
+                        <TextBox x:Name="Txt_UserId" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="100" Margin="5,0"
+						         VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="姓名" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="Txt_Name" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="100" Margin="5,0"
+						         VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="密碼" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <PasswordBox x:Name="Txt_PassWord" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="100" Margin="5,0"
+						             VerticalContentAlignment="Center"/>
+                    </StackPanel>
 
-                <!--第二行-->
-                <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="角色權限" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-                    <ComboBox x:Name="Cmb_RoleId" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="role_id" DisplayMemberPath="role_name"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="單位" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-                    <ComboBox x:Name="Cmb_DeptId" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="dept_id" DisplayMemberPath="dept_name"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="啟用" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-                    <CheckBox x:Name="Chk_Enabled" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="False"/>
-                </StackPanel>
+                    <!--第二行-->
+                    <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="角色權限" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="Cmb_RoleId" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="role_id" DisplayMemberPath="role_name"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="單位" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="Cmb_DeptId" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="dept_id" DisplayMemberPath="dept_name"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="啟用" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <CheckBox x:Name="Chk_Enabled" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="False" Margin="5,0"/>
+                    </StackPanel>
 
-                <!--第三行-->
+                    <!--第三行-->
 
-            </Grid>
-        </GroupBox>
+                </Grid>
+            </GroupBox>
 
-        <!--CRUD控件-->
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,224,0,0">
-            <ctnl:btn_crud x:Name="BtnGroup_CRUD"></ctnl:btn_crud>
+            <!--CRUD控件-->
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,20,0,0">
+                <ctnl:btn_crud x:Name="BtnGroup_CRUD"/>
+            </StackPanel>
+
+            <DataGrid x:Name="DG_Main" Height="400" VerticalAlignment="Top" Margin="0,20,0,0" materialDesign:DataGridAssist.CellPadding="6 6 6 6" materialDesign:DataGridAssist.ColumnHeaderPadding="6 6 6 6"
+			          CanUserAddRows="False" IsReadOnly="True"
+			          SelectionChanged="DG_Main_SelectionChanged"
+			          AutoGenerateColumns="False" ItemsSource="{Binding}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="dgc_user_id" Header="帳號" Binding="{Binding user_id}"/>
+                    <DataGridTextColumn x:Name="dgc_name" Header="姓名" Binding="{Binding name}"/>
+                    <DataGridTemplateColumn x:Name="dgc_role_id" Header="角色權限" SortMemberPath="role_id" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding role_id, Converter={vcvt:Vcvt_BasRole}, ConverterParameter=role_id}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn x:Name="dgc_dept_id" Header="單位" SortMemberPath="dept_id" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding dept_id, Converter={vcvt:Vcvt_BasDept}, ConverterParameter=dept_id}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridCheckBoxColumn x:Name="dgc_enabled" Header="啟用" Binding="{Binding enabled}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
-
-        <DataGrid x:Name="DG_Main" Height="250" VerticalAlignment="Top" Margin="10,265,10,0"
-                  CanUserAddRows="False" IsReadOnly="True"
-                  SelectionChanged="DG_Main_SelectionChanged"
-                  AutoGenerateColumns="False" ItemsSource="{Binding}">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="dgc_user_id" Header="帳號" Binding="{Binding user_id}"/>
-                <DataGridTextColumn x:Name="dgc_name" Header="姓名" Binding="{Binding name}"/>
-                <DataGridTemplateColumn x:Name="dgc_role_id" Header="角色權限" SortMemberPath="role_id" CanUserSort="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding role_id, Converter={vcvt:Vcvt_BasRole}, ConverterParameter=role_id}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_dept_id" Header="單位" SortMemberPath="dept_id" CanUserSort="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding dept_id, Converter={vcvt:Vcvt_BasDept}, ConverterParameter=dept_id}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridCheckBoxColumn x:Name="dgc_enabled" Header="啟用" Binding="{Binding enabled}" IsReadOnly="True" />
-            </DataGrid.Columns>
-        </DataGrid>
-
     </Grid>
 </Window>

@@ -8,200 +8,204 @@
         xmlns:local="clr-namespace:Accounting_App.Form"
         xmlns:vcvt="clr-namespace:Accounting_App.ValueConverters"
         xmlns:ctnl="clr-namespace:Accounting_App.UserControls"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Form_tra_mast_memodef" Height="768.906" Width="800">
+        Title="Form_tra_mast_memodef" Height="900" Width="800">
     <Window.Resources>
     </Window.Resources>
     <Grid>
-        <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Name="lbStatusBar1" />
+                <TextBlock Name="lbStatusBar1"/>
             </StatusBarItem>
-            <Separator Grid.Column="1" />
+            <Separator Grid.Column="1"/>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="lbStatusBar2" />
+                <TextBlock Name="lbStatusBar2"/>
             </StatusBarItem>
-            <Separator Grid.Column="3" />
+            <Separator Grid.Column="3"/>
             <StatusBarItem Grid.Column="4">
-                <TextBlock Name="lbStatusBar3" />
+                <TextBlock Name="lbStatusBar3"/>
             </StatusBarItem>
         </StatusBar>
 
-        <GroupBox x:Name="GpBox_Qry" Header="查詢" VerticalAlignment="Top" Margin="10,10,10,0" Height="138">
-            <Grid HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="auto" Width="auto">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
+        <StackPanel Margin="10,10,10,40">
+            <GroupBox x:Name="GpBox_Qry" Header="查詢" VerticalAlignment="Top" Height="auto" Style="{StaticResource MaterialDesignCardGroupBox}" materialDesign:ElevationAssist.Elevation="Dp4" materialDesign:ColorZoneAssist.Mode="SecondaryMid">
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Height="auto" Width="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
 
-                <!--第一行-->
-                <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="收支" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0"/>
-                    <ComboBox x:Name="Qry_Action" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Qry_Action_SelectionChanged"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="交易方式" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <ComboBox x:Name="Qry_ActionDtl" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Qry_ActionDtl_SelectionChanged"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="會計科目" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <ComboBox x:Name="Qry_AcctCode" Height="25" Width="150" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Qry_AcctCode_SelectionChanged" />
-                </StackPanel>
+                    <!--第一行-->
+                    <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="收支" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0"/>
+                        <ComboBox x:Name="Qry_Action" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Qry_Action_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="交易方式" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="Qry_ActionDtl" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Qry_ActionDtl_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="會計科目" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="Qry_AcctCode" Height="30" Width="150" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Qry_AcctCode_SelectionChanged"/>
+                    </StackPanel>
 
-                <!--第二行-->
-                <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="收入帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <ComboBox x:Name="Qry_BookIn" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="book" DisplayMemberPath="book_name" />
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="支出帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <ComboBox x:Name="Qry_BookOut" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="book" DisplayMemberPath="book_name"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Button x:Name="Btn_Qry" VerticalAlignment="Center" Margin="70,0,0,0" Width="75" Height="25" Click="Btn_Qry_Click"
-                        Background="#43a9c7" Foreground="White" BorderThickness="0">
-                        <StackPanel Orientation="Horizontal" >
-                            <Image Source="/images/Btn_Qurey_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                            <TextBlock Margin="5,0" VerticalAlignment="Center">查詢</TextBlock>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Grid>
+                    <!--第二行-->
+                    <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="收入帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="Qry_BookIn" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="book" DisplayMemberPath="book_name"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="支出帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="Qry_BookOut" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="book" DisplayMemberPath="book_name"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Button x:Name="Btn_Qry" VerticalAlignment="Center" Margin="80,0,0,0" Width="90" Height="30" Click="Btn_Qry_Click"
+						        Background="#43a9c7" Foreground="White" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/images/Btn_Qurey_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
+                                <TextBlock Margin="8,0" VerticalAlignment="Center">查詢</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
 
-        </GroupBox>
-        <GroupBox x:Name="GpBox_Dtl" Header="詳細資料" Height="188" Margin="10,153,10,0" VerticalAlignment="Top">
-            <Grid HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="auto" Width="auto">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
+            </GroupBox>
+            <GroupBox x:Name="GpBox_Dtl" Header="詳細資料" Height="auto" Margin="0,10,0,0" VerticalAlignment="Top" Style="{StaticResource MaterialDesignCardGroupBox}" materialDesign:ElevationAssist.Elevation="Dp4">
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Height="auto" Width="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
 
-                <!--第一行-->
-                <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="收支" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
-                    <ComboBox x:Name="Cmb_Action" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Cmb_Action_SelectionChanged"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="交易方式" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
-                    <ComboBox x:Name="Cmb_ActionDtl" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Cmb_ActionDtl_SelectionChanged"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="會計科目" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
-                    <ComboBox x:Name="Cmb_AcctCode" Height="25" Width="150" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Cmb_AcctCode_SelectionChanged"/>
-                </StackPanel>
+                    <!--第一行-->
+                    <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="收支" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
+                        <ComboBox x:Name="Cmb_Action" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Cmb_Action_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="交易方式" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
+                        <ComboBox x:Name="Cmb_ActionDtl" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Cmb_ActionDtl_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="會計科目" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
+                        <ComboBox x:Name="Cmb_AcctCode" Height="30" Width="150" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="item" DisplayMemberPath="display_name" SelectionChanged="Cmb_AcctCode_SelectionChanged"/>
+                    </StackPanel>
 
-                <!--第二行-->
-                <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="收入帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
-                    <ComboBox x:Name="Cmb_BookIn" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="book" DisplayMemberPath="book_name"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="支出帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
-                    <ComboBox x:Name="Cmb_BookOut" Height="25" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                              IsSynchronizedWithCurrentItem="True" SelectedIndex = "0"
-                              SelectedValuePath="book" DisplayMemberPath="book_name"/>
-                </StackPanel>
+                    <!--第二行-->
+                    <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="收入帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
+                        <ComboBox x:Name="Cmb_BookIn" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="book" DisplayMemberPath="book_name"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="支出帳冊" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
+                        <ComboBox x:Name="Cmb_BookOut" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
+						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+						          SelectedValuePath="book" DisplayMemberPath="book_name"/>
+                    </StackPanel>
 
-                <!--第三行-->
-                <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Label Content="備註" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0"/>
-                    <TextBox x:Name="Txt_MemoDef" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="350"
-                             VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
-                </StackPanel>
-            </Grid>
-        </GroupBox>
+                    <!--第三行-->
+                    <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="備註" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0"/>
+                        <TextBox x:Name="Txt_MemoDef" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="350" Margin="5,0"
+						         VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
 
-        <!--CRUD控件-->
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,355,0,0">
-            <ctnl:btn_crud x:Name="BtnGroup_CRUD"></ctnl:btn_crud>
+            <!--CRUD控件-->
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,20,0,0">
+                <ctnl:btn_crud x:Name="BtnGroup_CRUD"/>
+            </StackPanel>
+
+            <DataGrid x:Name="DG_Main" Height="300" VerticalAlignment="Top" Margin="0,20,0,0" materialDesign:DataGridAssist.CellPadding="6 6 6 6" materialDesign:DataGridAssist.ColumnHeaderPadding="6 6 6 6"
+			          CanUserAddRows="False" IsReadOnly="True"
+			          SelectionChanged="DG_Main_SelectionChanged"
+			          AutoGenerateColumns="False" ItemsSource="{Binding}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn x:Name="dgc_action" Header="收支" SortMemberPath="action" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding action, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=1}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn x:Name="dgc_action_dtl" Header="交易方式" SortMemberPath="action_dtl" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding action_dtl, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=2}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn x:Name="dgc_acct_code" Header="會計科目" SortMemberPath="acct_code" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding acct_code, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=AC}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn x:Name="dgc_acct_book_in" Header="收入帳冊" SortMemberPath="acct_book_in" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding acct_book_in, Converter={vcvt:Vcvt_BookBase}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn x:Name="dgc_acct_book_out" Header="支出帳冊" SortMemberPath="acct_book_out" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding acct_book_out, Converter={vcvt:Vcvt_BookBase}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn x:Name="dgc_memodef" Header="備註" Binding="{Binding memodef}"/>
+                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguser}"/>
+                    <DataGridTextColumn x:Name="dgc_logtime" Header="異動時間" Binding="{Binding logtime, StringFormat={}{0:yyyy/M/d hh:mm:ss}}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
-
-        <DataGrid x:Name="DG_Main" Height="295" VerticalAlignment="Top" Margin="10,396,10,0"
-                  CanUserAddRows="False" IsReadOnly="True"
-                  SelectionChanged="DG_Main_SelectionChanged"
-                  AutoGenerateColumns="False" ItemsSource="{Binding}">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn x:Name="dgc_action" Header="收支" SortMemberPath="action" CanUserSort="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding action, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=1}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_action_dtl" Header="交易方式" SortMemberPath="action_dtl" CanUserSort="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding action_dtl, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=2}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_code" Header="會計科目" SortMemberPath="acct_code" CanUserSort="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding acct_code, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=AC}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_book_in" Header="收入帳冊" SortMemberPath="acct_book_in" CanUserSort="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding acct_book_in, Converter={vcvt:Vcvt_BookBase}}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="dgc_acct_book_out" Header="支出帳冊" SortMemberPath="acct_book_out" CanUserSort="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding acct_book_out, Converter={vcvt:Vcvt_BookBase}}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="dgc_memodef" Header="備註" Binding="{Binding memodef}"/>
-                <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguser}"/>
-                <DataGridTextColumn x:Name="dgc_logtime" Header="異動時間" Binding="{Binding logtime, StringFormat={}{0:yyyy/M/d hh:mm:ss}}"/>
-            </DataGrid.Columns>
-        </DataGrid>
     </Grid>
 </Window>

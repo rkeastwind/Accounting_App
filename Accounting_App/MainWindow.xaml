@@ -4,57 +4,59 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Accounting_App"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="600" Width="900" Closing="Window_Closing">
     <Grid>
+        <DockPanel>
+            <Menu x:Name="MainMenu" DockPanel.Dock="Top" Height="auto" VerticalAlignment="Top" materialDesign:MenuAssist.TopLevelMenuItemHeight="35"/>
+            <StatusBar DockPanel.Dock="Bottom" Height="auto" VerticalAlignment="Bottom">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem>
+                    <TextBlock Name="lbStatusBar1"/>
+                </StatusBarItem>
+                <Separator Grid.Column="1"/>
+                <StatusBarItem Grid.Column="2">
+                    <TextBlock Name="lbStatusBar2"/>
+                </StatusBarItem>
+                <Separator Grid.Column="3"/>
+                <StatusBarItem Grid.Column="4">
+                    <TextBlock Name="lbStatusBar3"/>
+                </StatusBarItem>
+            </StatusBar>
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/images/MainWindow_background.png" Stretch="UniformToFill" Opacity="1"/>
+                </Grid.Background>
+            </Grid>
+        </DockPanel>
 
-        <Menu x:Name="MainMenu" DockPanel.Dock="Top" Height="25" VerticalAlignment="Top">
-        </Menu>
-        <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem>
-                <TextBlock Name="lbStatusBar1" />
-            </StatusBarItem>
-            <Separator Grid.Column="1" />
-            <StatusBarItem Grid.Column="2">
-                <TextBlock Name="lbStatusBar2" />
-            </StatusBarItem>
-            <Separator Grid.Column="3" />
-            <StatusBarItem Grid.Column="4">
-                <TextBlock Name="lbStatusBar3" />
-            </StatusBarItem>
-        </StatusBar>
+        <TextBlock x:Name="tb_version" Margin="0,10,5,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="auto"
+		           Text="Version x.x.x Copyright © Rick Lin" TextWrapping="Wrap" TextAlignment="Center" Background="Transparent" Foreground="Black"/>
 
-        <Grid Margin="0,25,0,25">
+        <Grid Margin="0,50,5,0" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Grid.Background>
-                <ImageBrush ImageSource="/images/MainWindow_background.png" Stretch="UniformToFill" Opacity="1" />
-            </Grid.Background>
-        </Grid>
-
-        <TextBlock x:Name="tb_version" Margin="0,5,5,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="auto"
-                   Text="Version x.x.x Copyright © Rick Lin" TextWrapping="Wrap" TextAlignment="Center" Background="LightCyan" Foreground="Black" />
-
-        <Grid Margin="0,30,5,0" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Grid.Background>
-                <SolidColorBrush Color="GhostWhite" Opacity="0.7"></SolidColorBrush>
+                <SolidColorBrush Color="GhostWhite" Opacity="0.7"/>
             </Grid.Background>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0" Grid.Row="0" x:Name="tb_UserInfo" Text="UserInfo" Padding="10,10,10,10" TextWrapping="Wrap" LineHeight="25" LineStackingStrategy="MaxHeight"/>

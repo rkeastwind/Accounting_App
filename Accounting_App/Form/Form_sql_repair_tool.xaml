@@ -4,31 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Form_sql_repair_tool" Height="600" Width="1000">
+        Title="Form_sql_repair_tool" Height="650" Width="1000">
     <Grid>
-        <TextBox x:Name="Txt_Input" AcceptsReturn="True" TextWrapping="Wrap" Margin="10,10,0,0" VerticalScrollBarVisibility="Auto" Height="250" VerticalAlignment="Top" HorizontalAlignment="Left" Width="546"/>
-        <TextBox x:Name="Txt_Output" AcceptsReturn="True" TextWrapping="Wrap"  Margin="10,265,215,10" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
-        <TextBox x:Name="Txt_TableList" AcceptsReturn="True" TextWrapping="Wrap"  Margin="0,265,10,10" VerticalScrollBarVisibility="Auto" IsReadOnly="True" HorizontalAlignment="Right" Width="200"/>
+        <TextBox x:Name="Txt_Input" AcceptsReturn="True" TextWrapping="Wrap" Margin="10,10,0,0" VerticalScrollBarVisibility="Auto" Height="260" VerticalAlignment="Top" HorizontalAlignment="Left" Width="546"
+		         materialDesign:HintAssist.Hint="輸入SQL指令" materialDesign:HintAssist.FloatingScale="0.9" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+        <TextBox x:Name="Txt_Output" AcceptsReturn="True" TextWrapping="Wrap" Margin="10,280,215,10" VerticalScrollBarVisibility="Auto" IsReadOnly="True"
+		         materialDesign:HintAssist.Hint="輸出資料" materialDesign:HintAssist.FloatingScale="0.9" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+        <TextBox x:Name="Txt_TableList" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,280,10,10" VerticalScrollBarVisibility="Auto" IsReadOnly="True" HorizontalAlignment="Right" Width="200"
+		         materialDesign:HintAssist.Hint="資料表" materialDesign:HintAssist.FloatingScale="0.9" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
         <Button x:Name="Btn_Execute" VerticalAlignment="Top" Margin="561,10,0,0" Height="40" Click="Btn_Execute_Click"
-                        Background="#336633" Foreground="White" BorderThickness="0" HorizontalAlignment="Left" Width="120">
-            <StackPanel Orientation="Horizontal" >
+		        Background="#336633" Foreground="White" BorderThickness="0" HorizontalAlignment="Left" Width="120">
+            <StackPanel Orientation="Horizontal">
                 <Image Source="/images/Btn_Setting_white.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="30"/>
                 <TextBlock x:Name="Txt_Btn_Run" Margin="15,0" VerticalAlignment="Center" FontSize="14">執行</TextBlock>
             </StackPanel>
         </Button>
         <Button x:Name="Btn_Save" VerticalAlignment="Top" Margin="686,10,0,0" Height="40" Click="Btn_Save_Click"
-                        Background="#FF7F3F" Foreground="White" BorderThickness="0" HorizontalAlignment="Left" Width="120">
-            <StackPanel Orientation="Horizontal" >
+		        Background="#FF7F3F" Foreground="White" BorderThickness="0" HorizontalAlignment="Left" Width="120">
+            <StackPanel Orientation="Horizontal">
                 <Image Source="/images/Btn_Report_white.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="30"/>
                 <TextBlock x:Name="Txt_Btn_Save" Margin="15,0" VerticalAlignment="Center" FontSize="14">儲存</TextBlock>
             </StackPanel>
         </Button>
-        <RichTextBox x:Name="Ritx_Stas" Height="205" Margin="561,55,10,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+        <RichTextBox x:Name="Ritx_Stas" Height="210" Margin="561,60,10,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" IsReadOnly="True"
+		             Style="{StaticResource MaterialDesignOutlinedRichTextBox}">
             <FlowDocument>
                 <Paragraph>
                     <!--先給一行空白，程式比較好做-->
-                    <InlineUIContainer></InlineUIContainer>
+                    <InlineUIContainer/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>

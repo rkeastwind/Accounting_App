@@ -10,42 +10,42 @@
         <!--CRUD控件-->
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,0,0,0">
             <StackPanel x:Name="BtnGroup_CED" HorizontalAlignment="Left" Orientation="Horizontal">
-                <Button x:Name="Btn_Add" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25"
+                <Button x:Name="Btn_Add" VerticalAlignment="Center" Margin="0,0,0,0" Width="90" Height="30"
                 Background="#336633" Foreground="White" BorderThickness="0">
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="/images/Btn_Add_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">新增</TextBlock>
+                        <TextBlock Margin="8,0" VerticalAlignment="Center">新增</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button x:Name="Btn_Edit" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25"
+                <Button x:Name="Btn_Edit" VerticalAlignment="Center" Margin="10,0,0,0" Width="90" Height="30"
                 Background="#FF7F3F" Foreground="White" BorderThickness="0">
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="/images/Btn_Edit_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">修改</TextBlock>
+                        <TextBlock Margin="8,0" VerticalAlignment="Center">修改</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button x:Name="Btn_Delete" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25"
+                <Button x:Name="Btn_Delete" VerticalAlignment="Center" Margin="10,0,0,0" Width="90" Height="30"
                 Background="#ED5565" Foreground="White" BorderThickness="0">
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="/images/Btn_Delete_White.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">刪除</TextBlock>
+                        <TextBlock Margin="8,0" VerticalAlignment="Center">刪除</TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>
 
             <StackPanel x:Name="BtnGroup_SoN" HorizontalAlignment="Left" Orientation="Horizontal" Margin="50,0,0,0">
-                <Button x:Name="Btn_Save" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25"
+                <Button x:Name="Btn_Save" VerticalAlignment="Center" Margin="10,0,0,0" Width="90" Height="30"
                 Background="Gray" Foreground="White" BorderThickness="0">
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="/images/Btn_Save_Green.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">確定</TextBlock>
+                        <TextBlock Margin="8,0" VerticalAlignment="Center">確定</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button x:Name="Btn_Cancel" VerticalAlignment="Center" Margin="10,0,0,0" Width="75" Height="25"
+                <Button x:Name="Btn_Cancel" VerticalAlignment="Center" Margin="10,0,0,0" Width="90" Height="30"
                 Background="DarkGray" Foreground="White" BorderThickness="0">
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="/images/Btn_Cancel_Red.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="18"/>
-                        <TextBlock Margin="5,0" VerticalAlignment="Center">取消</TextBlock>
+                        <TextBlock Margin="8,0" VerticalAlignment="Center">取消</TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>

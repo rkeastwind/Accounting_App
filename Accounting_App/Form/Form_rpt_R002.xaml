@@ -6,54 +6,55 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Form_rpt_R002" Height="450" Width="800">
     <Grid>
-        <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Name="lbStatusBar1" />
+                <TextBlock Name="lbStatusBar1"/>
             </StatusBarItem>
-            <Separator Grid.Column="1" />
+            <Separator Grid.Column="1"/>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="lbStatusBar2" />
+                <TextBlock Name="lbStatusBar2"/>
             </StatusBarItem>
-            <Separator Grid.Column="3" />
+            <Separator Grid.Column="3"/>
             <StatusBarItem Grid.Column="4">
-                <TextBlock Name="lbStatusBar3" />
+                <TextBlock Name="lbStatusBar3"/>
             </StatusBarItem>
         </StatusBar>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="190" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="150" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-
             <DataGrid x:Name="DG_Main" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
-                      Height="150" VerticalAlignment="TOP" Margin="10,0"
-                  CanUserAddRows="False" IsReadOnly="True" CanUserSortColumns="False"
-                  AutoGenerateColumns="False" ItemsSource="{Binding}">
+			          Height="150" VerticalAlignment="TOP" Margin="10,0" materialDesign:DataGridAssist.CellPadding="6 6 6 6" materialDesign:DataGridAssist.ColumnHeaderPadding="6 6 6 6"
+			          CanUserAddRows="False" IsReadOnly="True" CanUserSortColumns="False"
+			          AutoGenerateColumns="False" ItemsSource="{Binding}">
                 <DataGrid.ToolTip>
                     <TextBlock Text="複選請按住Ctrl"/>
                 </DataGrid.ToolTip>
@@ -64,7 +65,7 @@
                         </DataGridCheckBoxColumn.Header>
                         <DataGridCheckBoxColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
                             </Style>
                         </DataGridCheckBoxColumn.HeaderStyle>
                     </DataGridCheckBoxColumn>
@@ -76,18 +77,18 @@
 
             <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Label Content="查詢起訖" VerticalAlignment="Center"/>
-                <xctk:DateTimeUpDown x:Name="Qry_Beg_Dt" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center" 
-                                     Format="Custom " FormatString="yyyy/MM" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
+                <xctk:DateTimeUpDown x:Name="Qry_Beg_Dt" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center"
+				                     Format="Custom " FormatString="yyyy/MM" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Label Content="~" VerticalAlignment="Center"/>
-                <xctk:DateTimeUpDown x:Name="Qry_End_Dt" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center" 
-                                     Format="Custom " FormatString="yyyy/MM" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
+                <xctk:DateTimeUpDown x:Name="Qry_End_Dt" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center"
+				                     Format="Custom " FormatString="yyyy/MM" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
             </StackPanel>
             <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
-                    x:Name="Btn_Execute" VerticalAlignment="Center" Margin="0,0,0,0" Width="120" Height="40" Click="Btn_Execute_Click"
-                    Background="#336633" Foreground="White" BorderThickness="0">
-                <StackPanel Orientation="Horizontal" >
+			        x:Name="Btn_Execute" VerticalAlignment="Center" Margin="0,0,0,0" Width="120" Height="40" Click="Btn_Execute_Click"
+			        Background="#336633" Foreground="White" BorderThickness="0">
+                <StackPanel Orientation="Horizontal">
                     <Image Source="/images/Btn_Report_white.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="30"/>
                     <TextBlock x:Name="Txt_Btn_Run" Margin="15,0" VerticalAlignment="Center" FontSize="14">列印</TextBlock>
                 </StackPanel>

@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
+using MaterialDesignThemes.Wpf;
 
 namespace Accounting_App
 {
@@ -117,9 +118,9 @@ namespace Accounting_App
             int icon_number = 0;
             if (int.TryParse(mu.icon_path, out icon_number))
             {
-                //PackIcon x = new PackIcon();
-                //x.Kind = (PackIconKind)icon_number;
-                //mi.Icon = x;
+                PackIcon x = new PackIcon();
+                x.Kind = (PackIconKind)icon_number;
+                mi.Icon = x;
             }
             if (mu.menu_type == "1")
                 mi.Click += MenuItem_Click;  //賦予事件

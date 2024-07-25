@@ -4,18 +4,47 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Accounting_App"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="LogInPage" Height="500" Width="400">
+        Title="LogInPage" Height="550" Width="400">
+    <Window.Resources>
+        <RoutedUICommand x:Key="cmd1"/>
+        <Thickness x:Key="IconMargin">0,0,8,0</Thickness>
+        <Style x:Key="FieldIcon" TargetType="materialDesign:PackIcon">
+            <Setter Property="DockPanel.Dock" Value="Left"/>
+            <Setter Property="Margin" Value="{StaticResource IconMargin}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="FieldDockPanel" TargetType="DockPanel">
+            <Setter Property="Margin" Value="0,10,0,10"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+        <Style x:Key="TitleEffect" TargetType="TextBlock">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="5" Opacity="0.3" Direction="315"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <!--Enter自動登入-->
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource cmd1}" Executed="Btn_LogIn_Click"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="Enter" Command="{StaticResource cmd1}"/>
+    </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Image Grid.Row="0" x:Name="Logo" Source="/images/ChurchLogo.png" Width="100" Margin="0,20,0,0" RenderOptions.BitmapScalingMode="Fant">
@@ -24,19 +53,25 @@
             </Image.Effect>
         </Image>
         <StackPanel Grid.Row="1">
-            <TextBlock FontFamily="Microsoft JhengHei" FontSize="26" FontWeight="Heavy" HorizontalAlignment="Center" Text="基督教會景美禮拜堂" />
-            <TextBlock FontFamily="Microsoft JhengHei" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Center"  Text="會計帳務系統" />
+            <TextBlock FontFamily="Microsoft JhengHei" FontSize="26" FontWeight="Heavy" HorizontalAlignment="Center" Text="基督教會景美禮拜堂" Style="{StaticResource TitleEffect}"/>
+            <TextBlock FontFamily="Microsoft JhengHei" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Center" Text="會計帳務系統" Style="{StaticResource TitleEffect}"/>
         </StackPanel>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" >
-            <Label x:Name="lb_Message" Margin="0,10,0,0" HorizontalAlignment="Left" Foreground="Red"/>
-            <Label Content="帳號" Margin="0,10,0,0" HorizontalAlignment="Left" />
-            <TextBox x:Name="Txt_UserName" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
-                     VerticalContentAlignment="Center" TextWrapping="NoWrap" />
-            <Label Content="密碼" Margin="0,10,0,0" HorizontalAlignment="Left" />
-            <PasswordBox x:Name="Txt_Password" Margin="5,0,0,0" HorizontalAlignment="Left" Height="25" Width="120"
-                     VerticalContentAlignment="Center" />
-            <CheckBox x:Name="chk_RememberMe" HorizontalAlignment="Left" Margin="5,10,0,0" Content="記住帳號" />
-            <Button x:Name="Btn_LogIn" Margin="5,15,0,0" Width="120" Height="40" Content="登入" Click="Btn_LogIn_Click" />
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center">
+            <Label x:Name="lb_Message" Margin="0,10,0,10" HorizontalAlignment="Center" Foreground="Red"/>
+            <DockPanel Style="{StaticResource FieldDockPanel}">
+                <materialDesign:PackIcon Foreground="{Binding ElementName=Txt_UserName, Path=BorderBrush}" Kind="Account" Style="{StaticResource FieldIcon}"/>
+                <TextBox x:Name="Txt_UserName" HorizontalAlignment="Left" Width="120"
+				         VerticalContentAlignment="Center" TextWrapping="NoWrap"
+				         materialDesign:HintAssist.Hint="帳號" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            </DockPanel>
+            <DockPanel Style="{StaticResource FieldDockPanel}">
+                <materialDesign:PackIcon Foreground="{Binding ElementName=Txt_Password, Path=BorderBrush}" Kind="Key" Style="{StaticResource FieldIcon}"/>
+                <PasswordBox x:Name="Txt_Password" HorizontalAlignment="Left" Width="120"
+				             VerticalContentAlignment="Center"
+				             materialDesign:HintAssist.Hint="密碼" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+            </DockPanel>
+            <CheckBox x:Name="chk_RememberMe" Margin="20,10,0,10" HorizontalAlignment="Left" Content="記住帳號"/>
+            <Button x:Name="Btn_LogIn" Margin="0,10,0,0" Width="120" Height="40" Content="登  入" Click="Btn_LogIn_Click"/>
         </StackPanel>
     </Grid>
 </Window>

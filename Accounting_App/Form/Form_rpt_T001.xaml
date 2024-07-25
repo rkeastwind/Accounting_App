@@ -6,56 +6,58 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        Style="{StaticResource MaterialDesignWindow}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Form_rpt_T001" Height="450" Width="800">
     <Grid>
-        <StatusBar DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Name="lbStatusBar1" />
+                <TextBlock Name="lbStatusBar1"/>
             </StatusBarItem>
-            <Separator Grid.Column="1" />
+            <Separator Grid.Column="1"/>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="lbStatusBar2" />
+                <TextBlock Name="lbStatusBar2"/>
             </StatusBarItem>
-            <Separator Grid.Column="3" />
+            <Separator Grid.Column="3"/>
             <StatusBarItem Grid.Column="4">
-                <TextBlock Name="lbStatusBar3" />
+                <TextBlock Name="lbStatusBar3"/>
             </StatusBarItem>
         </StatusBar>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Label Content="查詢年度" VerticalAlignment="Center"/>
-                <xctk:DateTimeUpDown x:Name="Qry_Year" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center" 
-                                     Format="Custom " FormatString="yyyy" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
+                <xctk:DateTimeUpDown x:Name="Qry_Year" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center"
+				                     Format="Custom " FormatString="yyyy" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
             </StackPanel>
             <Button Grid.Column="0" Grid.Row="1"
-                    x:Name="Btn_Execute" VerticalAlignment="Center" Margin="0,0,0,0" Width="120" Height="40" Click="Btn_Execute_Click"
-                    Background="#336633" Foreground="White" BorderThickness="0">
-                <StackPanel Orientation="Horizontal" >
+			        x:Name="Btn_Execute" VerticalAlignment="Center" Margin="0,0,0,0" Width="120" Height="40" Click="Btn_Execute_Click"
+			        Background="#336633" Foreground="White" BorderThickness="0">
+                <StackPanel Orientation="Horizontal">
                     <Image Source="/images/Btn_Report_white.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="Fant" Height="30"/>
                     <TextBlock x:Name="Txt_Btn_Run" Margin="15,0" VerticalAlignment="Center" FontSize="14">列印</TextBlock>
                 </StackPanel>
