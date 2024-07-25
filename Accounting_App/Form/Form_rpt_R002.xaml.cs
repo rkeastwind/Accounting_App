@@ -24,7 +24,7 @@ namespace Accounting_App.Form
         {
             InitializeComponent();
             BindBookBase();
-        }       
+        }
 
         private void BindBookBase()
         {
@@ -77,13 +77,13 @@ order by book", new string[] { });  //庫存表開放查詢總帳冊
                 MessageBox.Show("請選擇帳冊", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-            if (Qry_Beg_Dt.Value == null || Qry_End_Dt.Value == null)
+            if (Qry_Beg_Dt.SelectedDate == null || Qry_End_Dt.SelectedDate == null)
             {
                 MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-            DateTime QryDtBeg = (DateTime)Qry_Beg_Dt.Value;
-            DateTime QryDtEnd = (DateTime)Qry_End_Dt.Value;
+            DateTime QryDtBeg = (DateTime)Qry_Beg_Dt.SelectedDate;
+            DateTime QryDtEnd = (DateTime)Qry_End_Dt.SelectedDate;
             if (QryDtBeg.Year > QryDtEnd.Year || (QryDtBeg.Year == QryDtEnd.Year && QryDtBeg.Month > QryDtEnd.Month))  //年份大於，或年份相同但月份大於
             {
                 MessageBox.Show("起日不可大於迄日", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -123,8 +123,8 @@ order by book", new string[] { });  //庫存表開放查詢總帳冊
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-                DateTime QryDtBeg = Qry_Beg_Dt.Value == null ? DateTime.Now : (DateTime)Qry_Beg_Dt.Value;
-                DateTime QryDtEnd = Qry_End_Dt.Value == null ? DateTime.Now : (DateTime)Qry_End_Dt.Value;
+                DateTime QryDtBeg = Qry_Beg_Dt.SelectedDate == null ? DateTime.Now : (DateTime)Qry_Beg_Dt.SelectedDate;
+                DateTime QryDtEnd = Qry_End_Dt.SelectedDate == null ? DateTime.Now : (DateTime)Qry_End_Dt.SelectedDate;
                 QryDtBeg = new DateTime(QryDtBeg.Year, QryDtBeg.Month, 1);  //起始日：月初
                 QryDtEnd = new DateTime(QryDtEnd.Year, QryDtEnd.Month, DateTime.DaysInMonth(QryDtEnd.Year, QryDtEnd.Month));  //結束日：月底日
 

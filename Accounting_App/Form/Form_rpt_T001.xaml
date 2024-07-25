@@ -6,6 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        xmlns:atp="clr-namespace:Accounting_App.AttachedProperty"
         Style="{StaticResource MaterialDesignWindow}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -40,7 +41,6 @@
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -51,8 +51,8 @@
 
             <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Label Content="查詢年度" VerticalAlignment="Center"/>
-                <xctk:DateTimeUpDown x:Name="Qry_Year" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center"
-				                     Format="Custom " FormatString="yyyy" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
+                <DatePicker x:Name="Qry_Year" atp:DatePickerCalendar.IsMonthYear="Y" atp:DatePickerDateFormat.DateFormat="yyyy" Text="yyyy" SelectedDate="{x:Static s:DateTime.Now}"
+                            Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
             </StackPanel>
             <Button Grid.Column="0" Grid.Row="1"
 			        x:Name="Btn_Execute" VerticalAlignment="Center" Margin="0,0,0,0" Width="120" Height="40" Click="Btn_Execute_Click"

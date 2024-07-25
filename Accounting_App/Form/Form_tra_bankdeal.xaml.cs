@@ -57,7 +57,7 @@ namespace Accounting_App.Form
             string filter = "where 1=1";
 
             //查詢年月(月初到月底)
-            DateTime QryDt = Qry_YearMonth.Value == null ? DateTime.Now : (DateTime)Qry_YearMonth.Value;
+            DateTime QryDt = Qry_YearMonth.SelectedDate == null ? DateTime.Now : (DateTime)Qry_YearMonth.SelectedDate;
             string q_dt = QryDt.ToString("yyyy-MM") + "-01";  //月初
             filter += "\r\n  and " + $@"date(trade_dt) between date('{q_dt}','start of month') and date('{q_dt}','start of month','+1 month','-1 day')";
             //交易方式

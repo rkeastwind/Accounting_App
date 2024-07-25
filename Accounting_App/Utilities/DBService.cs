@@ -133,7 +133,7 @@ ORDER BY parent_id
                 string statement = $@"select * from bas_role_permission where 1=1 ";
                 if (!string.IsNullOrEmpty(roleid) && !string.IsNullOrEmpty(menuid))
                 {
-                    statement += "and role_id = @Roleid and menu_id = @Menuid";
+                    statement += "and role_id = @RoleId and menu_id = @Menuid";
                     parameters = new { RoleId = roleid, Menuid = menuid };
                 }
 

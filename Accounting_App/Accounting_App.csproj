@@ -133,6 +133,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperty\DatePickerCalendar.cs" />
     <Compile Include="DTO\BasDept.cs" />
     <Compile Include="DTO\BaseDTO\TableBaseDTO.cs" />
     <Compile Include="DTO\BasMenu.cs" />

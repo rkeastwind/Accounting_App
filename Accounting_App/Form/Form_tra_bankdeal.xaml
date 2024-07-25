@@ -8,6 +8,7 @@
         xmlns:local="clr-namespace:Accounting_App.Form"
         xmlns:vcvt="clr-namespace:Accounting_App.ValueConverters"
         xmlns:ctnl="clr-namespace:Accounting_App.UserControls"
+        xmlns:atp="clr-namespace:Accounting_App.AttachedProperty"
         Style="{StaticResource MaterialDesignWindow}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -47,8 +48,8 @@
 			          Style="{StaticResource MaterialDesignCardGroupBox}" materialDesign:ElevationAssist.Elevation="Dp4" materialDesign:ColorZoneAssist.Mode="SecondaryMid">
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                     <Label Content="查詢年月" VerticalAlignment="Center"/>
-                    <xctk:DateTimeUpDown x:Name="Qry_YearMonth" Height="30" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
-					                     Format="Custom " FormatString="yyyy/MM" DefaultValue="{x:Static System:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
+                    <DatePicker x:Name="Qry_YearMonth" atp:DatePickerCalendar.IsMonthYear="M" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static System:DateTime.Now}"
+                                Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
                     <Button x:Name="Btn_Qry" VerticalAlignment="Center" Margin="20,0,0,0" Width="90" Height="30" Click="Btn_Qry_Click"
 					        Background="#43a9c7" Foreground="White" BorderThickness="0">
                         <StackPanel Orientation="Horizontal">

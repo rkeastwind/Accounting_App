@@ -6,6 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        xmlns:atp="clr-namespace:Accounting_App.AttachedProperty"
         Style="{StaticResource MaterialDesignWindow}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -40,8 +41,6 @@
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="190"/>
-                <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -77,13 +76,11 @@
 
             <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Label Content="查詢起訖" VerticalAlignment="Center"/>
-                <xctk:DateTimeUpDown x:Name="Qry_Beg_Dt" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center"
-				                     Format="Custom " FormatString="yyyy/MM" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
-            </StackPanel>
-            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Label Content="~" VerticalAlignment="Center"/>
-                <xctk:DateTimeUpDown x:Name="Qry_End_Dt" Height="25" Width="120" VerticalAlignment="Center" VerticalContentAlignment="Center"
-				                     Format="Custom " FormatString="yyyy/MM" DefaultValue="{x:Static s:DateTime.Now}" DisplayDefaultValueOnEmptyText="True"/>
+                <DatePicker x:Name="Qry_Beg_Dt" atp:DatePickerCalendar.IsMonthYear="M" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
+                            Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
+                <Label Content="~" VerticalAlignment="Center" Margin="5,0"/>
+                <DatePicker x:Name="Qry_End_Dt" atp:DatePickerCalendar.IsMonthYear="M" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
+                            Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
             </StackPanel>
             <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
 			        x:Name="Btn_Execute" VerticalAlignment="Center" Margin="0,0,0,0" Width="120" Height="40" Click="Btn_Execute_Click"

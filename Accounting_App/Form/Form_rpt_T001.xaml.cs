@@ -24,7 +24,7 @@ namespace Accounting_App.Form
 
         private bool CheckSelectDate()
         {
-            if (Qry_Year.Value == null)
+            if (Qry_Year.SelectedDate == null)
             {
                 MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
@@ -63,7 +63,7 @@ namespace Accounting_App.Form
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-                DateTime QryDt = Qry_Year.Value == null ? DateTime.Now : (DateTime)Qry_Year.Value;
+                DateTime QryDt = Qry_Year.SelectedDate == null ? DateTime.Now : (DateTime)Qry_Year.SelectedDate;
 
                 decimal LastInv = GetLastYesrEndInv(QryDt);  //去年底庫存
                 DataTable MainTable = GetTable(QryDt);  //取得基底
