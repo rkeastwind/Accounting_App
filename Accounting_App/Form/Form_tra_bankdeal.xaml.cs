@@ -249,7 +249,7 @@ namespace Accounting_App.Form
             return result;
         }
 
-        private void Txt_Amt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void Txt_Amt_ValueChanged(object sender, TextChangedEventArgs e)
         {
             if (Txt_BookOutAmt != null && Txt_BookInAmt != null)
             {
@@ -278,8 +278,8 @@ namespace Accounting_App.Form
                     //新增跟修改的Base不同，分開寫才不會亂掉
                     //新增：Base為當日累計 => 用物件的SelectChange控制
                     //修改：Base為當日累計+-該筆交易 => 用RowSelectChange控制
-                    C_BookOutAmt = GetBookAmt(Cmb_BookOut.SelectedItem as BookBase) + Txt_Amt.Value.Value;
-                    C_BookInAmt = GetBookAmt(Cmb_BookIn.SelectedItem as BookBase) - Txt_Amt.Value.Value;
+                    C_BookOutAmt = GetBookAmt(Cmb_BookOut.SelectedItem as BookBase) + Txt_Amt.Value;
+                    C_BookInAmt = GetBookAmt(Cmb_BookIn.SelectedItem as BookBase) - Txt_Amt.Value;
                     Txt_Amt_ValueChanged(Txt_Amt, null);
                 }
             }
@@ -355,7 +355,7 @@ namespace Accounting_App.Form
                 acct_code = "",
                 acct_book_in = Convert.ToString(Cmb_BookIn.SelectedValue),
                 acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue),
-                amt = Txt_Amt.Value.Value,
+                amt = Txt_Amt.Value,
                 memo = Txt_Memo.Text.Trim(),
                 loguser = AppVar.User.user_id,
                 logtime = DateTime.Now
@@ -376,7 +376,7 @@ namespace Accounting_App.Form
             rowView.acct_code = "";
             rowView.acct_book_in = Convert.ToString(Cmb_BookIn.SelectedValue);
             rowView.acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue);
-            rowView.amt = Txt_Amt.Value.Value;
+            rowView.amt = Txt_Amt.Value;
             rowView.memo = Txt_Memo.Text.Trim();
             rowView.loguser = AppVar.User.user_id;
             rowView.logtime = DateTime.Now;

@@ -130,9 +130,11 @@
                     <!--第四行-->
                     <StackPanel Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Orientation="Horizontal">
                         <Label Content="金額" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0"/>
-                        <xctk:DecimalUpDown x:Name="Txt_Amt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
+                        <ctnl:CurrencyTextBox x:Name="Txt_Amt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
+						                    VerticalContentAlignment="Center" materialDesign:TextFieldAssist.PrefixText="$" materialDesign:TextFieldAssist.SuffixText="元" Style="{StaticResource MaterialDesignTextBox}"/>
+                        <!--<xctk:DecimalUpDown x:Name="Txt_Amt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
 						                    VerticalContentAlignment="Center" DefaultValue="0" DisplayDefaultValueOnEmptyText="True"
-						                    FormatString="N0" Increment="1" Minimum="0"/>
+						                    FormatString="N0" Increment="1" Minimum="0" LostFocus="Txt_Amt_LostFocus"/>-->
                     </StackPanel>
                     <StackPanel Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
                         <Label Content="備註" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0"/>

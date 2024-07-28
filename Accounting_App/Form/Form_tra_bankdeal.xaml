@@ -138,19 +138,28 @@
                             <!--第二行-->
                             <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
                                 <Label Content="金額" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <xctk:DecimalUpDown x:Name="Txt_BookOutAmt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
+                                <ctnl:CurrencyTextBox x:Name="Txt_BookOutAmt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
+								                    VerticalContentAlignment="Center" IsReadOnly="True"
+								                    materialDesign:TextFieldAssist.PrefixText="$" materialDesign:TextFieldAssist.SuffixText="元" Style="{StaticResource MaterialDesignTextBox}" Background="#F3F3F3"/>
+                                <!--<xctk:DecimalUpDown x:Name="Txt_BookOutAmt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
 								                    VerticalContentAlignment="Center" DefaultValue="0" DisplayDefaultValueOnEmptyText="True" IsReadOnly="True"
-								                    FormatString="N0" Increment="1" Minimum="0"/>
+								                    FormatString="N0" Increment="1" Minimum="0"/>-->
                             </StackPanel>
                             <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                                <xctk:DecimalUpDown x:Name="Txt_Amt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="30,0,0,0"
+                                <ctnl:CurrencyTextBox x:Name="Txt_Amt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="30,0,0,0"
+								                    VerticalContentAlignment="Center" materialDesign:TextFieldAssist.UnderlineBrush="#FF6F1B5A" TextChanged="Txt_Amt_ValueChanged"
+                                                    materialDesign:TextFieldAssist.PrefixText="$" materialDesign:TextFieldAssist.SuffixText="元" Style="{StaticResource MaterialDesignTextBox}"/>
+                                <!--<xctk:DecimalUpDown x:Name="Txt_Amt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="30,0,0,0"
 								                    VerticalContentAlignment="Center" DefaultValue="0" DisplayDefaultValueOnEmptyText="True" BorderBrush="PaleVioletRed" BorderThickness="2"
-								                    FormatString="N0" Increment="1" Minimum="0" ValueChanged="Txt_Amt_ValueChanged"/>
+								                    FormatString="N0" Increment="1" Minimum="0" ValueChanged="Txt_Amt_ValueChanged"/>-->
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                                <xctk:DecimalUpDown x:Name="Txt_BookInAmt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
+                                <ctnl:CurrencyTextBox x:Name="Txt_BookInAmt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
+								                    VerticalContentAlignment="Center" IsReadOnly="True"
+								                    materialDesign:TextFieldAssist.PrefixText="$" materialDesign:TextFieldAssist.SuffixText="元" Style="{StaticResource MaterialDesignTextBox}" Background="#F3F3F3"/>
+                                <!--<xctk:DecimalUpDown x:Name="Txt_BookInAmt" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="120" Margin="5,0"
 								                    VerticalContentAlignment="Center" DefaultValue="0" DisplayDefaultValueOnEmptyText="True" IsReadOnly="True"
-								                    FormatString="N0" Increment="1" Minimum="0"/>
+								                    FormatString="N0" Increment="1" Minimum="0"/>-->
                             </StackPanel>
                             <StackPanel Grid.Column="3" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
                                 <TextBlock x:Name="Txt_Amt_Msg" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Margin="10,0,0,0" Foreground="Red"

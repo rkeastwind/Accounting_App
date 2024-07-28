@@ -327,7 +327,7 @@ namespace Accounting_App.Form
                 acct_code = Convert.ToString(Cmb_AcctCode.SelectedValue),
                 acct_book_in = Convert.ToString(Cmb_BookIn.SelectedValue),
                 acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue),
-                amt = Txt_Amt.Value.Value,
+                amt = Txt_Amt.Value,
                 memo = Txt_Memo.Text.Trim(),
                 loguser = AppVar.User.user_id,
                 logtime = DateTime.Now,
@@ -348,7 +348,7 @@ namespace Accounting_App.Form
             rowView.acct_code = Convert.ToString(Cmb_AcctCode.SelectedValue);
             rowView.acct_book_in = Convert.ToString(Cmb_BookIn.SelectedValue);
             rowView.acct_book_out = Convert.ToString(Cmb_BookOut.SelectedValue);
-            rowView.amt = Txt_Amt.Value.Value;
+            rowView.amt = Txt_Amt.Value;
             rowView.memo = Txt_Memo.Text.Trim();
             rowView.loguser = AppVar.User.user_id;
             rowView.logtime = DateTime.Now;
