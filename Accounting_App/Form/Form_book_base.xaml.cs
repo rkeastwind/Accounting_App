@@ -197,9 +197,9 @@ namespace Accounting_App.Form
                 book = Txt_Book.Text.Trim(),
                 book_name = Txt_Book_Name.Text.Trim(),
                 book_type = Convert.ToString(Cmb_BookType.SelectedValue),
-                bank = Txt_Bank.Value.ToString().Trim(),
+                bank = Txt_Bank.Text.Trim(),
                 bank_name = Txt_Bank_Name.Text.Trim(),
-                account = Txt_Account.Value.ToString().Trim(),
+                account = Txt_Account.Text.Trim(),
                 title = Txt_Title.Text.Trim()
             };
 
@@ -215,9 +215,9 @@ namespace Accounting_App.Form
             rowView.book = Txt_Book.Text.Trim();
             rowView.book_name = Txt_Book_Name.Text.Trim();
             rowView.book_type = Convert.ToString(Cmb_BookType.SelectedValue);
-            rowView.bank = Txt_Bank.Value.ToString().Trim();
+            rowView.bank = Txt_Bank.Text.Trim();
             rowView.bank_name = Txt_Bank_Name.Text.Trim();
-            rowView.account = Txt_Account.Value.ToString().Trim();
+            rowView.account = Txt_Account.Text.Trim();
             rowView.title = Txt_Title.Text.Trim();
 
             rowView.UpdateDB();
@@ -230,6 +230,11 @@ namespace Accounting_App.Form
             rowView.DeleteDB();
             (DG_Main.ItemsSource as List<BookBase>).Remove(rowView);
             CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
+        }
+
+        private void Txt_Bank_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+
         }
     }
 }

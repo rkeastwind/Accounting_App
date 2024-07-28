@@ -157,6 +157,7 @@
       <DependentUpon>btn_crud.xaml</DependentUpon>
     </Compile>
     <Compile Include="DTO\BookBase.cs" />
+    <Compile Include="UserControls\NumberTextBox.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\FormState.cs" />
     <Compile Include="DTO\MapFile.cs" />

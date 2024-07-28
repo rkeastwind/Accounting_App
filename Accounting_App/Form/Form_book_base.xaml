@@ -52,8 +52,8 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
                     </Grid.RowDefinitions>
 
                     <!--第一行-->
@@ -76,9 +76,9 @@
 
                     <!--第二行-->
                     <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-                        <Label Content="銀行代碼(7碼)" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0"/>
-                        <xctk:MaskedTextBox x:Name="Txt_Bank" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="100" Margin="5,0"
-						                    VerticalContentAlignment="Center" TextWrapping="NoWrap" Text="" Mask="#######" ValueDataType="{x:Type s:String}"/>
+                        <Label Content="銀行代碼" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0"/>
+                        <ctnl:NumberTextBox x:Name="Txt_Bank" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="100" Margin="5,0"
+                                 VerticalContentAlignment="Center" TextWrapping="NoWrap" Text="" MaxLength="7" materialDesign:HintAssist.Hint="7碼" Style="{StaticResource MaterialDesignTextBox}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
                         <Label Content="銀行名稱" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
@@ -89,8 +89,8 @@
                     <!--第三行-->
                     <StackPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal">
                         <Label Content="銀行帳號" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0"/>
-                        <xctk:MaskedTextBox x:Name="Txt_Account" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="150" Margin="5,0"
-						                    VerticalContentAlignment="Center" TextWrapping="NoWrap" Text="" Mask="################" ValueDataType="{x:Type s:String}"/>
+                        <ctnl:NumberTextBox x:Name="Txt_Account" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="150" Margin="5,0"
+						                    VerticalContentAlignment="Center" TextWrapping="NoWrap" Text="" MaxLength="16" materialDesign:HintAssist.Hint="16碼" Style="{StaticResource MaterialDesignTextBox}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
                         <Label Content="戶名" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,0,0,0"/>
