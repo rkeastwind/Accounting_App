@@ -76,10 +76,10 @@
 
             <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Label Content="查詢起訖" VerticalAlignment="Center"/>
-                <DatePicker x:Name="Qry_Beg_Dt" atp:DatePickerCalendar.IsMonthYear="M" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
+                <DatePicker x:Name="Qry_Beg_Dt" atp:DatePickerCalendar.IsMonthYear="Month" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
                             Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
                 <Label Content="~" VerticalAlignment="Center" Margin="5,0"/>
-                <DatePicker x:Name="Qry_End_Dt" atp:DatePickerCalendar.IsMonthYear="M" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
+                <DatePicker x:Name="Qry_End_Dt" atp:DatePickerCalendar.IsMonthYear="Month" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
                             Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
             </StackPanel>
             <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"

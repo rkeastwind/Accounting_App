@@ -51,7 +51,7 @@
 
             <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Label Content="查詢年度" VerticalAlignment="Center"/>
-                <DatePicker x:Name="Qry_Year" atp:DatePickerCalendar.IsMonthYear="Y" atp:DatePickerDateFormat.DateFormat="yyyy" Text="yyyy" SelectedDate="{x:Static s:DateTime.Now}"
+                <DatePicker x:Name="Qry_Year" atp:DatePickerCalendar.IsMonthYear="Year" atp:DatePickerDateFormat.DateFormat="yyyy" Text="yyyy" SelectedDate="{x:Static s:DateTime.Now}"
                             Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
             </StackPanel>
             <Button Grid.Column="0" Grid.Row="1"

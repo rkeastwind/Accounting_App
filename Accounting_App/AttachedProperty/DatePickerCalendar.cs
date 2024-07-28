@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -16,20 +17,24 @@ using DatePicker = System.Windows.Controls.DatePicker;
 
 namespace Accounting_App.AttachedProperty
 {
+    public enum MonthType
+    {
+        None,
+        Month,
+        Year
+    }
     public class DatePickerCalendar
     {
         public static readonly DependencyProperty IsMonthYearProperty =
-            DependencyProperty.RegisterAttached("IsMonthYear", typeof(string), typeof(DatePickerCalendar),
+            DependencyProperty.RegisterAttached("IsMonthYear", typeof(MonthType), typeof(DatePickerCalendar),
                                                 new PropertyMetadata(OnIsMonthYearChanged));
 
-        private static List<string> MonthYearType = new List<string>() { "M", "Y" };
-
-        public static string GetIsMonthYear(DependencyObject dobj)
+        public static MonthType GetIsMonthYear(DependencyObject dobj)
         {
-            return (string)dobj.GetValue(IsMonthYearProperty);
+            return (MonthType)dobj.GetValue(IsMonthYearProperty);
         }
 
-        public static void SetIsMonthYear(DependencyObject dobj, string value)
+        public static void SetIsMonthYear(DependencyObject dobj, MonthType value)
         {
             dobj.SetValue(IsMonthYearProperty, value);
         }
@@ -49,7 +54,7 @@ namespace Accounting_App.AttachedProperty
             if (e.NewValue == e.OldValue)
                 return;
 
-            if (MonthYearType.Contains(e.NewValue as string))
+            if ((MonthType)e.NewValue != MonthType.None)
             {
                 datePicker.CalendarOpened += DatePickerOnCalendarOpened;
                 datePicker.CalendarClosed += DatePickerOnCalendarClosed;
@@ -64,7 +69,7 @@ namespace Accounting_App.AttachedProperty
         private static void DatePickerOnCalendarOpened(object sender, RoutedEventArgs routedEventArgs)
         {
             var calendar = GetDatePickerCalendar(sender);
-            calendar.DisplayMode = (GetIsMonthYear((sender as DatePicker)) == "Y") ? CalendarMode.Decade : CalendarMode.Year;
+            calendar.DisplayMode = (GetIsMonthYear((sender as DatePicker)) == MonthType.Year) ? CalendarMode.Decade : CalendarMode.Year;
 
             calendar.DisplayModeChanged += CalendarOnDisplayModeChanged;
         }
@@ -81,7 +86,7 @@ namespace Accounting_App.AttachedProperty
         private static void CalendarOnDisplayModeChanged(object sender, CalendarModeChangedEventArgs e)
         {
             var calendar = (Calendar)sender;
-            if (calendar.DisplayMode != ((GetIsMonthYear(GetCalendarsDatePicker(calendar)) == "Y") ? CalendarMode.Year : CalendarMode.Month))
+            if (calendar.DisplayMode != ((GetIsMonthYear(GetCalendarsDatePicker(calendar)) == MonthType.Year) ? CalendarMode.Year : CalendarMode.Month))
                 return;
 
             calendar.SelectedDate = GetSelectedCalendarDate(calendar.DisplayDate);

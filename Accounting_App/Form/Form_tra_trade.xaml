@@ -48,7 +48,7 @@
 			          Style="{StaticResource MaterialDesignCardGroupBox}" materialDesign:ElevationAssist.Elevation="Dp4" materialDesign:ColorZoneAssist.Mode="SecondaryMid">
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                     <Label Content="查詢年月" VerticalAlignment="Center"/>
-                    <DatePicker x:Name="Qry_YearMonth" atp:DatePickerCalendar.IsMonthYear="M" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
+                    <DatePicker x:Name="Qry_YearMonth" atp:DatePickerCalendar.IsMonthYear="Month" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static s:DateTime.Now}"
                                 Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
                     <Label Content="收支" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     <ComboBox x:Name="Qry_Action" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
