@@ -64,7 +64,7 @@ namespace Accounting_App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

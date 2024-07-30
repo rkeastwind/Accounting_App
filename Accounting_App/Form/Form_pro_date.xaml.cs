@@ -79,7 +79,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show("結帳失敗，錯誤訊息：" + ex.Message.ToString());
+                MessageBox.Show("結帳失敗，錯誤訊息：" + ex.Message.ToString(), "結帳失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             finally
             {

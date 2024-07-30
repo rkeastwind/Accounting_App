@@ -34,7 +34,7 @@ namespace Accounting_App
             string DB_path = ConfigurationManager.AppSettings["DBPath"];
             if (!File.Exists(DB_path))
             {
-                MessageBox.Show($"資料庫{Environment.CurrentDirectory}{DB_path.Substring(1)}不存在", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"資料庫{Environment.CurrentDirectory}{DB_path.Substring(1)}不存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Environment.Exit(0);
             }
         }
@@ -64,7 +64,7 @@ namespace Accounting_App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

@@ -32,7 +32,7 @@ namespace Accounting_App.Form
             AppVar.User.loguser = AppVar.User.user_id;
             AppVar.User.logtime = DateTime.Now;
             AppVar.User.UpdateDB();
-            MessageBox.Show("密碼更新成功");
+            MessageBox.Show("密碼更新成功", "", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
 

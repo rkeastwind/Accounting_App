@@ -26,7 +26,7 @@ namespace Accounting_App.Form
         {
             if (Qry_Year.SelectedDate == null)
             {
-                MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             return true;
@@ -148,7 +148,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show("列印失敗，錯誤訊息：" + ex.Message.ToString());
+                MessageBox.Show("列印失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             finally
             {

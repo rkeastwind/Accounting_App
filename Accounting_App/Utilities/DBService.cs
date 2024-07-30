@@ -15,7 +15,7 @@ namespace Accounting_App.Utilities
 {
     public static class DBService
     {
-        private static string cnStr = "data source=" + ConfigurationManager.AppSettings["DBPath"];
+        public static string cnStr = "data source=" + ConfigurationManager.AppSettings["DBPath"];
 
         /// <summary>
         /// SQL_Command
@@ -25,8 +25,13 @@ namespace Accounting_App.Utilities
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
-                return conn.Execute(sql);
+                return SQL_Command(conn, sql);
             }
+        }
+
+        public static int SQL_Command(SQLiteConnection conn, string sql)
+        {
+            return conn.Execute(sql);
         }
 
         /// <summary>
@@ -356,7 +361,19 @@ where A.book_type != 0 --排除總帳
             }
         }
 
+        #region TableBaseDTO異動資料庫擴充
+
         public static int InsertDB<T>(this T r) where T : TableBaseDTO
+        {
+            int affected = 0;
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                affected = r.InsertDB(conn);
+            }
+            return affected;
+        }
+
+        public static int InsertDB<T>(this T r, SQLiteConnection conn) where T : TableBaseDTO
         {
             int affected = 0;
             if (r.GetType() != typeof(T))
@@ -375,14 +392,22 @@ where A.book_type != 0 --排除總帳
             SqlScript = SqlScript.Replace("[$Table]", r.Table);
             SqlScript = SqlScript.Replace("[$Cols]", string.Join(", ", cols.ToArray()));
             SqlScript = SqlScript.Replace("[$Values]", string.Join(", ", cols.Select(x => "@" + x).ToArray()));
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                affected = conn.Execute(SqlScript, parameters);
-            }
+
+            affected = conn.Execute(SqlScript, parameters);
             return affected;
         }
 
         public static int UpdateDB<T>(this T r) where T : TableBaseDTO
+        {
+            int affected = 0;
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                affected = r.UpdateDB(conn);
+            }
+            return affected;
+        }
+
+        public static int UpdateDB<T>(this T r, SQLiteConnection conn) where T : TableBaseDTO
         {
             int affected = 0;
             if (r.GetType() != typeof(T))
@@ -401,14 +426,22 @@ where A.book_type != 0 --排除總帳
             SqlScript = SqlScript.Replace("[$Table]", r.Table);
             SqlScript = SqlScript.Replace("[$ColVal]", string.Join(", ", cols.Where(x => !pkey.Contains(x)).Select(x => $@"{x} = @{x}").ToArray()));
             SqlScript = SqlScript.Replace("[$Key]", string.Join(" and ", pkey.Select(x => $@"{x} = @{x}").ToArray()));
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                affected = conn.Execute(SqlScript, parameters);
-            }
+
+            affected = conn.Execute(SqlScript, parameters);
             return affected;
         }
 
         public static int DeleteDB<T>(this T r) where T : TableBaseDTO
+        {
+            int affected = 0;
+            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
+            {
+                affected = r.DeleteDB(conn);
+            }
+            return affected;
+        }
+
+        public static int DeleteDB<T>(this T r, SQLiteConnection conn) where T : TableBaseDTO
         {
             int affected = 0;
             if (r.GetType() != typeof(T))
@@ -426,13 +459,10 @@ where A.book_type != 0 --排除總帳
             }
             SqlScript = SqlScript.Replace("[$Table]", r.Table);
             SqlScript = SqlScript.Replace("[$Key]", string.Join(" and ", pkey.Select(x => $@"{x} = @{x}").ToArray()));
-            using (SQLiteConnection conn = new SQLiteConnection(cnStr))
-            {
-                affected = conn.Execute(SqlScript, parameters);
-            }
+
+            affected = conn.Execute(SqlScript, parameters);
             return affected;
         }
-
 
         private static void SetColByAttr(PropertyInfo pi, object vl, ref List<string> pkey, ref List<string> cols, ref DynamicParameters para)
         {
@@ -477,5 +507,7 @@ where A.book_type != 0 --排除總帳
 
             para.Add(pi.Name, vl);
         }
+
+        #endregion
     }
 }

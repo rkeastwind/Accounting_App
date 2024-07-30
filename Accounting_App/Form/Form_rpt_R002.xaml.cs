@@ -74,19 +74,19 @@ order by book", new string[] { });  //庫存表開放查詢總帳冊
         {
             if (DG_Main.SelectedItems.Count == 0)
             {
-                MessageBox.Show("請選擇帳冊", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("請選擇帳冊", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (Qry_Beg_Dt.SelectedDate == null || Qry_End_Dt.SelectedDate == null)
             {
-                MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             DateTime QryDtBeg = (DateTime)Qry_Beg_Dt.SelectedDate;
             DateTime QryDtEnd = (DateTime)Qry_End_Dt.SelectedDate;
             if (QryDtBeg.Year > QryDtEnd.Year || (QryDtBeg.Year == QryDtEnd.Year && QryDtBeg.Month > QryDtEnd.Month))  //年份大於，或年份相同但月份大於
             {
-                MessageBox.Show("起日不可大於迄日", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("起日不可大於迄日", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             return true;
@@ -177,7 +177,7 @@ order by book", new string[] { });  //庫存表開放查詢總帳冊
             }
             catch (Exception ex)
             {
-                MessageBox.Show("列印失敗，錯誤訊息：" + ex.Message.ToString());
+                MessageBox.Show("列印失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             finally
             {

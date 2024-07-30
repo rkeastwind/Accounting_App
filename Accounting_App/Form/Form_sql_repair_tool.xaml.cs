@@ -60,7 +60,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show("執行失敗，錯誤訊息：" + ex.Message.ToString());
+                MessageBox.Show("執行失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show("儲存失敗，錯誤訊息：" + ex.Message.ToString());
+                MessageBox.Show("儲存失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }
