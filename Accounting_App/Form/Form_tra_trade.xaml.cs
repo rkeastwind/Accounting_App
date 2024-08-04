@@ -8,6 +8,7 @@ using System.Windows.Data;
 using Accounting_App.DTO;
 using Accounting_App.Utilities;
 using System.Globalization;
+using System.Windows.Navigation;
 
 namespace Accounting_App.Form
 {
@@ -24,7 +25,6 @@ namespace Accounting_App.Form
         List<MapFile> Lst_TraDtlOut = DBService.GetMapFile("2").Where(x => x.memo1 == "支出").ToList();
         List<MapFile> Lst_AcctIn = DBService.GetMapFile("AC").Where(x => x.item.Substring(0, 1) == "B").ToList();
         List<MapFile> Lst_AcctOut = DBService.GetMapFile("AC").Where(x => x.item.Substring(0, 1) == "A").ToList();
-        List<BookBase> Lst_BookBase = DBService.GetBookBase(false);
 
         public Form_tra_trade()
         {
@@ -139,18 +139,30 @@ namespace Accounting_App.Form
             //小物件控制
             if (FormState.State == FormStateS.Initial || FormState.State == FormStateS.ShowData)
             {
+                Cmb_BookIn.ItemsSource = DBService.GetBookBase();
+                Cmb_BookOut.ItemsSource = DBService.GetBookBase();
                 Txt_TradeNo.Text = "";
                 DG_Main_SelectionChanged(DG_Main, null);
             }
             else if (FormState.State == FormStateS.Add)
             {
                 Txt_TradeNo.Text = "系統自動編號";
-                Dtp_TradeDt.SelectedDate = CommUtility.GetNextProStartDt();
+                Dtp_TradeDt.SelectedDate = ProUtility.GetNextProStartDt();
                 Cmb_Action.SelectedIndex = 0;
                 Cmb_ActionDtl.SelectedIndex = Cmb_AcctCode.SelectedIndex = 0;
                 Txt_Amt.Value = 0;
                 Txt_Memo.Text = "";
-                UpdateMemoDef();
+                Cmb_ActionDtl_SelectionChanged(null, null);
+                Cmb_BookIn.SelectedIndex = Cmb_BookOut.SelectedIndex = 0;
+            }
+            else if (FormState.State == FormStateS.Edit)
+            {
+                object BBIn_SelectValue = Cmb_BookIn.SelectedValue;
+                object BBOut_SelectValue = Cmb_BookOut.SelectedValue;
+                Cmb_ActionDtl_SelectionChanged(null, null);
+                //重新給值(因為ItemsSource換掉會變)
+                Cmb_BookIn.SelectedValue = BBIn_SelectValue;
+                Cmb_BookOut.SelectedValue = BBOut_SelectValue;
             }
             Dtp_TradeDt.IsHitTestVisible = Cmb_Action.IsHitTestVisible = Cmb_ActionDtl.IsHitTestVisible = !(FormState.State == FormStateS.Edit);  //新增後不可編輯
         }
@@ -192,26 +204,42 @@ namespace Accounting_App.Form
         //交易明細欄位連動(影響收入支出帳冊)
         private void Cmb_ActionDtl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (FormState.State != FormStateS.Add && FormState.State != FormStateS.Edit)
+                return;
+
+            List<BookBase> BBIn = new List<BookBase>();
+            List<BookBase> BBOut = new List<BookBase>();
+            if (FormState.State == FormStateS.Add)  //要排除已關閉的帳冊，但Edit情況會有舊資料，自身帳冊要保留
+            {
+                BBIn = DBService.GetBookBaseForTrade();
+                BBOut = DBService.GetBookBaseForTrade();
+            }
+            else
+            {
+                BBIn = DBService.GetBookBaseForTrade((DG_Main.SelectedItem as TraMast).acct_book_in);
+                BBOut = DBService.GetBookBaseForTrade((DG_Main.SelectedItem as TraMast).acct_book_out);
+            }
+
             string Act = Convert.ToString(Cmb_Action.SelectedValue);
             string Dtl = Convert.ToString(Cmb_ActionDtl.SelectedValue);
             if (Act == "1")  //收入
             {
                 if (Dtl == "a")  //入現金
-                    Cmb_BookIn.ItemsSource = Lst_BookBase.Where(x => x.book_type == "1").ToList();
+                    Cmb_BookIn.ItemsSource = BBIn.Where(x => x.book_type == "1").ToList();
                 else if (Dtl == "b")  //入銀存
-                    Cmb_BookIn.ItemsSource = Lst_BookBase.Where(x => x.book_type == "2").ToList();
+                    Cmb_BookIn.ItemsSource = BBIn.Where(x => x.book_type == "2").ToList();
                 else  //其他
-                    Cmb_BookIn.ItemsSource = new List<BookBase>(Lst_BookBase);
+                    Cmb_BookIn.ItemsSource = new List<BookBase>(BBIn);
                 Cmb_BookOut.ItemsSource = null;  //清空
             }
             else if (Act == "2")  //支出
             {
                 if (Dtl == "1")  //現金
-                    Cmb_BookOut.ItemsSource = Lst_BookBase.Where(x => x.book_type == "1").ToList();
+                    Cmb_BookOut.ItemsSource = BBOut.Where(x => x.book_type == "1").ToList();
                 else if (Dtl == "2")  //銀行轉帳
-                    Cmb_BookOut.ItemsSource = Lst_BookBase.Where(x => x.book_type == "2").ToList();
+                    Cmb_BookOut.ItemsSource = BBOut.Where(x => x.book_type == "2").ToList();
                 else  //其他
-                    Cmb_BookOut.ItemsSource = new List<BookBase>(Lst_BookBase);
+                    Cmb_BookOut.ItemsSource = new List<BookBase>(BBOut);
                 Cmb_BookIn.ItemsSource = null;  //清空
             }
             UpdateMemoDef();
@@ -239,7 +267,7 @@ namespace Accounting_App.Form
         private void UpdateMemoDef()
         {
             if (FormState.State != FormStateS.Add && FormState.State != FormStateS.Edit) return;
-            Txt_Memo.Text = CommUtility.GetTraMastMemoDef(Convert.ToString(Cmb_Action.SelectedValue),
+            Txt_Memo.Text = ProUtility.GetTraMastMemoDef(Convert.ToString(Cmb_Action.SelectedValue),
                 Convert.ToString(Cmb_ActionDtl.SelectedValue),
                 Convert.ToString(Cmb_AcctCode.SelectedValue),
                 Convert.ToString(Cmb_BookIn.SelectedValue),
@@ -279,7 +307,7 @@ namespace Accounting_App.Form
         {
             if (ChangeState == FormStateS.Edit || ChangeState == FormStateS.Delete)
             {
-                if (!CommUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
+                if (!ProUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
                 {
                     MessageBox.Show($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
                         $"不可{ChangeState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -305,7 +333,7 @@ namespace Accounting_App.Form
                     return false;
                 }
             }
-            if (!CommUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
+            if (!ProUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
             {
                 MessageBox.Show($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
                     $"不可{FormState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -317,7 +345,7 @@ namespace Accounting_App.Form
         //新增作業
         private void Operation_Add()
         {
-            string trade_no = CommUtility.GetNextTradeNo_TraMast((DateTime)Dtp_TradeDt.SelectedDate);
+            string trade_no = ProUtility.GetNextTradeNo_TraMast((DateTime)Dtp_TradeDt.SelectedDate);
             TraMast rowView = new TraMast()
             {
                 trade_no = trade_no,

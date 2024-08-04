@@ -6,6 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Accounting_App.Form"
+        xmlns:vcvt="clr-namespace:Accounting_App.ValueConverters"
         xmlns:atp="clr-namespace:Accounting_App.AttachedProperty"
         Style="{StaticResource MaterialDesignWindow}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -70,7 +71,7 @@
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn x:Name="dgc_book" Header="帳冊代碼" Binding="{Binding book}"/>
                     <DataGridTextColumn x:Name="dgc_book_name" Header="帳冊名稱" Binding="{Binding book_name}"/>
-                    <DataGridTextColumn x:Name="dgc_book_type_desc" Header="帳冊類型" Binding="{Binding book_type_desc}"/>
+                    <DataGridTextColumn x:Name="dgc_book_type" Header="帳冊類型" Binding="{Binding book_type, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=book_type}"/>
                 </DataGrid.Columns>
             </DataGrid>
 

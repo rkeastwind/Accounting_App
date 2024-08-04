@@ -243,6 +243,31 @@ ORDER BY parent_id
         }
 
         /// <summary>
+        /// 取得BookBase交易畫面用
+        /// </summary>
+        /// <param name="NotExceptItem">不排除的項目</param>
+        /// <returns></returns>
+        public static List<BookBase> GetBookBaseForTrade(string NotExceptItem = "")
+        {
+            string statement = $@"where book_type != 0 and (close_date is null or book = '{NotExceptItem}') ";
+            var result = QryBookBase(statement);
+            return result;
+        }
+
+        /// <summary>
+        /// 取得BookBase查詢畫面用
+        /// </summary>
+        /// <param name="InCludeTotal">是否含總帳</param>
+        /// <returns></returns>
+        public static List<BookBase> GetBookBaseForQry(bool InCludeTotal = false)
+        {
+            string statement = "where in_qurey = '1' ";
+            statement += (InCludeTotal == false) ? "and book_type != 0" : "";
+            var result = QryBookBase(statement);
+            return result;
+        }
+
+        /// <summary>
         /// 取得book_base
         /// </summary>
         /// <param name="filter">篩選條件</param>
@@ -340,13 +365,13 @@ ORDER BY parent_id
         /// <summary>
         /// 取得結帳庫存基底InvMast
         /// </summary>
-        /// <param name="idt"></param>
+        /// <param name="idt">本次結帳迄日</param>
         /// <returns></returns>
         public static List<InvMast> GetProBaseBal(DateTime idt)
         {
             using (SQLiteConnection conn = new SQLiteConnection(cnStr))
             {
-                DateTime dt = idt.AddDays(-idt.Day);  //上個月底
+                DateTime dt = idt.AddDays(-idt.Day);  //上個月底：上次結帳迄日
                 string sql = $@"
 SELECT
     A.book AS acct_book,
@@ -355,6 +380,7 @@ SELECT
 FROM book_base A
 left join (select * from inv_mast where date(trade_dt) = '{dt.GetFullDate()}') B ON A.book = B.acct_book
 where A.book_type != 0 --排除總帳
+    and (A.close_date is null or '{idt.GetFullDate()}' <= date(A.close_date))  --結帳日未關掉
 ";
                 var result = conn.Query<InvMast>(sql).OrderBy(x => x.acct_book);
                 return result.ToList();
@@ -491,18 +517,21 @@ where A.book_type != 0 --排除總帳
                 typeof(decimal), typeof(double), typeof(float), typeof(int),
                 typeof(decimal?), typeof(double?), typeof(float?), typeof(int?)
             };
-            //預設DB不可Null，日期轉TEXT(SQLLite沒有日期格式)
-            if (DtTp.Contains(pi.PropertyType))  //日期
+            //日期轉TEXT(SQLLite沒有日期格式)
+            if (DtTp.Contains(pi.PropertyType))  //日期：非null就轉換，null的維持原樣
             {
-                DateTime dt = (vl == null) ? new DateTime(1900, 01, 01) : Convert.ToDateTime(vl);
-                if (coltp == TableColTypeS.Date)
-                    vl = dt.GetFullDate();
-                else
-                    vl = dt.GetFullDateTime();
+                if (vl != null)
+                {
+                    DateTime dt = Convert.ToDateTime(vl);
+                    if (coltp == TableColTypeS.Date)
+                        vl = dt.GetFullDate();
+                    else
+                        vl = dt.GetFullDateTime();
+                }
             }
-            else if (NmTp.Contains(pi.PropertyType))  //數字
+            else if (NmTp.Contains(pi.PropertyType))  //數字：預設0
                 vl = (vl == null) ? 0 : vl;
-            else  //其他
+            else  //其他：預設空字串
                 vl = (vl == null) ? "" : vl;
 
             para.Add(pi.Name, vl);

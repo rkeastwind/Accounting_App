@@ -11,7 +11,7 @@
         Style="{StaticResource MaterialDesignWindow}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Form_book_base" Height="800" Width="800">
+        Title="Form_book_base" Height="900" Width="1100">
     <Window.Resources>
     </Window.Resources>
     <Grid>
@@ -51,7 +51,8 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
                         <RowDefinition Height="60"/>
                         <RowDefinition Height="60"/>
                     </Grid.RowDefinitions>
@@ -68,7 +69,7 @@
 						         VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                        <Label Content="帳冊類型" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
+                        <Label Content="帳冊類型" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" Style="{StaticResource LbInsOnlyColor}"/>
                         <ComboBox x:Name="Cmb_BookType" Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"
 						          IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
 						          SelectedValuePath="item" DisplayMemberPath="item_name"/>
@@ -97,6 +98,37 @@
                         <TextBox x:Name="Txt_Title" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="300" Margin="5,0"
 						         VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
                     </StackPanel>
+
+                    <!--第四行-->
+                    <StackPanel Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="起始日" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                        <DatePicker x:Name="Dtp_OpenDate" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="100" Margin="5,0"
+						            VerticalContentAlignment="Center" Text=""/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="結束日" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <CheckBox x:Name="Chk_CloseDate" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="False" Margin="5,0" Checked="Chk_CloseDate_Checked" Unchecked="Chk_CloseDate_Checked"/>
+                        <DatePicker x:Name="Dtp_CloseDate" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="100" Margin="5,0"
+						            VerticalContentAlignment="Center" Text="" IsHitTestVisible="False" />
+                        <materialDesign:PopupBox Margin="5,0" PlacementMode="BottomAndAlignCentres" PopupMode="MouseOver" PopupUniformCornerRadius="5">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Kind="InformationSlabCircleOutline" Foreground="#ED5565" Height="25" Width="25" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel Margin="10,0">
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Margin" Value="0,5"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <TextBlock x:Name="Txt_CloseNotice" Text="" />
+                                <TextBlock x:Name="Txt_OpenNotice" Text="" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="3" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Label Content="查詢啟用" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <CheckBox x:Name="Chk_InQurey" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Margin="5,0" />
+                    </StackPanel>
                 </Grid>
             </GroupBox>
 
@@ -112,17 +144,16 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="dgc_book" Header="帳冊代號" Binding="{Binding book}"/>
                     <DataGridTextColumn x:Name="dgc_book_name" Header="帳冊名稱" Binding="{Binding book_name}"/>
-                    <DataGridTemplateColumn x:Name="dgc_book_type" Header="帳冊類型" SortMemberPath="book_type" CanUserSort="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding book_type, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=book_type}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn x:Name="dgc_book_type" Header="帳冊類型" Binding="{Binding book_type, Converter={vcvt:Vcvt_MapFile}, ConverterParameter=book_type}"/>
                     <DataGridTextColumn x:Name="dgc_bank" Header="銀行代碼" Binding="{Binding bank}"/>
                     <DataGridTextColumn x:Name="dgc_bank_name" Header="銀行名稱" Binding="{Binding bank_name}"/>
                     <DataGridTextColumn x:Name="dgc_account" Header="銀行帳號" Binding="{Binding account}"/>
                     <DataGridTextColumn x:Name="dgc_title" Header="戶名" Binding="{Binding title}"/>
+                    <DataGridTextColumn x:Name="dgc_open_date" Header="起始日" Binding="{Binding open_date, Converter={vcvt:Vcvt_DateDeault}, ConverterParameter=0N}"/>
+                    <DataGridTextColumn x:Name="dgc_close_date" Header="結束日" Binding="{Binding close_date, Converter={vcvt:Vcvt_DateDeault}, ConverterParameter=0N}"/>
+                    <DataGridCheckBoxColumn x:Name="dgc_in_qurey" Header="查詢啟用" Binding="{Binding in_qurey}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguser}"/>
+                    <DataGridTextColumn x:Name="dgc_logtime" Header="異動時間" Binding="{Binding logtime, Converter={vcvt:Vcvt_DateDeault}, ConverterParameter=1N}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

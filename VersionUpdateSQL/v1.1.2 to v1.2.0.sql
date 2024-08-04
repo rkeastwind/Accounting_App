@@ -1,3 +1,9 @@
+ALTER TABLE "main"."book_base" ADD open_date TEXT;
+ALTER TABLE "main"."book_base" ADD close_date TEXT;
+ALTER TABLE "main"."book_base" ADD in_qurey INTEGER DEFAULT 1 NOT NULL;
+ALTER TABLE "main"."book_base" ADD loguser TEXT;
+ALTER TABLE "main"."book_base" ADD logtime TEXT;
+
 DELETE FROM "main"."map_file" WHERE opt_no='pro_status';
 INSERT INTO "main"."map_file" ("opt_no", "opt_name", "item", "item_name", "memo1", "memo2", "order_by") VALUES ('pro_status', '結帳狀態', '0', '未結帳', ' ', ' ', '0');
 INSERT INTO "main"."map_file" ("opt_no", "opt_name", "item", "item_name", "memo1", "memo2", "order_by") VALUES ('pro_status', '結帳狀態', '1', '已結帳', ' ', ' ', '1');

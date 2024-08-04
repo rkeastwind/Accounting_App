@@ -62,7 +62,7 @@ namespace Accounting_App.Form
                 Mouse.OverrideCursor = Cursors.Wait;
                 if (FormState == FormStates.Run)
                 {
-                    if (ProUtility.ExecutePro(dt, 1))
+                    if (ProExec.ExecutePro(dt, 1))
                     {
                         FormStateChange(FormStates.Run);
                         MessageBox.Show($"{dt.GetFullDate()}結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -70,7 +70,7 @@ namespace Accounting_App.Form
                 }
                 else
                 {
-                    if (ProUtility.ExecutePro(dt, 0))
+                    if (ProExec.ExecutePro(dt, 0))
                     {
                         FormStateChange(FormStates.Cancel);
                         MessageBox.Show($"{dt.GetFullDate()}反結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);

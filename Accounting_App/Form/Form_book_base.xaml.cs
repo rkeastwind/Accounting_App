@@ -9,6 +9,7 @@ using Accounting_App.DTO;
 using Accounting_App.Utilities;
 using System.Globalization;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+using System.Runtime.InteropServices;
 
 namespace Accounting_App.Form
 {
@@ -21,6 +22,9 @@ namespace Accounting_App.Form
 
         List<MapFile> Lst_BookType = DBService.GetMapFile("book_type");
         List<MapFile> Lst_BookType_NT = DBService.GetMapFile("book_type").Where(x => x.item != "0").ToList();
+
+        string bookCloseNotice = "關閉帳冊條件：上次結帳日庫存為0，且大於上次結帳日沒有任何交易(含進/出)";
+        string bookOpenNotice = "開啟帳冊條件：結帳日大於結束日才可以開啟";
 
         public Form_book_base()
         {
@@ -37,6 +41,8 @@ namespace Accounting_App.Form
             BtnGroup_CRUD.Btn_Delete.Click += (s, e) => { Btn_AED_Click(FormStateS.Delete); };
             BtnGroup_CRUD.Btn_Save.Click += Btn_Save_Click;
             BtnGroup_CRUD.Btn_Cancel.Click += (s, e) => { Refresh(FormStateS.ShowData); };
+            Txt_CloseNotice.Text = bookCloseNotice;
+            Txt_OpenNotice.Text = bookOpenNotice;
             Refresh(FormStateS.Initial);
         }
 
@@ -118,6 +124,10 @@ namespace Accounting_App.Form
             {
                 Cmb_BookType.SelectedIndex = 0;
                 Txt_Book.Text = Txt_Book_Name.Text = Txt_Bank.Text = Txt_Bank_Name.Text = Txt_Account.Text = Txt_Title.Text = "";
+                Dtp_OpenDate.SelectedDate = ProUtility.GetNextProStartDt();
+                Chk_CloseDate.IsChecked = false;
+                Chk_CloseDate_Checked(null, null);
+                Chk_InQurey.IsChecked = true;
             }
             Txt_Book.IsHitTestVisible = Cmb_BookType.IsHitTestVisible = !(FormState.State == FormStateS.Edit);  //新增後不可編輯
         }
@@ -137,6 +147,10 @@ namespace Accounting_App.Form
                     Txt_Bank_Name.Text = drv.bank_name;
                     Txt_Account.Text = drv.account;
                     Txt_Title.Text = drv.title;
+                    Dtp_OpenDate.SelectedDate = drv.open_date;
+                    Dtp_CloseDate.SelectedDate = drv.close_date;
+                    Chk_CloseDate.IsChecked = drv.Is_Closed;
+                    Chk_InQurey.IsChecked = drv.in_qurey;
                 }
             }
 
@@ -156,7 +170,7 @@ namespace Accounting_App.Form
         {
             if (ChangeState == FormStateS.Delete)  //只卡刪除，修改仍可調整銀行資訊
             {
-                if (!CommUtility.CheckBookIsPro(Txt_Book.Text))
+                if (!ProUtility.CheckBookIsPro(Txt_Book.Text))
                 {
                     MessageBox.Show($"{Txt_Book.Text}帳冊已經結帳，" +
                         $"不可{ChangeState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -185,8 +199,34 @@ namespace Accounting_App.Form
                     MessageBox.Show("帳冊代號必填", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
+                if (!CheckClosedDate(Chk_CloseDate.IsChecked.Value))
+                {
+                    string msg = (Chk_CloseDate.IsChecked.Value) ? bookCloseNotice : bookOpenNotice;
+                    MessageBox.Show(msg, "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
             }
             return true;
+        }
+
+        private bool CheckClosedDate(bool Mode)
+        {
+            string book = Txt_Book.Text;
+            var NextProDt = ProUtility.GetNextProEndDt();
+            var BookCloseDt = (DG_Main.SelectedItem as BookBase).close_date;  //因為畫面先動了，從Grid抓
+            if (Mode)  //關閉檢核
+            {
+                var LastInvMast = DBService.GetProBaseBal(NextProDt).Where(x => x.acct_book == book).FirstOrDefault();
+                var RangeTraMast = DBService.QryTraMast($"where date(trade_dt) >= date('{NextProDt.GetFullDate()}','start of month')").Where(x => x.acct_book_in == book || x.acct_book_out == book).ToList();
+                if (LastInvMast.amt == 0 && RangeTraMast.Count == 0)  //上次結帳日庫存為0，且大於上次結帳日沒有任何交易(含進/出)
+                    return true;
+            }
+            else  //開啟檢核
+            {
+                if (NextProDt > BookCloseDt)
+                    return true;
+            }
+            return false;
         }
 
         //新增作業
@@ -200,7 +240,12 @@ namespace Accounting_App.Form
                 bank = Txt_Bank.Text.Trim(),
                 bank_name = Txt_Bank_Name.Text.Trim(),
                 account = Txt_Account.Text.Trim(),
-                title = Txt_Title.Text.Trim()
+                title = Txt_Title.Text.Trim(),
+                open_date = Dtp_OpenDate.SelectedDate,
+                close_date = Dtp_CloseDate.SelectedDate,
+                in_qurey = Chk_InQurey.IsChecked ?? true,
+                loguser = AppVar.User.user_id,
+                logtime = DateTime.Now
             };
 
             rowView.InsertDB();
@@ -219,6 +264,11 @@ namespace Accounting_App.Form
             rowView.bank_name = Txt_Bank_Name.Text.Trim();
             rowView.account = Txt_Account.Text.Trim();
             rowView.title = Txt_Title.Text.Trim();
+            rowView.open_date = Dtp_OpenDate.SelectedDate;
+            rowView.close_date = Dtp_CloseDate.SelectedDate;
+            rowView.in_qurey = Chk_InQurey.IsChecked ?? true;
+            rowView.loguser = AppVar.User.user_id;
+            rowView.logtime = DateTime.Now;
 
             rowView.UpdateDB();
             CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
@@ -232,9 +282,15 @@ namespace Accounting_App.Form
             CollectionViewSource.GetDefaultView(DG_Main.ItemsSource).Refresh();
         }
 
-        private void Txt_Bank_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        private void Chk_CloseDate_Checked(object sender, RoutedEventArgs e)
         {
-
+            if (FormState.State == FormStateS.Add || FormState.State == FormStateS.Edit)
+            {
+                if (Chk_CloseDate.IsChecked == true)
+                    Dtp_CloseDate.SelectedDate = ProUtility.GetLastProEndDt();  //上一結帳日
+                else
+                    Dtp_CloseDate.SelectedDate = null;
+            }
         }
     }
 }

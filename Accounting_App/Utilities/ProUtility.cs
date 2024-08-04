@@ -2,103 +2,149 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Accounting_App.Utilities
 {
     public static class ProUtility
     {
-        public static bool ExecutePro(DateTime dt, int direction)
+        /// <summary>
+        /// 取得下一個TraMast交易編號
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string GetNextTradeNo_TraMast(DateTime dt)
         {
-            string qdt = dt.GetFullDate();
-            DateTime _qdt = dt.AddMonths(1);
-            string next_dt = new DateTime(_qdt.Year, _qdt.Month, DateTime.DaysInMonth(_qdt.Year, _qdt.Month)).GetFullDate();  //下個月底日
-
-            using (SQLiteConnection conn = new SQLiteConnection(DBService.cnStr))
+            string trade_no = "";
+            string leading_code = dt.ToString("yyyyMMdd");
+            TraMast rw = DBService.QryTraMast($@"where trade_no like '{leading_code}%'").AsEnumerable().OrderByDescending(x => x.trade_no).FirstOrDefault();
+            if (rw != null)
             {
-                conn.Open();
-                SQLiteTransaction tran = conn.BeginTransaction();
-                try
-                {
-                    if (direction == 1)  //正向
-                    {
-                        //前置作業，刪除庫存
-                        DBService.SQL_Command(conn, $"delete from inv_mast where date(trade_dt) >= '{qdt}'");
-
-                        List<InvMast> Bal = DBService.GetProBaseBal(dt);  //上個月底庫存(完整清單，沒有庫存的放0)
-                        List<TraMast> Tra = DBService.QryTraMast($"where date(trade_dt) between date('{qdt}','start of month') and '{qdt}'");  //月初到月底交易
-
-                        DateTime c_mbeg = dt.AddDays(-dt.Day + 1);  //月初
-
-                        while (c_mbeg <= dt)
-                        {
-                            string qc_mbeg = c_mbeg.GetFullDate();
-
-                            foreach (var b in Bal)
-                            {
-                                decimal amt_P = Tra.Where(x => x.acct_book_in == b.acct_book && x.trade_dt == c_mbeg).Sum(x => x.amt);
-                                decimal amt_M = Tra.Where(x => x.acct_book_out == b.acct_book && x.trade_dt == c_mbeg).Sum(x => x.amt);
-                                b.amt = b.amt + amt_P - amt_M;
-                                b.trade_dt = c_mbeg;
-
-                                if (b.amt < 0)
-                                {
-                                    string error = $"[{b.acct_book}_{b.acct_book_name}]於{qc_mbeg}結帳時發生庫存小於0 (${b.amt})，請檢查交易";
-                                    throw new Exception(error);
-                                }
-                            }
-                            c_mbeg = c_mbeg.AddDays(1);
-                        }
-
-                        //新增總帳
-                        Bal.Add(new InvMast()
-                        {
-                            acct_book = "Total",
-                            trade_dt = dt,
-                            amt = Bal.Sum(x => x.amt)
-                        });
-                        //刪除0庫存
-                        Bal.RemoveAll(x => x.amt == 0);
-                        //寫入庫存
-                        foreach (var b in Bal)
-                        {
-                            b.loguser = AppVar.User.user_id;
-                            b.logtime = DateTime.Now;
-                            b.InsertDB(conn);
-                        }
-
-                        //更新狀態，並新增下次的結帳期初，先刪除後新增就不用判斷是否有資料，
-                        DBService.SQL_Command(conn, $"delete from pro_date where date(pro_dt) between '{qdt}' and '{next_dt}'");
-                        ProDate pd = new ProDate()
-                        {
-                            pro_dt = Convert.ToDateTime(qdt),
-                            pro_status = 1,
-                            loguser = AppVar.User.user_id,
-                            logtime = DateTime.Now
-                        };
-                        pd.InsertDB(conn);
-                        pd.pro_dt = Convert.ToDateTime(next_dt);
-                        pd.pro_status = 0;
-                        pd.InsertDB(conn);
-                    }
-                    else  //反向
-                    {
-                        DBService.SQL_Command(conn, $"update pro_date set pro_status = 0 where date(pro_dt) >= '{qdt}'");  //還原狀態，之前的全部清除
-                    }
-
-                    tran.Commit();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    throw ex;
-                }
+                string max_trade_no = rw.trade_no;
+                int new_no = int.Parse(max_trade_no.Replace(leading_code, "")) + 1;
+                trade_no = leading_code + new_no.ToString().PadLeft(5, '0');
             }
+            else
+            {
+                trade_no = leading_code + "1".PadLeft(5, '0');
+            }
+            return trade_no;
+        }
+
+        /// <summary>
+        /// 判斷當年月是否結帳
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static bool CheckIsPro(DateTime dt)
+        {
+            string YearMonth = dt.ToString("yyyy-MM");
+            var Qry = DBService.QryProDate($@"where strftime('%Y-%m', pro_dt) = '{YearMonth}' and pro_status = 1");
+            if (Qry.Count > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 判斷帳冊是否已結帳
+        /// </summary>
+        /// <param name="book"></param>
+        /// <returns></returns>
+        public static bool CheckBookIsPro(string book)
+        {
+            DataTable Qry = DBService.SQL_QryTable($@"
+select *
+from pro_date A
+left join inv_mast B on A.pro_dt = B.trade_dt
+where acct_book = '{book}' and pro_status = 1
+", new string[] { });
+            if (Qry.Rows.Count > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 取得下一結帳起始日
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime GetNextProStartDt()
+        {
+            var rw = DBService.QryProDate("where pro_dt = (select MAX(pro_dt) from pro_date where pro_status = 1)").FirstOrDefault();
+            return (rw != null) ? rw.pro_dt.AddDays(1) : DateTime.Today;  //最大結帳日+1
+        }
+
+        /// <summary>
+        /// 取得下一結帳迄日
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime GetNextProEndDt()
+        {
+            var rw = DBService.QryProDate("where pro_dt = (select MIN(pro_dt) from pro_date where pro_status = 0)").FirstOrDefault();
+            return (rw != null) ? rw.pro_dt : DateTime.Today;
+        }
+
+        /// <summary>
+        /// 取得上一結帳迄日
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime GetLastProEndDt()
+        {
+            var rw = DBService.QryProDate("where pro_dt = (select MAX(pro_dt) from pro_date where pro_status = 1)").FirstOrDefault();
+            return (rw != null) ? rw.pro_dt : DateTime.Today;
+        }
+
+        /// <summary>
+        /// 找備註預設值(欄位吻合最多的那筆)
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="action_dtl"></param>
+        /// <param name="acct_code"></param>
+        /// <param name="acct_book_in"></param>
+        /// <param name="acct_book_out"></param>
+        /// <returns></returns>
+        public static string GetTraMastMemoDef(string action, string action_dtl, string acct_code, string acct_book_in, string acct_book_out)
+        {
+            string result = "";
+            if (string.IsNullOrWhiteSpace(action) && string.IsNullOrWhiteSpace(action_dtl) && string.IsNullOrWhiteSpace(acct_code) &&
+                string.IsNullOrWhiteSpace(acct_book_in) && string.IsNullOrWhiteSpace(acct_book_out))
+                return result;
+
+            string QryStr = @"
+select
+[CtStr]
+,*
+from tra_mast_memodef
+[WhStr]
+order by cnt desc
+";
+            //吻合計數(找最高的)
+            string CtStr = " 0";
+            CtStr += (string.IsNullOrWhiteSpace(action)) ? "" : $"\r\n + case when action = '{action}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(action_dtl)) ? "" : $"\r\n + case when action_dtl = '{action_dtl}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(acct_code)) ? "" : $"\r\n + case when acct_code = '{acct_code}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(acct_book_in)) ? "" : $"\r\n + case when acct_book_in = '{acct_book_in}' then 1 else 0 end";
+            CtStr += (string.IsNullOrWhiteSpace(acct_book_out)) ? "" : $"\r\n + case when acct_book_out = '{acct_book_out}' then 1 else 0 end";
+            CtStr += "\r\n as cnt";
+
+            //來源有值代表要找設定是ALL和一樣的那一列
+            string WhStr = "where 1=1";
+            WhStr += (string.IsNullOrWhiteSpace(action)) ? "" : $"\r\n and (action = '' or action = '{action}')";
+            WhStr += (string.IsNullOrWhiteSpace(action_dtl)) ? "" : $"\r\n and (action_dtl = '' or action_dtl = '{action_dtl}')";
+            WhStr += (string.IsNullOrWhiteSpace(acct_code)) ? "" : $"\r\n and (acct_code = '' or acct_code = '{acct_code}')";
+            WhStr += (string.IsNullOrWhiteSpace(acct_book_in)) ? "" : $"\r\n and (acct_book_in = '' or acct_book_in = '{acct_book_in}')";
+            WhStr += (string.IsNullOrWhiteSpace(acct_book_out)) ? "" : $"\r\n and (acct_book_out = '' or acct_book_out = '{acct_book_out}')";
+
+            QryStr = QryStr.Replace("[CtStr]", CtStr).Replace("[WhStr]", WhStr);
+            DataTable dt = DBService.SQL_QryTable(QryStr, new string[] { });
+            if (dt.Rows.Count == 0) return result;
+
+            return dt.Rows[0]["memodef"].ToString();
         }
     }
 }

@@ -28,13 +28,7 @@ namespace Accounting_App.Form
 
         private void BindBookBase()
         {
-            DataTable book = DBService.SQL_QryTable(@"
-select A.*, B.item_name as book_type_desc
-from book_base A
-left join map_file B on A.book_type = B.item and B.opt_no = 'book_type'
-where book_type != 0
-order by book", new string[] { });
-            DG_Main.ItemsSource = book.AsDataView();
+            DG_Main.ItemsSource = DBService.GetBookBaseForQry();
             DG_Main.SelectionChanged += Checked_SelectionChanged;
             CheckBox_Checked(dgc_check_header, null);
         }
@@ -59,12 +53,12 @@ order by book", new string[] { });
                 DG_Main.SelectedItems.Clear();
         }
 
-        private List<string> GetSelectedBook()
+        private List<BookBase> GetSelectedBook()
         {
-            List<string> book = new List<string>();
-            foreach (DataRowView r in DG_Main.SelectedItems)
+            List<BookBase> book = new List<BookBase>();
+            foreach (BookBase r in DG_Main.SelectedItems)
             {
-                book.Add(r.Row[0].ToString());
+                book.Add(r);
             }
             return book;
         }
@@ -128,7 +122,7 @@ order by book", new string[] { });
                 QryDtBeg = new DateTime(QryDtBeg.Year, QryDtBeg.Month, 1);  //起始日：月初
                 QryDtEnd = new DateTime(QryDtEnd.Year, QryDtEnd.Month, DateTime.DaysInMonth(QryDtEnd.Year, QryDtEnd.Month));  //結束日：月底日
 
-                List<BookBase> Books = DBService.GetBookBase(false).Where(x => GetSelectedBook().Contains(x.book)).ToList();  //取得帳冊清單
+                List<BookBase> Books = GetSelectedBook();  //取得帳冊清單
                 DataTable Trans = GetTrans(QryDtBeg, QryDtEnd, Books);  //取得交易
                 int DataCount = Trans.AsEnumerable().Count();  //行數
 

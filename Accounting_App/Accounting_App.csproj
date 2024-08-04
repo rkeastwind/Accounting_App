@@ -195,11 +195,13 @@
     <Compile Include="Utilities\AppVar.cs" />
     <Compile Include="Utilities\CommUtility.cs" />
     <Compile Include="Utilities\DBService.cs" />
+    <Compile Include="Utilities\ProExec.cs" />
     <Compile Include="Utilities\ProUtility.cs" />
     <Compile Include="ValueConverters\ValueConverterBase.cs" />
     <Compile Include="ValueConverters\Vcvt_BasDept.cs" />
     <Compile Include="ValueConverters\Vcvt_BasRole.cs" />
     <Compile Include="ValueConverters\Vcvt_BookBase.cs" />
+    <Compile Include="ValueConverters\Vcvt_DateDeault.cs" />
     <Compile Include="ValueConverters\Vcvt_MapFile.cs" />
     <Page Include="Form\Form_bas_user.xaml">
       <SubType>Designer</SubType>

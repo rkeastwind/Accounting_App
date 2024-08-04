@@ -42,6 +42,6 @@ namespace Accounting_App.DTO
         public string loguser { get; set; }
 
         [TableColumn, ColType(TableColTypeS.DateTime)]
-        public DateTime logtime { get; set; }
+        public DateTime? logtime { get; set; }
     }
 }

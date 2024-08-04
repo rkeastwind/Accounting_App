@@ -26,7 +26,6 @@ namespace Accounting_App.Form
         List<MapFile> Lst_Acct = CommUtility.InsertBlankItem(DBService.GetMapFile("AC"));
         List<MapFile> Lst_AcctIn = CommUtility.InsertBlankItem(DBService.GetMapFile("AC").Where(x => x.item.Substring(0, 1) == "B").ToList());
         List<MapFile> Lst_AcctOut = CommUtility.InsertBlankItem(DBService.GetMapFile("AC").Where(x => x.item.Substring(0, 1) == "A").ToList());
-        List<BookBase> Lst_BookBase = CommUtility.InsertBlankItem(DBService.GetBookBase(false));
 
         List<string> Lst_BankDealTra = new List<string>() { "3", "4", "5", "6" };
 
@@ -211,6 +210,16 @@ namespace Accounting_App.Form
         /// <param name="cb_BookOut">支出帳冊</param>
         private void CmbSyncUp_SelectionChanged(int level, ComboBox cb_Action, ComboBox cb_ActionDtl, ComboBox cb_AcctCode, ComboBox cb_BookIn, ComboBox cb_BookOut)
         {
+            List<BookBase> Lst_BookBase = new List<BookBase>();
+            if (FormState.State == FormStateS.Add)  //新增時排除已關閉的帳冊，但其他狀況不用，因為只有新增可以編輯帳冊
+            {
+                Lst_BookBase = CommUtility.InsertBlankItem(DBService.GetBookBaseForTrade());
+            }
+            else
+            {
+                Lst_BookBase = CommUtility.InsertBlankItem(DBService.GetBookBase(false));
+            }
+
             string Act = Convert.ToString(cb_Action.SelectedValue);
             string Dtl = Convert.ToString(cb_ActionDtl.SelectedValue);
             string Code = Convert.ToString(cb_AcctCode.SelectedValue);
