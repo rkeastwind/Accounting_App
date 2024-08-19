@@ -9,6 +9,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using DataTable = System.Data.DataTable;
 using System.Windows.Input;
 using System.Windows.Documents;
+using Accounting_App.UserControls;
 
 namespace Accounting_App.Form
 {
@@ -26,7 +27,7 @@ namespace Accounting_App.Form
         {
             if (Qry_Year.SelectedDate == null)
             {
-                MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("查詢日期不可空白", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                 return false;
             }
             return true;
@@ -69,7 +70,7 @@ namespace Accounting_App.Form
                 DataTable MainTable = GetTable(QryDt);  //取得基底
                 if (MainTable.Rows.Count == 0)
                 {
-                    MessageBox.Show("查無資料", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("查無資料", "", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return;
                 }
                 int DataCount = MainTable.AsEnumerable().Count();  //行數
@@ -142,13 +143,13 @@ namespace Accounting_App.Form
                 sheet.Range[$"A{skiprow + DataCount + 1}:G{skiprow + DataCount + 1}"].Cells.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlThin;
 
                 workBook.SaveAs(localFilePath);
-                MessageBox.Show($"{fileNameExt}報表列印成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                new MessageBoxCustom($"{fileNameExt}報表列印成功", "成功", MessageButtons.Ok, MessageType.Success).ShowDialog();
                 #endregion
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("列印失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("列印失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
             finally
             {

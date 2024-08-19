@@ -8,6 +8,7 @@ using System.Windows.Data;
 using Accounting_App.DTO;
 using Accounting_App.Utilities;
 using System.Globalization;
+using Accounting_App.UserControls;
 
 namespace Accounting_App.Form
 {
@@ -107,7 +108,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
             finally
             {
@@ -331,12 +332,7 @@ namespace Accounting_App.Form
         {
             if (ChangeState == FormStateS.Edit || ChangeState == FormStateS.Delete)
             {
-                //if (!CommUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
-                //{
-                //    MessageBox.Show($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
-                //        $"不可{Enum.GetName(typeof(EnumFormStatesText), ChangeState)}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //    return false;
-                //}
+
             }
             return true;
         }
@@ -365,14 +361,14 @@ namespace Accounting_App.Form
 
                 if (q_action == "" && q_action_dtl == "" && q_acct_code == "" && q_acct_book_in == "" && q_acct_book_out == "")
                 {
-                    MessageBox.Show("「收支、交易方式、會計科目、收入帳冊、支出帳冊」不可皆為空", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("「收支、交易方式、會計科目、收入帳冊、支出帳冊」不可皆為空", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
 
                 var dt = DBService.QryTraMastMemoDef(filter);
                 if (dt.Count > 0)
                 {
-                    MessageBox.Show("「收支、交易方式、會計科目、收入帳冊、支出帳冊」為Key值只能有一筆", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("「收支、交易方式、會計科目、收入帳冊、支出帳冊」為Key值只能有一筆", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }

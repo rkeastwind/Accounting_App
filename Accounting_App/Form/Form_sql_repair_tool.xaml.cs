@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Documents;
 using Microsoft.Win32;
 using System.IO;
+using Accounting_App.UserControls;
 
 namespace Accounting_App.Form
 {
@@ -60,7 +61,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show("執行失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("執行失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
         }
 
@@ -89,11 +90,11 @@ namespace Accounting_App.Form
                 sw.WriteLine(Txt_Output.Text);
                 sw.Close();
                 fs.Close();
-                MessageBox.Show($"{fileNameExt}儲存成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                new MessageBoxCustom($"{fileNameExt}儲存成功", "成功", MessageButtons.Ok, MessageType.Success).ShowDialog();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("儲存失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("儲存失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
         }
     }

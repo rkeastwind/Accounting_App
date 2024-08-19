@@ -1,4 +1,5 @@
 ﻿using Accounting_App.DTO;
+using Accounting_App.UserControls;
 using Accounting_App.Utilities;
 using System;
 using System.Collections.Generic;
@@ -70,7 +71,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
             finally
             {
@@ -152,7 +153,7 @@ namespace Accounting_App.Form
         {
             if (ChangeState == FormStateS.Delete)
             {
-                MessageBox.Show("注意：帳號還未使用的情況才可刪除，一般情況請使用「停用」!", "刪除警示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("注意：帳號還未使用的情況才可刪除，一般情況請使用「停用」!", "刪除警示", MessageButtons.Ok, MessageType.Warning).ShowDialog();
             }
             return true;
         }
@@ -165,7 +166,7 @@ namespace Accounting_App.Form
                 var IsUserIdExists = DBService.QryBasUser($@"where user_id = '{Txt_UserId.Text}'");
                 if (IsUserIdExists.Count > 0)
                 {
-                    MessageBox.Show("帳號已存在", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("帳號已存在", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }
@@ -173,7 +174,7 @@ namespace Accounting_App.Form
             {
                 if (Txt_UserId.Text == "" || Txt_Name.Text == "" || Txt_PassWord.Password == "")
                 {
-                    MessageBox.Show("帳號、姓名、密碼必填", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("帳號、姓名、密碼必填", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }

@@ -13,6 +13,7 @@ using System.Configuration;
 using System.IO;
 using System.Reflection;
 using MaterialDesignThemes.Wpf;
+using Accounting_App.UserControls;
 
 namespace Accounting_App
 {
@@ -26,6 +27,7 @@ namespace Accounting_App
             DBExists();
             InitializeComponent();
             SetFormInfo();
+            this.GotKeyboardFocus += (s, e) => SetFormInfo();
             BindMenu();
         }
 
@@ -34,7 +36,7 @@ namespace Accounting_App
             string DB_path = ConfigurationManager.AppSettings["DBPath"];
             if (!File.Exists(DB_path))
             {
-                MessageBox.Show($"資料庫{Environment.CurrentDirectory}{DB_path.Substring(1)}不存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom($"資料庫{Environment.CurrentDirectory}{DB_path.Substring(1)}不存在", "", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                 Environment.Exit(0);
             }
         }
@@ -46,6 +48,9 @@ namespace Accounting_App
 單位：{AppVar.User.dept_name}
 角色權限：{AppVar.User.role_name}";
             tb_UserInfo.Text = UserInfo;
+
+            var DT_Main = DBService.QryProDate("where pro_dt = (select MIN(pro_dt) from pro_date where pro_status = 0)");
+            DG_Main.ItemsSource = DT_Main;
         }
 
         private void BindMenu()
@@ -64,7 +69,7 @@ namespace Accounting_App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom(ex.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
         }
 
@@ -160,7 +165,7 @@ namespace Accounting_App
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MessageBox.Show("是否要關閉系統?", "確認", MessageBoxButton.YesNo) == MessageBoxResult.No)
+            if (new MessageBoxCustom("是否要關閉系統?", "確認", MessageButtons.YesNo, MessageType.Confirmation).ShowDialog() == false)
             {
                 e.Cancel = true;
             }

@@ -10,6 +10,7 @@ using Accounting_App.Utilities;
 using System.Globalization;
 using System.Windows.Media;
 using System.Windows.Input;
+using Accounting_App.UserControls;
 
 namespace Accounting_App.Form
 {
@@ -65,7 +66,7 @@ namespace Accounting_App.Form
                     if (ProExec.ExecutePro(dt, 1))
                     {
                         FormStateChange(FormStates.Run);
-                        MessageBox.Show($"{dt.GetFullDate()}結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                        new MessageBoxCustom($"{dt.GetFullDate()}結帳成功", "成功", MessageButtons.Ok, MessageType.Success).ShowDialog();
                     }
                 }
                 else
@@ -73,13 +74,13 @@ namespace Accounting_App.Form
                     if (ProExec.ExecutePro(dt, 0))
                     {
                         FormStateChange(FormStates.Cancel);
-                        MessageBox.Show($"{dt.GetFullDate()}反結帳成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                        new MessageBoxCustom($"{dt.GetFullDate()}反結帳成功", "成功", MessageButtons.Ok, MessageType.Success).ShowDialog();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("結帳失敗，錯誤訊息：" + ex.Message.ToString(), "結帳失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("結帳失敗，錯誤訊息：" + ex.Message.ToString(), "結帳失敗", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
             finally
             {

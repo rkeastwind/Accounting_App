@@ -12,6 +12,7 @@ using Accounting_App.DTO;
 using System.Collections.Generic;
 using System.Collections;
 using System.ComponentModel;
+using Accounting_App.UserControls;
 
 namespace Accounting_App.Form
 {
@@ -68,19 +69,19 @@ namespace Accounting_App.Form
         {
             if (DG_Main.SelectedItems.Count == 0)
             {
-                MessageBox.Show("請選擇帳冊", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("請選擇帳冊", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                 return false;
             }
             if (Qry_Beg_Dt.SelectedDate == null || Qry_End_Dt.SelectedDate == null)
             {
-                MessageBox.Show("查詢日期不可空白", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("查詢日期不可空白", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                 return false;
             }
             DateTime QryDtBeg = (DateTime)Qry_Beg_Dt.SelectedDate;
             DateTime QryDtEnd = (DateTime)Qry_End_Dt.SelectedDate;
             if (QryDtBeg.Year > QryDtEnd.Year || (QryDtBeg.Year == QryDtEnd.Year && QryDtBeg.Month > QryDtEnd.Month))  //年份大於，或年份相同但月份大於
             {
-                MessageBox.Show("起日不可大於迄日", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("起日不可大於迄日", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                 return false;
             }
             return true;
@@ -165,13 +166,13 @@ namespace Accounting_App.Form
                 }
 
                 workBook.SaveAs(localFilePath);
-                MessageBox.Show($"{fileNameExt}報表列印成功", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                new MessageBoxCustom($"{fileNameExt}報表列印成功", "成功", MessageButtons.Ok, MessageType.Success).ShowDialog();
                 #endregion
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("列印失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom("列印失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
             finally
             {

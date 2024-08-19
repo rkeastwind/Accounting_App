@@ -10,6 +10,7 @@ using Accounting_App.Utilities;
 using System.Globalization;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 using System.Runtime.InteropServices;
+using Accounting_App.UserControls;
 
 namespace Accounting_App.Form
 {
@@ -75,7 +76,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
             finally
             {
@@ -172,8 +173,8 @@ namespace Accounting_App.Form
             {
                 if (!ProUtility.CheckBookIsPro(Txt_Book.Text))
                 {
-                    MessageBox.Show($"{Txt_Book.Text}帳冊已經結帳，" +
-                        $"不可{ChangeState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom($"{Txt_Book.Text}帳冊已經結帳，" +
+                        $"不可{ChangeState.GetDescriptionText()}", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }
@@ -188,7 +189,7 @@ namespace Accounting_App.Form
                 var IsBookExists = DBService.QryBookBase($@"where book = '{Txt_Book.Text}'");
                 if (IsBookExists.Count > 0)
                 {
-                    MessageBox.Show("帳冊代號已存在", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("帳冊代號已存在", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }
@@ -196,13 +197,13 @@ namespace Accounting_App.Form
             {
                 if (Txt_Book.Text == "")
                 {
-                    MessageBox.Show("帳冊代號必填", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("帳冊代號必填", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
                 if (!CheckClosedDate(Chk_CloseDate.IsChecked.Value))
                 {
                     string msg = (Chk_CloseDate.IsChecked.Value) ? bookCloseNotice : bookOpenNotice;
-                    MessageBox.Show(msg, "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom(msg, "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }

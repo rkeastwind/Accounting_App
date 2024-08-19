@@ -1,4 +1,5 @@
-﻿using Accounting_App.Utilities;
+﻿using Accounting_App.UserControls;
+using Accounting_App.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Accounting_App.Form
             AppVar.User.loguser = AppVar.User.user_id;
             AppVar.User.logtime = DateTime.Now;
             AppVar.User.UpdateDB();
-            MessageBox.Show("密碼更新成功", "", MessageBoxButton.OK, MessageBoxImage.Information);
+            new MessageBoxCustom("密碼更新成功", "", MessageButtons.Ok, MessageType.Success).ShowDialog();
             Close();
         }
 

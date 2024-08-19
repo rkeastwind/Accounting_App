@@ -51,6 +51,35 @@
             <Image.Effect>
                 <DropShadowEffect BlurRadius="5" Opacity="0.3" Direction="315"/>
             </Image.Effect>
+            <Image.OpacityMask>
+                <RadialGradientBrush x:Name="Brush" Center=".5,.5" GradientOrigin=".5,.5" RadiusX="2" RadiusY="2">
+                    <GradientStop Color="Black" />
+                    <GradientStop Offset=".5" Color="#6000" />
+                    <GradientStop Offset="1" Color="#2000" />
+                </RadialGradientBrush>
+
+            </Image.OpacityMask>
+            <Image.Triggers>
+                <EventTrigger RoutedEvent="Path.Loaded">
+                    <BeginStoryboard Name="MyBeginStoryboard">
+                        <Storyboard>
+
+                            <PointAnimation RepeatBehavior="Forever"
+     Storyboard.TargetName="Brush"
+     Storyboard.TargetProperty="Center"
+     From="-2,.5"
+     To="3,.5"
+     Duration="0:0:5" />
+                            <PointAnimation RepeatBehavior="Forever"
+     Storyboard.TargetName="Brush"
+     Storyboard.TargetProperty="GradientOrigin"
+     From="-2,.5"
+     To="3,.5"
+     Duration="0:0:5" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Image.Triggers>
         </Image>
         <StackPanel Grid.Row="1">
             <TextBlock FontFamily="Microsoft JhengHei" FontSize="26" FontWeight="Heavy" HorizontalAlignment="Center" Text="基督教會景美禮拜堂" Style="{StaticResource TitleEffect}"/>
@@ -71,7 +100,7 @@
 				             materialDesign:HintAssist.Hint="密碼" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
             </DockPanel>
             <CheckBox x:Name="chk_RememberMe" Margin="20,10,0,10" HorizontalAlignment="Left" Content="記住帳號"/>
-            <Button x:Name="Btn_LogIn" Margin="0,10,0,0" Width="120" Height="40" Content="登  入" Click="Btn_LogIn_Click"/>
+            <Button x:Name="Btn_LogIn" Margin="0,10,0,0" Width="120" Height="40" Content="登  入" Click="Btn_LogIn_Click" ToolTip="Enter"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -159,6 +159,9 @@
     <Compile Include="DTO\BookBase.cs" />
     <Compile Include="UserControls\CurrencyTextBox.cs" />
     <Compile Include="UserControls\NumberTextBox.cs" />
+    <Compile Include="UserControls\MessageBoxCustom.xaml.cs">
+      <DependentUpon>MessageBoxCustom.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\FormState.cs" />
     <Compile Include="DTO\MapFile.cs" />
@@ -271,6 +274,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\MessageBoxCustom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

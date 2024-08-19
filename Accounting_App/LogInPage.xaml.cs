@@ -1,4 +1,5 @@
-﻿using Accounting_App.Utilities;
+﻿using Accounting_App.UserControls;
+using Accounting_App.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -64,7 +65,7 @@ namespace Accounting_App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom(ex.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
         }
 

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Accounting_App.DTO;
+using Accounting_App.UserControls;
 using Accounting_App.Utilities;
 
 namespace Accounting_App.Form
@@ -97,7 +98,7 @@ namespace Accounting_App.Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom($"{FormState.StateText}失敗，錯誤訊息：" + ex.Message.ToString(), "", MessageButtons.Ok, MessageType.Error).ShowDialog();
             }
             finally
             {
@@ -325,8 +326,8 @@ namespace Accounting_App.Form
             {
                 if (!ProUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
                 {
-                    MessageBox.Show($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
-                        $"不可{ChangeState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
+                        $"不可{ChangeState.GetDescriptionText()}", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }
@@ -340,29 +341,29 @@ namespace Accounting_App.Form
             {
                 if (Dtp_TradeDt.SelectedDate == null)
                 {
-                    MessageBox.Show("交易日期必填", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("交易日期必填", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
                 if (Txt_Amt.Value == 0)
                 {
-                    MessageBox.Show("金額不可為0", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("金額不可為0", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
                 if (Convert.ToString(Cmb_BookOut.SelectedValue) == Convert.ToString(Cmb_BookIn.SelectedValue))
                 {
-                    MessageBox.Show("轉出帳冊與轉入帳冊不可相同", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("轉出帳冊與轉入帳冊不可相同", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
                 if (Txt_BookInAmt.Value < 0 || Txt_BookOutAmt.Value < 0)
                 {
-                    MessageBox.Show("出入帳冊庫存不可小於0", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MessageBoxCustom("出入帳冊庫存不可小於0", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                     return false;
                 }
             }
             if (!ProUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
             {
-                MessageBox.Show($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
-                    $"不可{FormState.GetDescriptionText()}", "檢核失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new MessageBoxCustom($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
+                    $"不可{FormState.GetDescriptionText()}", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                 return false;
             }
             return true;
