@@ -10,6 +10,17 @@ namespace Accounting_App.Utilities
 {
     public static class CommUtility
     {
+        /// <summary>
+        /// 取得UserName (來源空值:空值，有值但查無帳號:UserId，有找到帳號:Name)
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public static string GetUserName(string userid)
+        {
+            if (string.IsNullOrEmpty(userid)) return userid;
+            var r = DBService.GetBasUser(userid);
+            return (r == null) ? userid : r.name;
+        }
 
         /// <summary>
         /// 填充空白選項

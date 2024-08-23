@@ -29,6 +29,14 @@ namespace Accounting_App.DTO
         [TableColumn, ColType(TableColTypeS.DateTime)]
         public DateTime? logtime { get; set; }
 
+        public string loguserName
+        {
+            get
+            {
+                return CommUtility.GetUserName(loguser);
+            }
+        }
+
         public string dept_name
         {
             get

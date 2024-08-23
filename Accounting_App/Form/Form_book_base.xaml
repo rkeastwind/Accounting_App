@@ -152,7 +152,7 @@
                     <DataGridTextColumn x:Name="dgc_open_date" Header="起始日" Binding="{Binding open_date, Converter={vcvt:Vcvt_DateDeault}, ConverterParameter=0N}"/>
                     <DataGridTextColumn x:Name="dgc_close_date" Header="結束日" Binding="{Binding close_date, Converter={vcvt:Vcvt_DateDeault}, ConverterParameter=0N}"/>
                     <DataGridCheckBoxColumn x:Name="dgc_in_qurey" Header="查詢啟用" Binding="{Binding in_qurey}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguser}"/>
+                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguserName}"/>
                     <DataGridTextColumn x:Name="dgc_logtime" Header="異動時間" Binding="{Binding logtime, Converter={vcvt:Vcvt_DateDeault}, ConverterParameter=1N}"/>
                 </DataGrid.Columns>
             </DataGrid>

@@ -57,9 +57,13 @@ namespace Accounting_App.Form
             string filter = "where 1=1";
 
             //查詢年月(月初到月底)
-            DateTime QryDt = Qry_YearMonth.SelectedDate == null ? DateTime.Now : (DateTime)Qry_YearMonth.SelectedDate;
-            string q_dt = QryDt.ToString("yyyy-MM") + "-01";  //月初
-            filter += "\r\n  and " + $@"date(trade_dt) between date('{q_dt}','start of month') and date('{q_dt}','start of month','+1 month','-1 day')";
+            DateTime QryDtBeg = Qry_YearMonthBeg.SelectedDate == null ? DateTime.Now : (DateTime)Qry_YearMonthBeg.SelectedDate;
+            QryDtBeg = new DateTime(QryDtBeg.Year, QryDtBeg.Month, 1);  //起始日：月初
+            DateTime QryDtEnd = Qry_YearMonthEnd.SelectedDate == null ? DateTime.Now : (DateTime)Qry_YearMonthEnd.SelectedDate;
+            QryDtEnd = new DateTime(QryDtEnd.Year, QryDtEnd.Month, DateTime.DaysInMonth(QryDtEnd.Year, QryDtEnd.Month));  //結束日：月底日
+            filter += "\r\n  and " + $@"date(trade_dt) between date('{QryDtBeg.GetFullDate()}') and date('{QryDtEnd.GetFullDate()}')";
+            //filter += "\r\n  and " + $@"date(trade_dt) between date('{q_dt}','start of month') and date('{q_dt}','start of month','+1 month','-1 day')";
+
             //交易方式
             filter += "\r\n  and " + $@"action in ('3','4','5','6')";
 

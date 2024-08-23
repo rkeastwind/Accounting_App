@@ -28,6 +28,14 @@ namespace Accounting_App.DTO
         [TableColumn, ColType(TableColTypeS.DateTime)]
         public DateTime? logtime { get; set; }
 
+        public string loguserName
+        {
+            get
+            {
+                return CommUtility.GetUserName(loguser);
+            }
+        }
+
         public string acct_book_name
         {
             get { return DBService.QryBookBase($@"where book = '{acct_book}'").FirstOrDefault().book_name; }

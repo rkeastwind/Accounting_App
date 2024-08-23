@@ -215,6 +215,9 @@ namespace Accounting_App.Form
             string book = Txt_Book.Text;
             var NextProDt = ProUtility.GetNextProEndDt();
             var BookCloseDt = (DG_Main.SelectedItem as BookBase).close_date;  //因為畫面先動了，從Grid抓
+            if ((BookCloseDt != null && Mode) || (BookCloseDt == null && !Mode))  //改前改後沒有異動不檢核
+                return true;
+
             if (Mode)  //關閉檢核
             {
                 var LastInvMast = DBService.GetProBaseBal(NextProDt).Where(x => x.acct_book == book).FirstOrDefault();

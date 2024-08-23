@@ -48,8 +48,11 @@
 			          Style="{StaticResource MaterialDesignCardGroupBox}" materialDesign:ElevationAssist.Elevation="Dp4" materialDesign:ColorZoneAssist.Mode="SecondaryMid">
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                     <Label Content="查詢年月" VerticalAlignment="Center"/>
-                    <DatePicker x:Name="Qry_YearMonth" atp:DatePickerCalendar.IsMonthYear="Month" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static System:DateTime.Now}"
+                    <DatePicker x:Name="Qry_YearMonthBeg" atp:DatePickerCalendar.IsMonthYear="Month" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static System:DateTime.Now}"
                                 Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>
+                    <Label Content="~" VerticalAlignment="Center" Margin="5,0"/>
+                    <DatePicker x:Name="Qry_YearMonthEnd" atp:DatePickerCalendar.IsMonthYear="Month" atp:DatePickerDateFormat.DateFormat="yyyy/MM" Text="yyyy/MM" SelectedDate="{x:Static System:DateTime.Now}"
+                                Height="30" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="5,0"/>                    
                     <Button x:Name="Btn_Qry" VerticalAlignment="Center" Margin="20,0,0,0" Width="90" Height="30" Click="Btn_Qry_Click"
 					        Background="#43a9c7" Foreground="White" BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
@@ -212,7 +215,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="dgc_amt" Header="金額" Binding="{Binding amt}"/>
                     <DataGridTextColumn x:Name="dgc_memo" Header="備註" Binding="{Binding memo}"/>
-                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguser}"/>
+                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguserName}"/>
                     <DataGridTextColumn x:Name="dgc_logtime" Header="異動時間" Binding="{Binding logtime, StringFormat={}{0:yyyy/M/d hh:mm:ss}}"/>
                 </DataGrid.Columns>
             </DataGrid>

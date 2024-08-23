@@ -1,4 +1,5 @@
 ﻿using Accounting_App.DTO.BaseDTO;
+using Accounting_App.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,5 +44,13 @@ namespace Accounting_App.DTO
 
         [TableColumn, ColType(TableColTypeS.DateTime)]
         public DateTime? logtime { get; set; }
+
+        public string loguserName 
+        {
+            get
+            {
+                return CommUtility.GetUserName(loguser);
+            }
+        }
     }
 }

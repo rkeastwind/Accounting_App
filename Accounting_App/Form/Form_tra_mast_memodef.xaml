@@ -202,7 +202,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="dgc_memodef" Header="備註" Binding="{Binding memodef}"/>
-                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguser}"/>
+                    <DataGridTextColumn x:Name="dgc_loguser" Header="異動人員" Binding="{Binding loguserName}"/>
                     <DataGridTextColumn x:Name="dgc_logtime" Header="異動時間" Binding="{Binding logtime, StringFormat={}{0:yyyy/M/d hh:mm:ss}}"/>
                 </DataGrid.Columns>
             </DataGrid>
