@@ -43,7 +43,7 @@
 ## Development
 
 - 使用 Visual Studio Community 2022
-- 前端使用WPF用戶端應用程式
+- 前端使用WPF用戶端應用程式，搭配MaterialDesignInXaml套版
 - 後端使用SQLite搭配Dapper實作
 
 資料庫路徑可於App.config修改
