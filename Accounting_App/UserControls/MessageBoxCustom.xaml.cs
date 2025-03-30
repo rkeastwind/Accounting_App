@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Accounting_App.UserControls
@@ -14,6 +15,8 @@ namespace Accounting_App.UserControls
     /// </summary>
     public partial class MessageBoxCustom : Window
     {
+        System.Windows.Input.Cursor Before_MouseCursor { get; set; }  //進來前的游標
+
         public MessageBoxCustom(string Message, MessageButtons Buttons, MessageType Type)
         {
             FormLoad(Message, null, Buttons, Type);
@@ -26,6 +29,10 @@ namespace Accounting_App.UserControls
         public void FormLoad(string Message, string Title, MessageButtons Buttons, MessageType Type)
         {
             InitializeComponent();
+            Before_MouseCursor = Mouse.OverrideCursor;
+            this.Closed += (s, e) => { Mouse.OverrideCursor = Before_MouseCursor; };
+            Mouse.OverrideCursor = Cursors.Arrow;
+
             var ph = new PaletteHelper();
             var theme = ph.GetTheme();
 

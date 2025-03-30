@@ -153,6 +153,10 @@
                         <TextBox x:Name="Txt_MemoDef" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="350" Margin="5,0"
 						         VerticalContentAlignment="Center" TextWrapping="NoWrap" Text=""/>
                     </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal">
+                        <TextBlock x:Name="Txt_CloseNotice" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"
+                                    Text="※套用時機：新增或編輯時備註空白" />
+                    </StackPanel>
                 </Grid>
             </GroupBox>
 

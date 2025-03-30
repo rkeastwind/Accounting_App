@@ -230,12 +230,15 @@ namespace Accounting_App.Form
         //取得Memo預設值
         private void UpdateMemoDef()
         {
-            if (FormState.State != FormStateS.Add && FormState.State != FormStateS.Edit) return;
-            Txt_Memo.Text = ProUtility.GetTraMastMemoDef(Convert.ToString(Cmb_Action.SelectedValue),
+            if (FormState.State == FormStateS.Add ||
+                (FormState.State == FormStateS.Edit && string.IsNullOrEmpty(Txt_Memo.Text)))
+            {
+                Txt_Memo.Text = ProUtility.GetTraMastMemoDef(Convert.ToString(Cmb_Action.SelectedValue),
                 "0",
                 "",
                 Convert.ToString(Cmb_BookIn.SelectedValue),
                 Convert.ToString(Cmb_BookOut.SelectedValue));
+            }
         }
 
         private void CheckBookSelect()

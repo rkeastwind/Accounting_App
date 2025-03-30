@@ -270,12 +270,15 @@ namespace Accounting_App.Form
         //取得Memo預設值
         private void UpdateMemoDef()
         {
-            if (FormState.State != FormStateS.Add && FormState.State != FormStateS.Edit) return;
-            Txt_Memo.Text = ProUtility.GetTraMastMemoDef(Convert.ToString(Cmb_Action.SelectedValue),
-                Convert.ToString(Cmb_ActionDtl.SelectedValue),
-                Convert.ToString(Cmb_AcctCode.SelectedValue),
-                Convert.ToString(Cmb_BookIn.SelectedValue),
-                Convert.ToString(Cmb_BookOut.SelectedValue));
+            if (FormState.State == FormStateS.Add ||
+                (FormState.State == FormStateS.Edit && string.IsNullOrEmpty(Txt_Memo.Text)))
+            {
+                Txt_Memo.Text = ProUtility.GetTraMastMemoDef(Convert.ToString(Cmb_Action.SelectedValue),
+                    Convert.ToString(Cmb_ActionDtl.SelectedValue),
+                    Convert.ToString(Cmb_AcctCode.SelectedValue),
+                    Convert.ToString(Cmb_BookIn.SelectedValue),
+                    Convert.ToString(Cmb_BookOut.SelectedValue));
+            }
         }
 
         //物件與Grid連動
