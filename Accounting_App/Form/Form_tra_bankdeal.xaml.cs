@@ -370,7 +370,7 @@ namespace Accounting_App.Form
             if (!ProUtility.CheckIsPro((DateTime)Dtp_TradeDt.SelectedDate))
             {
                 new MessageBoxCustom($"{((DateTime)Dtp_TradeDt.SelectedDate).ToString("%M")}月已經結帳，" +
-                    $"不可{FormState.GetDescriptionText()}", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
+                    $"不可{FormState.StateText}", "檢核失敗", MessageButtons.Ok, MessageType.Warning).ShowDialog();
                 return false;
             }
             return true;
